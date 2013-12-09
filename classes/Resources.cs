@@ -9,6 +9,9 @@ namespace AIS_Time.classes
     {
         //ResourceID
         //ResourceName
+        //AISCode
+        //CEAClassCode
+        //HourlyRate
         //Description
         //Status
         //Type

@@ -291,15 +291,12 @@
       <DependentUpon>RegisterExternalLogin.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="classes\AISCodes.cs" />
-    <Compile Include="classes\CEAClasses.cs" />
     <Compile Include="classes\Companies.cs" />
     <Compile Include="classes\Customers.cs" />
     <Compile Include="classes\Departments.cs" />
     <Compile Include="classes\EmployeeCompanies.cs" />
-    <Compile Include="classes\EmployeeDepartments.cs" />
+    <Compile Include="classes\EmployeeResources.cs" />
     <Compile Include="classes\Employees.cs" />
-    <Compile Include="classes\LabourCodes.cs" />
     <Compile Include="classes\ProjectHours.cs" />
     <Compile Include="classes\Projects.cs" />
     <Compile Include="classes\Resources.cs" />

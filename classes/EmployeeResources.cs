@@ -5,11 +5,10 @@ using System.Web;
 
 namespace AIS_Time.classes
 {
-    public class EmployeeDepartments
+    public class EmployeeResources
     {
-        //EmployeeDepartment
         //EmployeeID
-        //DepartmentID
+        //ResourceID
         //Status
         //Type
     }

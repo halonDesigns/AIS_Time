@@ -8,6 +8,8 @@ namespace AIS_Time.classes
     public class ProjectHours
     {
         //ProjectHoursID
+        //EmployeeID
+        //DepartmentID
         //ProjectID
         //DateOfWork
         //HoursOfWork

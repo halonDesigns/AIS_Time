@@ -3,27 +3,25 @@
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
     <hgroup class="title">
         <h1><%: Title %>.</h1>
-        <h2>Your app description page.</h2>
+        <h2>What to put here, dunno.</h2>
     </hgroup>
 
     <article>
         <p>        
-            Use this area to provide additional information.
+             Blah de Blah.
         </p>
-
         <p>        
-            Use this area to provide additional information.
+             Blah de Blah.
         </p>
-
         <p>        
-            Use this area to provide additional information.
+             Blah de Blah.
         </p>
     </article>
 
     <aside>
-        <h3>Aside Title</h3>
+        <h3>Something Else</h3>
         <p>        
-            Use this area to provide additional information.
+            Additional information.
         </p>
         <ul>
             <li><a runat="server" href="~/">Home</a></li>

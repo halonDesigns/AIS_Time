@@ -3,7 +3,7 @@
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
     <hgroup class="title">
         <h1><%: Title %>.</h1>
-        <h2>Your contact page.</h2>
+        <h2>Contact Us.</h2>
     </hgroup>
 
     <section class="contact">
@@ -12,11 +12,11 @@
         </header>
         <p>
             <span class="label">Main:</span>
-            <span>425.555.0100</span>
+            <span>403.247.7666</span>
         </p>
         <p>
             <span class="label">After Hours:</span>
-            <span>425.555.0199</span>
+            <span>403.867.5309</span>
         </p>
     </section>
 
@@ -26,15 +26,15 @@
         </header>
         <p>
             <span class="label">Support:</span>
-            <span><a href="mailto:Support@example.com">Support@example.com</a></span>
+            <span><a href="mailto:Support@athenaindustrial.com">Support@athenaindustrial.com</a></span>
         </p>
         <p>
             <span class="label">Marketing:</span>
-            <span><a href="mailto:Marketing@example.com">Marketing@example.com</a></span>
+            <span><a href="mailto:Marketing@athenaindustrial.com">Marketing@athenaindustrial.com</a></span>
         </p>
         <p>
             <span class="label">General:</span>
-            <span><a href="mailto:General@example.com">General@example.com</a></span>
+            <span><a href="mailto:General@athenaindustrial.com">General@athenaindustrial.com</a></span>
         </p>
     </section>
 
@@ -43,8 +43,8 @@
             <h3>Address:</h3>
         </header>
         <p>
-            One Microsoft Way<br />
-            Redmond, WA 98052-6399
+            554 Hurricane Dr<br />
+            Calgary, AB 
         </p>
     </section>
 </asp:Content>

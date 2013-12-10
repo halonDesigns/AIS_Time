@@ -34,14 +34,14 @@
                 </fieldset>
             </LayoutTemplate>
         </asp:Login>
-        <p>
+       <%-- <p>
             <asp:HyperLink runat="server" ID="RegisterHyperLink" ViewStateMode="Disabled">Register</asp:HyperLink>
             if you don't have an account.
-        </p>
+        </p>--%>
     </section>
 
     <section id="socialLoginForm">
-        <h2>Use another service to log in.</h2>
-        <uc:OpenAuthProviders runat="server" ID="OpenAuthLogin" />
+      <%--  <h2>Use another service to log in.</h2>
+        <uc:OpenAuthProviders runat="server" ID="OpenAuthLogin" />--%>
     </section>
 </asp:Content>

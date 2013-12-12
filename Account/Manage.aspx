@@ -89,7 +89,7 @@
         </asp:PlaceHolder>
     </section>
 
-    <section id="externalLoginsForm">
+   <%-- <section id="externalLoginsForm">
         
         <asp:ListView runat="server"
             ItemType="Microsoft.AspNet.Membership.OpenAuth.OpenAuthAccountData"
@@ -122,5 +122,5 @@
 
         <h3>Add an external login</h3>
         <uc:OpenAuthProviders runat="server" ReturnUrl="~/Account/Manage" />
-    </section>
+    </section>--%>
 </asp:Content>

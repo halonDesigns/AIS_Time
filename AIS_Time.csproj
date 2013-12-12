@@ -108,6 +108,14 @@
     <Reference Include="Microsoft.AspNet.Membership.OpenAuth, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <HintPath>packages\Microsoft.AspNet.Membership.OpenAuth.1.0.1\lib\net45\Microsoft.AspNet.Membership.OpenAuth.dll</HintPath>
     </Reference>
+    <Reference Include="Vici.CoolStorage, Version=1.3.0.1128, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Vici.CoolStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="Vici.Core, Version=1.0.0.1027, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Vici.Core.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>packages\WebGrease.1.1.0\lib\WebGrease.dll</HintPath>
@@ -131,6 +139,8 @@
     <Content Include="Account\OpenAuthProviders.ascx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
+    <Content Include="bin\Vici.CoolStorage.dll" />
+    <Content Include="bin\Vici.Core.dll" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -187,6 +197,11 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="css\bootstrap-theme.css" />
+    <Content Include="css\bootstrap-theme.min.css" />
+    <Content Include="css\bootstrap.css" />
+    <Content Include="css\bootstrap.min.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Images\accent.png" />
     <Content Include="Images\bullet.png" />
     <Content Include="Images\heroAccent.png" />
@@ -203,7 +218,12 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="js\bootstrap.js" />
+    <Content Include="js\bootstrap.min.js" />
     <Content Include="packages.config" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\athena-track - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\athena-track - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
@@ -295,13 +315,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="classes\Companies.cs" />
     <Compile Include="classes\Customers.cs" />
-    <Compile Include="classes\Departments.cs" />
+    <Compile Include="classes\TimeDepartments.cs" />
     <Compile Include="classes\EmployeeCompanies.cs" />
     <Compile Include="classes\EmployeeResources.cs" />
-    <Compile Include="classes\Employees.cs" />
-    <Compile Include="classes\ProjectHours.cs" />
+    <Compile Include="classes\TimeEmployees.cs" />
+    <Compile Include="classes\TimeProjectHours.cs" />
     <Compile Include="classes\Projects.cs" />
-    <Compile Include="classes\Resources.cs" />
+    <Compile Include="classes\TimeResources.cs" />
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -343,6 +363,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="admin\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>

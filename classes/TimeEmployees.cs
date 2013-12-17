@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Vici.CoolStorage;
+﻿using Vici.CoolStorage;
 
 namespace AIS_Time.classes
 {
@@ -12,7 +8,7 @@ namespace AIS_Time.classes
         public abstract int TimeEmployeeID { get; }
         public abstract string FirstName { get; set; }
         public abstract string LastName { get; set; }
-        public abstract int CompanyID { get; }
+        public abstract int CompanyID { get; set; }
         public abstract string Description { get; set; }
         public abstract int Status { get; set; }
         public abstract int Type { get; set; }

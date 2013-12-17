@@ -40,6 +40,33 @@ namespace AIS_Time.admin {
         protected global::System.Web.UI.WebControls.TextBox txtName;
         
         /// <summary>
+        /// ddlAISCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlAISCode;
+        
+        /// <summary>
+        /// ddlCEAClassCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlCEAClassCode;
+        
+        /// <summary>
+        /// txtHourlyRate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtHourlyRate;
+        
+        /// <summary>
         /// txtDescription control.
         /// </summary>
         /// <remarks>
@@ -58,13 +85,13 @@ namespace AIS_Time.admin {
         protected global::System.Web.UI.WebControls.Button cmdSubmit;
         
         /// <summary>
-        /// rptCustomers control.
+        /// rptResources control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptCustomers;
+        protected global::System.Web.UI.WebControls.Repeater rptResources;
         
         /// <summary>
         /// ModalProgress control.

@@ -63,8 +63,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
+                       <br />
                         <br />
-                        <br />
+                         <h2>Resource Manager</h2>
                         <br />
                     </div>
                 </div>
@@ -72,12 +73,40 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>New Customer</h4>
+                                <h4>New Resource</h4>
 
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="customer name" />
+                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="resource name" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:DropDownList ID="ddlAISCode" class="form-control" runat="server">
+                                            <asp:ListItem>AIT1</asp:ListItem>
+                                            <asp:ListItem>AIT2</asp:ListItem>
+                                            <asp:ListItem>AIT3</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:DropDownList ID="ddlCEAClassCode" class="form-control" runat="server">
+                                            <asp:ListItem>CEA1</asp:ListItem>
+                                            <asp:ListItem>CEA2</asp:ListItem>
+                                            <asp:ListItem>CEA3</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <asp:TextBox runat="server" ID="txtHourlyRate" class="form-control" placeholder="hourly rate" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -96,21 +125,21 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>Existing Customers</h4>
-                                <asp:Repeater ID="rptCustomers" runat="server" OnItemCommand="rptCustomers_ItemCommand">
+                                <h4>Existing Resources</h4>
+                                <asp:Repeater ID="rptResources" runat="server" OnItemCommand="rptResource_ItemCommand">
                                     <HeaderTemplate>
                                         <table>
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <tr>
                                             <td>
-                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("CustomerName") %>'></asp:Label></td>
+                                                <asp:Label ID="lblResourceName" runat="server" Text='<%#Eval("ResourceName") %>'></asp:Label></td>
                                             <asp:Literal ID="editChildColumn" runat="server"></asp:Literal>
                                             <td id="Td1" style="width: 10%" runat="server">
-                                                <asp:LinkButton ID="btnEditCustomer" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeCustomerID") %>'> EDIT </asp:LinkButton>
+                                                <asp:LinkButton ID="btnEditResource" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeResourceID") %>'> EDIT </asp:LinkButton>
                                             </td>
                                             <td id="deleteChildCol" style="width: 10%" runat="server">
-                                                <asp:LinkButton ID="btnDeleteCustomer" runat="server" CssClass="btn btn-danger" type="submit" CommandName="Delete" CommandArgument='<%# Eval("TimeCustomerID") %>' OnClientClick="return confirmdeleteEntry();">DELETE</asp:LinkButton>
+                                                <asp:LinkButton ID="btnDeleteResource" runat="server" CssClass="btn btn-danger" type="submit" CommandName="Delete" CommandArgument='<%# Eval("TimeResourceID") %>' OnClientClick="return confirmdeleteEntry();">DELETE</asp:LinkButton>
                                             </td>
                                         </tr>
                                     </ItemTemplate>

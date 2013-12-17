@@ -63,8 +63,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
+                       <br />
                         <br />
-                        <br />
+                         <h2>Company Manager</h2>
                         <br />
                     </div>
                 </div>

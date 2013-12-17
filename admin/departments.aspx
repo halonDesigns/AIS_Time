@@ -65,6 +65,7 @@
                     <div class="col-md-12">
                         <br />
                         <br />
+                         <h2>Department Manager</h2>
                         <br />
                     </div>
                 </div>
@@ -72,12 +73,12 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>New Customer</h4>
+                                <h4>New Department</h4>
 
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="customer name" />
+                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="department name" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -96,21 +97,21 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>Existing Customers</h4>
-                                <asp:Repeater ID="rptCustomers" runat="server" OnItemCommand="rptCustomers_ItemCommand">
+                                <h4>Existing Departments</h4>
+                                <asp:Repeater ID="rptDepartments" runat="server" OnItemCommand="rptCustomers_ItemCommand">
                                     <HeaderTemplate>
                                         <table>
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <tr>
                                             <td>
-                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("CustomerName") %>'></asp:Label></td>
+                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("DepartmentName") %>'></asp:Label></td>
                                             <asp:Literal ID="editChildColumn" runat="server"></asp:Literal>
                                             <td id="Td1" style="width: 10%" runat="server">
-                                                <asp:LinkButton ID="btnEditCustomer" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeCustomerID") %>'> EDIT </asp:LinkButton>
+                                                <asp:LinkButton ID="btnEditCustomer" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeDepartmentID") %>'> EDIT </asp:LinkButton>
                                             </td>
                                             <td id="deleteChildCol" style="width: 10%" runat="server">
-                                                <asp:LinkButton ID="btnDeleteCustomer" runat="server" CssClass="btn btn-danger" type="submit" CommandName="Delete" CommandArgument='<%# Eval("TimeCustomerID") %>' OnClientClick="return confirmdeleteEntry();">DELETE</asp:LinkButton>
+                                                <asp:LinkButton ID="btnDeleteCustomer" runat="server" CssClass="btn btn-danger" type="submit" CommandName="Delete" CommandArgument='<%# Eval("TimeDepartmentID") %>' OnClientClick="return confirmdeleteEntry();">DELETE</asp:LinkButton>
                                             </td>
                                         </tr>
                                     </ItemTemplate>

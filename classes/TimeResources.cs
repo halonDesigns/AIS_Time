@@ -9,7 +9,7 @@ namespace AIS_Time.classes
     [MapTo("TimeResources")]
     public abstract partial class TimeResources : CSObject<TimeResources, int>
     {
-        public abstract int ResourceID { get; }
+        public abstract int TimeResourceID { get; }
         public abstract string ResourceName { get; set; }
         public abstract string AISCode { get; set; }
         public abstract string CEAClassCode { get; set; }

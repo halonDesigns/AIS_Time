@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AIS_Time.user {
+namespace AIS_Time.admin {
     
     
     public partial class project_hours {

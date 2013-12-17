@@ -1,4 +1,5 @@
-﻿using Vici.CoolStorage;
+﻿using System;
+using Vici.CoolStorage;
 
 namespace AIS_Time.classes
 {
@@ -12,5 +13,13 @@ namespace AIS_Time.classes
         public abstract string Description { get; set; }
         public abstract int Status { get; set; }
         public abstract int Type { get; set; }
+        public abstract Guid UserID { get; set; }
+        public abstract string Email { get; set; }
+        public abstract string Phone { get; set; }
+        public abstract int TimeResourceID { get; set; }
+
+        //[OneToMany]
+        //public abstract CSList<TimeProjectHours> ProjectHours { get; }
+
     }
 }

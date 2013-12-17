@@ -88,12 +88,61 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                     <h5>Company</h5>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
                                         <asp:DropDownList ID="ddlCompany" class="form-control" runat="server"></asp:DropDownList>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <h5>Resource Type</h5>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:DropDownList ID="ddlResouces" class="form-control" runat="server"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <asp:TextBox runat="server" ID="txtEmail" class="form-control" placeholder="email" />
+                                      <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="UserName" CssClass="field-validation-error" ErrorMessage="The user name field is required." />--%>
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <asp:TextBox runat="server" ID="txtPhone" class="form-control" placeholder="phone" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                   
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <asp:TextBox runat="server" ID="UserName" class="form-control" placeholder="Username" />
+                                       <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="UserName" CssClass="field-validation-error" ErrorMessage="The user name field is required." />--%>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                        <asp:TextBox runat="server" ID="Password" TextMode="Password" class="form-control" placeholder="Password" />
+                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="Password" CssClass="field-validation-error" ErrorMessage="The password field is required." />--%>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <h5>Role</h5>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:DropDownList ID="ddlRoles" class="form-control" runat="server"></asp:DropDownList>
+                                    </div>
+                                </div>
+                            </div>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>

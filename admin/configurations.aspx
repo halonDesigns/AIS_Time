@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/userMP.Master" AutoEventWireup="true" CodeBehind="project-hours.aspx.cs" Inherits="AIS_Time.user.project_hours" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/mainMP.Master" AutoEventWireup="true" CodeBehind="configurations.aspx.cs" Inherits="AIS_Time.admin.configurations" %>
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style type="text/css">
@@ -56,16 +56,16 @@
     <script type="text/javascript" language="javascript">
         var ModalProgress = '<%= ModalProgress.ClientID %>';         
     </script>
-    <script src="user.js" type="text/javascript"></script>
+    <script src="admin.js" type="text/javascript"></script>
     <asp:UpdatePanel runat="server" ID="updEntries" UpdateMode="Conditional" ChildrenAsTriggers="True">
         <ContentTemplate>
 
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                      <br />
                         <br />
-                         <h2>Project Manager</h2>
+                        <br />
+                         <h2>AIS Code Manager</h2>
                         <br />
                     </div>
                 </div>
@@ -73,52 +73,23 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>New Project</h4>
-                                <%-- <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
-                                        </span>
-                                        <asp:DropDownList ID="ddlEmployee" class="form-control" runat="server"></asp:DropDownList>
-                                    </div>
-                                </div>--%>
+                                <h4>New AIS Code</h4>
+
                                 <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
-                                        </span>
-                                        <asp:DropDownList ID="ddlProject" class="form-control" runat="server"></asp:DropDownList>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
-                                        </span>
-                                        <asp:DropDownList ID="ddlDepartment" class="form-control" runat="server"></asp:DropDownList>
-                                    </div>
-                                </div>
-                               
-                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtDate" class="form-control" placeholder="date of work" />
-                                        <asp:CalendarExtender ID="txtDate_CalendarExtender" runat="server" Enabled="True" TargetControlID="txtDate">
-                                        </asp:CalendarExtender>
-                                    </div>
-                                </div>
-                                 <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtHours" class="form-control" placeholder="project hours" />
+                                        <asp:TextBox runat="server" ID="txtAISCodeName" class="form-control" placeholder="code name" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
-                                        <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />
+                                        <asp:TextBox runat="server" ID="txtAISCodeDescription" class="form-control" placeholder="description" />
                                     </div>
                                 </div>
                             </div>
-                            <asp:Button ID="cmdSubmit" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmit_Click" />
+                            <asp:Button ID="cmdSubmitAISCode" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmitAISCode_Click" />
                         </div>
                     </div>
                 </div>
@@ -126,21 +97,84 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>Existing Projects</h4>
-                                <asp:Repeater ID="rptProjectHours" runat="server" OnItemCommand="rptCustomers_ItemCommand">
+                                <h4>Existing AIS Codes</h4>
+                                <asp:Repeater ID="rptAISCodes" runat="server" OnItemCommand="rptAISCodes_ItemCommand">
                                     <HeaderTemplate>
                                         <table>
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <tr>
                                             <td>
-                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("DateOfWork") %>'></asp:Label></td>
+                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("AISCode") %>'></asp:Label></td>
                                             <asp:Literal ID="editChildColumn" runat="server"></asp:Literal>
                                             <td id="Td1" style="width: 10%" runat="server">
-                                                <asp:LinkButton ID="btnEditCustomer" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeProjectHoursID") %>'> EDIT </asp:LinkButton>
+                                                <asp:LinkButton ID="btnEditCustomer" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeAISCodeID") %>'> EDIT </asp:LinkButton>
                                             </td>
                                             <td id="deleteChildCol" style="width: 10%" runat="server">
-                                                <asp:LinkButton ID="btnDeleteCustomer" runat="server" CssClass="btn btn-danger" type="submit" CommandName="Delete" CommandArgument='<%# Eval("TimeProjectHoursID") %>' OnClientClick="return confirmdeleteEntry();">DELETE</asp:LinkButton>
+                                                <asp:LinkButton ID="btnDeleteCustomer" runat="server" CssClass="btn btn-danger" type="submit" CommandName="Delete" CommandArgument='<%# Eval("TimeAISCodeID") %>' OnClientClick="return confirmdeleteEntry();">DELETE</asp:LinkButton>
+                                            </td>
+                                        </tr>
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                        </table>
+                                    </FooterTemplate>
+                                </asp:Repeater>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                    <div class="row">
+                    <div class="col-md-12">
+                        <br />
+                        <br />
+                         <h2>CEA Class Code Manager</h2>
+                        <br />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4>New CEA Class Code</h4>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <asp:TextBox runat="server" ID="txtCEAClassCodeName" class="form-control" placeholder="CEA Class Code name" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:TextBox runat="server" ID="txtCEAClassCodeDescription" class="form-control" placeholder="description" />
+                                    </div>
+                                </div>
+                            </div>
+                            <asp:Button ID="btnSaveCEAClassCode" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmitCEAClassCode_Click" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4>Existing CEA Class Codes</h4>
+                                <asp:Repeater ID="rptCEAClassCodes" runat="server" OnItemCommand="rptCEAClassCodes_ItemCommand">
+                                    <HeaderTemplate>
+                                        <table>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <tr>
+                                            <td>
+                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("CEAClassCode") %>'></asp:Label></td>
+                                            <asp:Literal ID="editChildColumn" runat="server"></asp:Literal>
+                                            <td id="Td1" style="width: 10%" runat="server">
+                                                <asp:LinkButton ID="btnEditCEAClassCode" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeCEAClassCodeID") %>'> EDIT </asp:LinkButton>
+                                            </td>
+                                            <td id="deleteChildCol" style="width: 10%" runat="server">
+                                                <asp:LinkButton ID="btnDeleteCEAClassCode" runat="server" CssClass="btn btn-danger" type="submit" CommandName="Delete" CommandArgument='<%# Eval("TimeCEAClassCodeID") %>' OnClientClick="return confirmdeleteEntry();">DELETE</asp:LinkButton>
                                             </td>
                                         </tr>
                                     </ItemTemplate>
@@ -182,3 +216,4 @@
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
+

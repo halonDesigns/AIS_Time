@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using AIS_Time.classes;
 
 namespace AIS_Time.Account
 {
@@ -31,12 +32,30 @@ namespace AIS_Time.Account
             {
                 //store name
                 Session["LoggedInUserName"] = Login1.UserName;
+               
+                 //get the GUID of the newly created user
+                MembershipUser user = Membership.GetUser(Login1.UserName);
+                var guid = (Guid)user.ProviderUserKey;
+                Session["UserID"] = guid;
+
+                TimeEmployees employee = TimeEmployees.ReadFirst("UserID = @UserID", "@UserID", guid);
+                Session["TimeEmployeeID"] = employee.TimeEmployeeID;
+
                 Response.Redirect("~/admin/index.aspx");
             }
             else if (Roles.IsUserInRole(Login1.UserName, "Consultant"))
             {
                 //store name
                 Session["LoggedInUserName"] = Login1.UserName;
+
+                //get the GUID of the newly created user
+                MembershipUser user = Membership.GetUser(Login1.UserName);
+                var guid = (Guid)user.ProviderUserKey;
+                Session["UserID"] = guid;
+
+                TimeEmployees employee = TimeEmployees.ReadFirst("UserID = @UserID", "@UserID", guid);
+                Session["TimeEmployeeID"] = employee.TimeEmployeeID;
+
                 Response.Redirect("~/user/index.aspx");
             }
         }

@@ -1,9 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/mainMP.Master" AutoEventWireup="true" CodeBehind="reports.aspx.cs" Inherits="AIS_Time.admin.reports" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/mainMP.Master" AutoEventWireup="true" CodeBehind="project-hours.aspx.cs" Inherits="AIS_Time.admin.project_hours" %>
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style type="text/css">
-        .input-group-addon
+       .input-group-addon
         {
             background-color: rgb(50, 118, 177);
             border-color: rgb(40, 94, 142);
@@ -54,103 +53,80 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <ajaxToolkit:ToolkitScriptManager ID="ScriptManager1" runat="server">
     </ajaxToolkit:ToolkitScriptManager>
-    <%-- <script type="text/javascript" language="javascript">
+    <script type="text/javascript" language="javascript">
         var ModalProgress = '<%= ModalProgress.ClientID %>';         
-    </script>--%>
+    </script>
     <script src="admin.js" type="text/javascript"></script>
-    <%--  <asp:UpdatePanel runat="server" ID="updEntries" UpdateMode="Conditional" ChildrenAsTriggers="True">
-        <ContentTemplate>--%>
+    <asp:UpdatePanel runat="server" ID="updEntries" UpdateMode="Conditional" ChildrenAsTriggers="True">
+        <ContentTemplate>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <br />
-                <br />
-                <h2>Project Hours Manager</h2>
-                <br />
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h4>Daily Project Time Cards</h4>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
-                                </span>
-                                <asp:DropDownList ID="ddlEmployee" class="form-control" runat="server"></asp:DropDownList>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                <asp:TextBox runat="server" ID="txtDate" class="form-control" placeholder="date of work" />
-                                <asp:CalendarExtender ID="txtDate_CalendarExtender" runat="server" Enabled="True" TargetControlID="txtDate">
-                                </asp:CalendarExtender>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="form-group">
-                        <div class="btn-group">
-                            <asp:Button ID="btnDailyReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Daily Report" OnClick="btnDailyReport_Click" />
-                        </div>
-
-                    </div>
-                    <div class="form-group">
-                        <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                      <br />
+                        <br />
+                         <h2>Project Time Card Manager</h2>
+                        <br />
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="row">
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <br />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h4>Weekly Project Summary</h4>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
-                                </span>
-                                <asp:DropDownList ID="ddlProjects" class="form-control" runat="server"></asp:DropDownList>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                <asp:TextBox runat="server" ID="txtWeeklyDateStart" class="form-control" placeholder="week start date" />
-                                <asp:CalendarExtender ID="CalendarExtender1" runat="server" Enabled="True" TargetControlID="txtWeeklyDateStart">
-                                </asp:CalendarExtender>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="form-group">
-                        <div class="btn-group">
-                            <asp:Button ID="btnWeeklyReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Weekly Project Report" OnClick="btnWeeklyReport_Click" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <asp:Label ID="lblErrorWeeklyReport" runat="server" Text=""></asp:Label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <%--<div class="row">
+                <div class="row">
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>Existing Project Hours</h4>
+                                <h4>New Project Time Card Entry</h4>
+                                <%-- <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:DropDownList ID="ddlEmployee" class="form-control" runat="server"></asp:DropDownList>
+                                    </div>
+                                </div>--%>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:DropDownList ID="ddlProject" class="form-control" runat="server"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:DropDownList ID="ddlDepartment" class="form-control" runat="server"></asp:DropDownList>
+                                    </div>
+                                </div>
+                               
+                                 <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <asp:TextBox runat="server" ID="txtDate" class="form-control" placeholder="date of work" />
+                                        <asp:CalendarExtender ID="txtDate_CalendarExtender" runat="server" Enabled="True" TargetControlID="txtDate">
+                                        </asp:CalendarExtender>
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <asp:TextBox runat="server" ID="txtHours" class="form-control" placeholder="project hours" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />
+                                    </div>
+                                </div>
+                            </div>
+                            <asp:Button ID="cmdSubmit" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmit_Click" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4>Existing Project Time Card Entries</h4>
                                 <asp:Repeater ID="rptProjectHours" runat="server" OnItemCommand="rptCustomers_ItemCommand">
                                     <HeaderTemplate>
                                         <table>
@@ -175,9 +151,9 @@
                             </div>
                         </div>
                     </div>
-                </div>--%>
-    </div>
-    <%--            <!-- START PROGRESS LOADING PANEL -->
+                </div>
+            </div>
+            <!-- START PROGRESS LOADING PANEL -->
             <asp:ModalPopupExtender ID="ModalProgress" runat="server" PopupControlID="PanLoad"
                 TargetControlID="PanLoad" BackgroundCssClass="modalBackground">
             </asp:ModalPopupExtender>
@@ -204,5 +180,5 @@
             </asp:Panel>
             <!-- END PROGRESS LOADING PANEL -->
         </ContentTemplate>
-    </asp:UpdatePanel>--%>
+    </asp:UpdatePanel>
 </asp:Content>

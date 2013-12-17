@@ -17,5 +17,8 @@ namespace AIS_Time.classes
         public abstract int Status { get; set; }
         public abstract int Type { get; set; }
 
+        [ManyToOne]
+        public abstract TimeEmployees Employee { get; set; }
+
     }
 }

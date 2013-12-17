@@ -78,7 +78,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="customer name" />
+                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="company name" />
                                     </div>
                                 </div>
                                 <div class="form-group">

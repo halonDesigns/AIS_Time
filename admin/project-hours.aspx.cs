@@ -4,7 +4,7 @@ using System.Web.UI.WebControls;
 using AIS_Time.classes;
 using Vici.CoolStorage;
 
-namespace AIS_Time.user
+namespace AIS_Time.admin
 {
     public partial class project_hours : System.Web.UI.Page
     {
@@ -64,7 +64,7 @@ namespace AIS_Time.user
         protected void cmdSubmit_Click(object sender, EventArgs e)
         {
             if (txtDate.Text == "" || txtHours.Text == "" || txtHours.Text == "0" || ddlDepartment.SelectedIndex == -1
-                ||  ddlProject.SelectedIndex == -1) { return; }
+                || ddlProject.SelectedIndex == -1) { return; }
 
             _currentProjectHours = (TimeProjectHours)Session["CurrentProjectHours"];
             if (_currentProjectHours == null)

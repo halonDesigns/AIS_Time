@@ -82,24 +82,20 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <h5>AIS Code</h5>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
                                         <asp:DropDownList ID="ddlAISCode" class="form-control" runat="server">
-                                            <asp:ListItem>AIT1</asp:ListItem>
-                                            <asp:ListItem>AIT2</asp:ListItem>
-                                            <asp:ListItem>AIT3</asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <h5>CEA Class Code</h5>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
                                         <asp:DropDownList ID="ddlCEAClassCode" class="form-control" runat="server">
-                                            <asp:ListItem>CEA1</asp:ListItem>
-                                            <asp:ListItem>CEA2</asp:ListItem>
-                                            <asp:ListItem>CEA3</asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
                                 </div>

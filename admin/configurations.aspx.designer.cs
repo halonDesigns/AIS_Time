@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AIS_Time.user {
+namespace AIS_Time.admin {
     
     
-    public partial class project_hours {
+    public partial class configurations {
         
         /// <summary>
         /// ScriptManager1 control.
@@ -31,76 +31,76 @@ namespace AIS_Time.user {
         protected global::System.Web.UI.UpdatePanel updEntries;
         
         /// <summary>
-        /// ddlProject control.
+        /// txtAISCodeName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlProject;
+        protected global::System.Web.UI.WebControls.TextBox txtAISCodeName;
         
         /// <summary>
-        /// ddlDepartment control.
+        /// txtAISCodeDescription control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlDepartment;
+        protected global::System.Web.UI.WebControls.TextBox txtAISCodeDescription;
         
         /// <summary>
-        /// txtDate control.
+        /// cmdSubmitAISCode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDate;
+        protected global::System.Web.UI.WebControls.Button cmdSubmitAISCode;
         
         /// <summary>
-        /// txtDate_CalendarExtender control.
+        /// rptAISCodes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.CalendarExtender txtDate_CalendarExtender;
+        protected global::System.Web.UI.WebControls.Repeater rptAISCodes;
         
         /// <summary>
-        /// txtHours control.
+        /// txtCEAClassCodeName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtHours;
+        protected global::System.Web.UI.WebControls.TextBox txtCEAClassCodeName;
         
         /// <summary>
-        /// txtDescription control.
+        /// txtCEAClassCodeDescription control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDescription;
+        protected global::System.Web.UI.WebControls.TextBox txtCEAClassCodeDescription;
         
         /// <summary>
-        /// cmdSubmit control.
+        /// btnSaveCEAClassCode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button cmdSubmit;
+        protected global::System.Web.UI.WebControls.Button btnSaveCEAClassCode;
         
         /// <summary>
-        /// rptProjectHours control.
+        /// rptCEAClassCodes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptProjectHours;
+        protected global::System.Web.UI.WebControls.Repeater rptCEAClassCodes;
         
         /// <summary>
         /// ModalProgress control.

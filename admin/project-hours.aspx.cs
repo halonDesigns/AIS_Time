@@ -119,7 +119,7 @@ namespace AIS_Time.admin
                 int pkID = Convert.ToInt32(allKeys);
                 _currentProjectHours = TimeProjectHours.Read(pkID);
                 Session["CurrentProjectHours"] = _currentProjectHours;
-                txtDate.Text = _currentProjectHours.DateOfWork.ToShortDateString();
+                txtDate.Text = _currentProjectHours.DateOfWork.ToString("M/d/yyyy", CultureInfo.InvariantCulture);
                 txtHours.Text = _currentProjectHours.HoursOfWork.ToString();
                 ddlDepartment.SelectedValue = ddlDepartment.Items.FindByValue(_currentProjectHours.TimeDepartmentID.ToString()).Value;
                 ddlProject.SelectedValue = ddlProject.Items.FindByValue(_currentProjectHours.TimeProjectID.ToString()).Value;

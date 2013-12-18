@@ -305,6 +305,7 @@
     <Content Include="defaultMP.Master" />
     <Content Include="ClassDiagram1.cd" />
     <Content Include="admin\PDFimages\DailyTemplate.pdf" />
+    <Content Include="classes\TimeKeeper.cd" />
     <None Include="Properties\PublishProfiles\athena-track - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\athena-track - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
@@ -474,6 +475,7 @@
     <Compile Include="classes\TimeProjectHours.cs" />
     <Compile Include="classes\TimeProjects.cs" />
     <Compile Include="classes\TimeResources.cs" />
+    <Compile Include="classes\WeeklyReportResult.cs" />
     <Compile Include="defaultMP.Master.cs">
       <DependentUpon>defaultMP.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

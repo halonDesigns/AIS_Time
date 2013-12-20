@@ -58,6 +58,15 @@ namespace AIS_Time.admin {
         protected global::System.Web.UI.WebControls.Button cmdSubmitAISCode;
         
         /// <summary>
+        /// lblError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblError;
+        
+        /// <summary>
         /// rptAISCodes control.
         /// </summary>
         /// <remarks>
@@ -92,6 +101,15 @@ namespace AIS_Time.admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSaveCEAClassCode;
+        
+        /// <summary>
+        /// lblErrorAIS control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblErrorAIS;
         
         /// <summary>
         /// rptCEAClassCodes control.

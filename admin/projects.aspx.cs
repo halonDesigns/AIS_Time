@@ -41,8 +41,23 @@ namespace AIS_Time.admin
 
         protected void cmdSubmit_Click(object sender, EventArgs e)
         {
-            if (txtName.Text == "" || txtNumber.Text == "" || ddlCustomer.SelectedIndex == -1) { return; }
-
+            if (txtName.Text == "")
+            {
+                lblError.Text = "Please enter a Project Name.";
+                return;
+            }
+            if (txtNumber.Text == "")
+            {
+                lblError.Text = "Please enter a Project Number.";
+                return;
+            }
+            if (ddlCustomer.SelectedIndex == -1)
+            {
+                lblError.Text = "Please choose a customer.";
+                return;
+            }
+            lblError.Text = "";
+            
             _currentProject = (TimeProjects)Session["CurrentProject"];
             if (_currentProject == null)
             {

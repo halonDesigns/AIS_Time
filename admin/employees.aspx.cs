@@ -17,7 +17,6 @@ namespace AIS_Time.admin
             {
                 RefreshEntries();
                 LoadCompanies();
-                LoadResources();
                 LoadRoles();
             }
         }
@@ -44,16 +43,6 @@ namespace AIS_Time.admin
             ddlCompany.DataBind();
         }
 
-        private void LoadResources()
-        {
-            CSList<TimeResources> resources = TimeResources.OrderedList("ResourceName");
-
-            ddlResouces.DataSource = resources;
-            ddlResouces.DataValueField = "TimeResourceID";
-            ddlResouces.DataTextField = "ResourceName";
-            ddlResouces.DataBind();
-        }
-
          private void LoadRoles()
          {
             string[] roles = Roles.GetAllRoles();
@@ -64,9 +53,47 @@ namespace AIS_Time.admin
 
         protected void cmdSubmit_Click(object sender, EventArgs e)
         {
-            if (txtFname.Text == "" || txtLname.Text == "" || ddlCompany.SelectedIndex == -1) { return; }
-
             _currentEmployee = (TimeEmployees)Session["CurrentEmployee"];
+
+            if (txtFname.Text == "")
+            {
+                lblError.Text = "Please enter a first name.";
+                return;
+            }
+            if (txtLname.Text == "")
+            {
+                lblError.Text = "Please enter a last name.";
+                return;
+            }
+            if (ddlCompany.SelectedIndex == -1)
+            {
+                lblError.Text = "Please choose a company.";
+                return;
+            }
+            if (txtEmail.Text == "")
+            {
+                lblError.Text = "Please enter an email address.";
+                return;
+            }
+            if (UserName.Text == "" && _currentEmployee == null)
+            {
+                lblError.Text = "Please enter a username.";
+                return;
+            }
+            if (Password.Text == "" && _currentEmployee == null)
+            {
+                lblError.Text = "Please enter a password.";
+                return;
+            }
+
+            if (ddlRoles.SelectedIndex == -1 && _currentEmployee == null)
+            {
+                lblError.Text = "Please choose a role for this user.";
+                return;
+            }
+            lblError.Text = "";
+
+            
             if (_currentEmployee == null)
             {
 
@@ -92,7 +119,6 @@ namespace AIS_Time.admin
                         employee.FirstName = txtFname.Text;
                         employee.LastName = txtLname.Text;
                         employee.CompanyID = Convert.ToInt32(ddlCompany.SelectedValue);
-                        employee.TimeResourceID = Convert.ToInt32(ddlResouces.SelectedValue);
                         employee.Description = txtDescription.Text;
                         employee.Status = 1;
                         employee.Type = 1;
@@ -110,7 +136,6 @@ namespace AIS_Time.admin
                 _currentEmployee.FirstName = txtFname.Text;
                 _currentEmployee.LastName = txtLname.Text;
                 _currentEmployee.CompanyID = Convert.ToInt32(ddlCompany.SelectedValue);
-                _currentEmployee.TimeResourceID = Convert.ToInt32(ddlResouces.SelectedValue);
                 _currentEmployee.Description = txtDescription.Text;
                 _currentEmployee.Email = txtEmail.Text;
                 _currentEmployee.Phone = txtPhone.Text;
@@ -133,7 +158,6 @@ namespace AIS_Time.admin
             Password.Text = "";
             UserName.Text = "";
             ddlCompany.SelectedIndex = -1;
-            ddlResouces.SelectedIndex = -1;
             txtDescription.Text = "";
             _currentEmployee = null;
             Session["CurrentEmployee"] = _currentEmployee;
@@ -154,7 +178,6 @@ namespace AIS_Time.admin
                 txtEmail.Text = _currentEmployee.Email;
                 txtPhone.Text = _currentEmployee.Phone;
                 ddlCompany.SelectedValue = ddlCompany.Items.FindByValue(_currentEmployee.CompanyID.ToString()).Value;
-                ddlResouces.SelectedValue = ddlResouces.Items.FindByValue(_currentEmployee.TimeResourceID.ToString()).Value;
                 txtDescription.Text = _currentEmployee.Description;
 
                 UserName.Visible = false;
@@ -167,11 +190,23 @@ namespace AIS_Time.admin
                 string allKeys = Convert.ToString(e.CommandArgument);
                 int pkID = Convert.ToInt32(allKeys);
                 _currentEmployee = TimeEmployees.Read(pkID);
-                _currentEmployee.Delete();
-                _currentEmployee = null;
-                Session["CurrentEmployee"] = _currentEmployee;
-                RefreshEntries();
-                updEntries.Update();
+
+                var user = Membership.GetUser(_currentEmployee.UserID);
+                if (user == null)
+                {
+                    lblError.Text = "User could not be deleted";
+                }
+                else
+                {
+                    //delete the user from the membership tables
+                    Membership.DeleteUser(user.UserName);
+
+                    _currentEmployee.Delete();
+                    _currentEmployee = null;
+                    Session["CurrentEmployee"] = _currentEmployee;
+                    RefreshEntries();
+                    updEntries.Update();  
+                }
             }
         }
     }

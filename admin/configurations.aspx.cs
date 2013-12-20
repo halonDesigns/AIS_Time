@@ -48,7 +48,13 @@ namespace AIS_Time.admin
 
         protected void cmdSubmitCEAClassCode_Click(object sender, EventArgs e)
         {
-            if (txtCEAClassCodeName.Text == "") { return; }
+            if (txtCEAClassCodeName.Text == "")
+            {
+                lblError.Text = "Please enter a CEAClassCode name.";
+                return;
+            }
+            lblError.Text = "";
+
             _currentCEAClassCode = (TimeCEAClassCodes)Session["CurrentCEAClassCode"];
             if (_currentCEAClassCode == null)
             {
@@ -85,7 +91,13 @@ namespace AIS_Time.admin
 
         protected void cmdSubmitAISCode_Click(object sender, EventArgs e)
         {
-            if (txtAISCodeName.Text == "") { return; }
+           if (txtAISCodeName.Text == "")
+            {
+                lblErrorAIS.Text = "Please enter a AISCode name.";
+                return;
+            }
+           lblErrorAIS.Text = "";
+
             _currentAISCode = (TimeAISCodes)Session["CurrentAISCode"];
             if (_currentAISCode == null)
             {

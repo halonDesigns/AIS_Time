@@ -239,6 +239,8 @@
     <Content Include="font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Images\accent.png" />
+    <Content Include="Images\ajax\loaders\ajax-loader.gif" />
+    <Content Include="Images\ajax\loaders\loading.gif" />
     <Content Include="Images\bullet.png" />
     <Content Include="Images\head_black.png" />
     <Content Include="Images\heroAccent.png" />
@@ -264,6 +266,7 @@
     <Content Include="js\flot\jquery.flot.resize.js" />
     <Content Include="js\flot\jquery.flot.tooltip.min.js" />
     <Content Include="js\jquery-1.10.2.js" />
+    <Content Include="js\jsUpdateProgress.js" />
     <Content Include="js\morris\chart-data-morris.js" />
     <Content Include="js\tablesorter\jquery.tablesorter.js" />
     <Content Include="js\tablesorter\tables.js" />

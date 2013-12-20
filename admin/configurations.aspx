@@ -56,6 +56,16 @@
     <script type="text/javascript" language="javascript">
         var ModalProgress = '<%= ModalProgress.ClientID %>';         
     </script>
+     <script language="javascript" type="text/javascript" src="../js/jsUpdateProgress.js"></script>
+    <script language="javascript" type="text/javascript">
+        function ShowModalPopup(ModalBehaviour) {
+            $find(ModalBehaviour).show();
+        }
+
+        function HideModalPopup(ModalBehaviour) {
+            $find(ModalBehaviour).hide();
+        }
+    </script>
     <script src="admin.js" type="text/javascript"></script>
     <asp:UpdatePanel runat="server" ID="updEntries" UpdateMode="Conditional" ChildrenAsTriggers="True">
         <ContentTemplate>
@@ -88,8 +98,17 @@
                                         <asp:TextBox runat="server" ID="txtAISCodeDescription" class="form-control" placeholder="description" />
                                     </div>
                                 </div>
+                                
+                                 <div class="form-group">
+                                          <asp:Button ID="cmdSubmitAISCode" class="btn btn-lg btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmitAISCode_Click" />
+                                </div>
+                                <div class="form-group">
+                                    <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                                </div>
+                                
+
                             </div>
-                            <asp:Button ID="cmdSubmitAISCode" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmitAISCode_Click" />
+                         
                         </div>
                     </div>
                 </div>
@@ -151,8 +170,17 @@
                                         <asp:TextBox runat="server" ID="txtCEAClassCodeDescription" class="form-control" placeholder="description" />
                                     </div>
                                 </div>
+                                
+                                 <div class="form-group">
+                                        <asp:Button ID="btnSaveCEAClassCode" class="btn btn-lg btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmitCEAClassCode_Click" />
+                                </div>
+                                <div class="form-group">
+                                    <asp:Label ID="lblErrorAIS" runat="server" Text=""></asp:Label>
+                                </div>
+                                
+
                             </div>
-                            <asp:Button ID="btnSaveCEAClassCode" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmitCEAClassCode_Click" />
+                           
                         </div>
                     </div>
                 </div>
@@ -197,11 +225,11 @@
                         <asp:UpdateProgress ID="UpdateProgress1" runat="server" DisplayAfter="0">
                             <ProgressTemplate>
                                 <div style="padding: 5px; border: dotted 1px #c3c3c3; text-align: center;">
-                                    <div align="center">
+                                     <div align="center">
                                         <br />
-                                        <img src="../Images/head_black.png.png" width="150px" alt="loading" title="loading" />
+                                        <img src="../Images/head_black.png" width="150px" alt="loading" title="loading" />
                                         <br />
-                                        <img src="../img/ajax/loaders/ajax-loader.gif" alt="loading" title="loading" /><br />
+                                        <img src="../Images/ajax/loaders/ajax-loader.gif" alt="loading" title="loading" /><br />
                                         <asp:Label Width="100%" ID="lblProcessing" class="label_field_desc" runat="server"
                                             Text="Loading Data, please wait..."></asp:Label>
                                         <br />

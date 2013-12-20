@@ -16,7 +16,6 @@ namespace AIS_Time.classes
         public abstract Guid UserID { get; set; }
         public abstract string Email { get; set; }
         public abstract string Phone { get; set; }
-        public abstract int TimeResourceID { get; set; }
 
         //[OneToMany]
         //public abstract CSList<TimeProjectHours> ProjectHours { get; }

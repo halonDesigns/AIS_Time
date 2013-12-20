@@ -36,7 +36,15 @@ namespace AIS_Time.admin
 
         protected void cmdSubmit_Click(object sender, EventArgs e)
         {
-            if (txtName.Text == "") { return; }
+            if (txtName.Text == "")
+            {
+                lblError.Text = "Please enter a company name.";
+                return;
+            }
+            else
+            {
+                lblError.Text = "";
+            }
             _currentCompany = (TimeCompanies)Session["CurrentCompany"];
             if (_currentCompany == null)
             {

@@ -15,9 +15,11 @@ namespace AIS_Time.user
             if (!Page.IsPostBack)
             {
                 RefreshEntries();
-                //LoadEmployees();
+                LoadResources();
                 LoadDepartments();
                 LoadProjects();
+                //set the default date
+                txtDate.Text = DateTime.Now.ToString("M/d/yyyy", CultureInfo.InvariantCulture); 
             }
         }
 
@@ -33,15 +35,16 @@ namespace AIS_Time.user
             }
         }
 
-        //private void LoadEmployees()
-        //{
-        //    CSList<TimeEmployees> employees = TimeEmployees.OrderedList("LastName");
+        private void LoadResources()
+        {
+            CSList<TimeResources> employees = TimeResources.OrderedList("ResourceName");
 
-        //    ddlEmployee.DataSource = employees;
-        //    ddlEmployee.DataValueField = "TimeEmployeeID";
-        //    ddlEmployee.DataTextField = "LastName";
-        //    ddlEmployee.DataBind();
-        //}
+            ddlResoures.DataSource = employees;
+            ddlResoures.DataValueField = "TimeResourceID";
+            ddlResoures.DataTextField = "ResourceName";
+            ddlResoures.DataBind();
+        }
+
         private void LoadProjects()
         {
             CSList<TimeProjects> projects = TimeProjects.OrderedList("ProjectName");
@@ -51,6 +54,7 @@ namespace AIS_Time.user
             ddlProject.DataTextField = "ProjectName";
             ddlProject.DataBind();
         }
+
         private void LoadDepartments()
         {
             CSList<TimeDepartments> departments = TimeDepartments.OrderedList("DepartmentName");
@@ -76,6 +80,7 @@ namespace AIS_Time.user
                 projectHours.DateOfWork = DateTime.ParseExact(txtDate.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
                 projectHours.HoursOfWork = Convert.ToInt32(txtHours.Text);
                 projectHours.TimeDepartmentID = Convert.ToInt32(ddlDepartment.SelectedValue);
+                projectHours.TimeResourceID = Convert.ToInt32(ddlResoures.SelectedValue);
                 projectHours.TimeEmployeeID = (int)Session["TimeEmployeeID"];
                 projectHours.TimeProjectID = Convert.ToInt32(ddlProject.SelectedValue);
                 projectHours.Description = txtDescription.Text;
@@ -90,6 +95,7 @@ namespace AIS_Time.user
                 _currentProjectHours.DateOfWork = DateTime.ParseExact(txtDate.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
                 _currentProjectHours.HoursOfWork = Convert.ToInt32(txtHours.Text);
                 _currentProjectHours.TimeDepartmentID = Convert.ToInt32(ddlDepartment.SelectedValue);
+                _currentProjectHours.TimeResourceID = Convert.ToInt32(ddlResoures.SelectedValue);
                 _currentProjectHours.TimeEmployeeID = (int)Session["TimeEmployeeID"];
                 _currentProjectHours.TimeProjectID = Convert.ToInt32(ddlProject.SelectedValue);
                 _currentProjectHours.Description = txtDescription.Text;
@@ -103,6 +109,7 @@ namespace AIS_Time.user
             txtDate.Text = "";
             txtHours.Text = "0";
             ddlDepartment.SelectedIndex = -1;
+            ddlResoures.SelectedIndex = -1;
             ddlProject.SelectedIndex = -1;
             txtDescription.Text = "";
             _currentProjectHours = null;
@@ -122,6 +129,7 @@ namespace AIS_Time.user
                 txtDate.Text = _currentProjectHours.DateOfWork.ToString("M/d/yyyy", CultureInfo.InvariantCulture);
                 txtHours.Text = _currentProjectHours.HoursOfWork.ToString();
                 ddlDepartment.SelectedValue = ddlDepartment.Items.FindByValue(_currentProjectHours.TimeDepartmentID.ToString()).Value;
+                ddlResoures.SelectedValue = ddlResoures.Items.FindByValue(_currentProjectHours.TimeResourceID.ToString()).Value;
                 ddlProject.SelectedValue = ddlProject.Items.FindByValue(_currentProjectHours.TimeProjectID.ToString()).Value;
                 txtDescription.Text = _currentProjectHours.Description;
             }

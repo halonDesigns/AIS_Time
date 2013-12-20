@@ -56,7 +56,17 @@
     <script type="text/javascript" language="javascript">
         var ModalProgress = '<%= ModalProgress.ClientID %>';         
     </script>
-    <script src="admin.js" type="text/javascript"></script>
+     <script language="javascript" type="text/javascript" src="../js/jsUpdateProgress.js"></script>
+    <script language="javascript" type="text/javascript">
+        function ShowModalPopup(ModalBehaviour) {
+            $find(ModalBehaviour).show();
+        }
+
+        function HideModalPopup(ModalBehaviour) {
+            $find(ModalBehaviour).hide();
+        }
+    </script>
+    <script src="../user/user.js" type="text/javascript"></script>
     <asp:UpdatePanel runat="server" ID="updEntries" UpdateMode="Conditional" ChildrenAsTriggers="True">
         <ContentTemplate>
 
@@ -65,7 +75,7 @@
                     <div class="col-md-12">
                       <br />
                         <br />
-                         <h2>Project Time Card Manager</h2>
+                         <h2>Project Manager</h2>
                         <br />
                     </div>
                 </div>
@@ -73,7 +83,7 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>New Project Time Card Entry</h4>
+                                <h4>New Project</h4>
                                 <%-- <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
@@ -82,20 +92,29 @@
                                     </div>
                                 </div>--%>
                                 <div class="form-group">
+                                    <h5>Project</h5>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
                                         <asp:DropDownList ID="ddlProject" class="form-control" runat="server"></asp:DropDownList>
                                     </div>
                                 </div>
+                                 <div class="form-group">
+                                     <h5>Resource Type</h5>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:DropDownList ID="ddlResoures" class="form-control" runat="server"></asp:DropDownList>
+                                    </div>
+                                </div>
                                 <div class="form-group">
+                                    <h5>Department</h5>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
                                         <asp:DropDownList ID="ddlDepartment" class="form-control" runat="server"></asp:DropDownList>
                                     </div>
                                 </div>
-                               
                                  <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
@@ -126,7 +145,7 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>Existing Project Time Card Entries</h4>
+                                <h4>Existing Projects</h4>
                                 <asp:Repeater ID="rptProjectHours" runat="server" OnItemCommand="rptCustomers_ItemCommand">
                                     <HeaderTemplate>
                                         <table>
@@ -165,9 +184,9 @@
                                 <div style="padding: 5px; border: dotted 1px #c3c3c3; text-align: center;">
                                     <div align="center">
                                         <br />
-                                        <img src="../Images/head_black.png.png" width="150px" alt="loading" title="loading" />
+                                        <img src="../Images/head_black.png" width="150px" alt="loading" title="loading" />
                                         <br />
-                                        <img src="../img/ajax/loaders/ajax-loader.gif" alt="loading" title="loading" /><br />
+                                        <img src="../Images/ajax/loaders/ajax-loader.gif" alt="loading" title="loading" /><br />
                                         <asp:Label Width="100%" ID="lblProcessing" class="label_field_desc" runat="server"
                                             Text="Loading Data, please wait..."></asp:Label>
                                         <br />

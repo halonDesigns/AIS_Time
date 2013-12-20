@@ -54,7 +54,19 @@ namespace AIS_Time.admin
 
         protected void cmdSubmit_Click(object sender, EventArgs e)
         {
-            if (txtName.Text == "" || txtHourlyRate.Text == "" || txtHourlyRate.Text == "0.0") { return; }
+           
+            if (txtName.Text == "")
+            {
+                lblError.Text = "Please enter a Resource Name.";
+                return;
+            }
+            if (txtHourlyRate.Text == "" || txtHourlyRate.Text == "0.0")
+            {
+                lblError.Text = "Please enter an hourly rate.";
+                return;
+            }
+            lblError.Text = "";
+
             _currentResource = (TimeResources)Session["CurrentResource"];
             if (_currentResource == null)
             {

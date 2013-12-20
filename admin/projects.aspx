@@ -101,8 +101,17 @@
                                         <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />
                                     </div>
                                 </div>
+                                
+                                 <div class="form-group">
+                                       <asp:Button ID="cmdSubmit" class="btn btn-lg btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmit_Click" />
+                                </div>
+                                <div class="form-group">
+                                    <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                                </div>
+                                
+
                             </div>
-                            <asp:Button ID="cmdSubmit" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmit_Click" />
+                           
                         </div>
                     </div>
                 </div>

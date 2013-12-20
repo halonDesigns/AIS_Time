@@ -1,8 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/mainMP.Master" AutoEventWireup="true" CodeBehind="resources.aspx.cs" Inherits="AIS_Time.admin.resources" %>
+
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style type="text/css">
-       .input-group-addon
+        .input-group-addon
         {
             background-color: rgb(50, 118, 177);
             border-color: rgb(40, 94, 142);
@@ -56,6 +57,16 @@
     <script type="text/javascript" language="javascript">
         var ModalProgress = '<%= ModalProgress.ClientID %>';         
     </script>
+     <script language="javascript" type="text/javascript" src="../js/jsUpdateProgress.js"></script>
+    <script language="javascript" type="text/javascript">
+        function ShowModalPopup(ModalBehaviour) {
+            $find(ModalBehaviour).show();
+        }
+
+        function HideModalPopup(ModalBehaviour) {
+            $find(ModalBehaviour).hide();
+        }
+    </script>
     <script src="admin.js" type="text/javascript"></script>
     <asp:UpdatePanel runat="server" ID="updEntries" UpdateMode="Conditional" ChildrenAsTriggers="True">
         <ContentTemplate>
@@ -63,9 +74,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                       <br />
                         <br />
-                         <h2>Resource Manager</h2>
+                        <br />
+                        <h2>Resource Manager</h2>
                         <br />
                     </div>
                 </div>
@@ -112,8 +123,15 @@
                                         <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                        <asp:Button ID="cmdSubmit" class="btn btn-lg btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmit_Click" />
+                                </div>
+                                <div class="form-group">
+                                    <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                                </div>
                             </div>
-                            <asp:Button ID="cmdSubmit" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmit_Click" />
+
+
                         </div>
                     </div>
                 </div>
@@ -160,9 +178,9 @@
                                 <div style="padding: 5px; border: dotted 1px #c3c3c3; text-align: center;">
                                     <div align="center">
                                         <br />
-                                        <img src="../Images/head_black.png.png" width="150px" alt="loading" title="loading" />
+                                        <img src="../Images/head_black.png" width="150px" alt="loading" title="loading" />
                                         <br />
-                                        <img src="../img/ajax/loaders/ajax-loader.gif" alt="loading" title="loading" /><br />
+                                        <img src="../Images/ajax/loaders/ajax-loader.gif" alt="loading" title="loading" /><br />
                                         <asp:Label Width="100%" ID="lblProcessing" class="label_field_desc" runat="server"
                                             Text="Loading Data, please wait..."></asp:Label>
                                         <br />

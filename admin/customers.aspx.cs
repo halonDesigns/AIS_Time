@@ -36,7 +36,15 @@ namespace AIS_Time.admin
 
         protected void cmdSubmit_Click(object sender, EventArgs e)
         {
-            if( txtName.Text == ""){return;}
+            if (txtName.Text == "")
+            {
+                lblError.Text = "Please enter a customer name.";
+                return;
+            }
+            else
+            {
+                lblError.Text = "";
+            }
             _currentCustomer = (TimeCustomers) Session["CurrentCustomer"];
             if (_currentCustomer == null)
             {

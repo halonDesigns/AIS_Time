@@ -11,6 +11,7 @@ namespace AIS_Time.classes
         public abstract int TimeEmployeeID { get; set; }
         public abstract int TimeDepartmentID { get; set; }
         public abstract int TimeProjectID { get; set; }
+        public abstract int TimeResourceID { get; set; }
         public abstract DateTime DateOfWork { get; set; }
         public abstract int HoursOfWork { get; set; }
         public abstract string Description { get; set; }

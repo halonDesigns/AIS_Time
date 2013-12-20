@@ -309,6 +309,8 @@
     <Content Include="ClassDiagram1.cd" />
     <Content Include="admin\PDFimages\DailyTemplate.pdf" />
     <Content Include="classes\TimeKeeper.cd" />
+    <Content Include="admin\PDFimages\MonthlyEmployeeTemplate.pdf" />
+    <Content Include="admin\PDFimages\WeeklyTemplate.pdf" />
     <None Include="Properties\PublishProfiles\athena-track - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\athena-track - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />

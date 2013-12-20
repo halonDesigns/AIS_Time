@@ -104,6 +104,41 @@
                 </div>
             </div>
         </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Monthly Employee Time Card</h4>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                </span>
+                                <asp:DropDownList ID="ddlEmployeeMonthly" class="form-control" runat="server"></asp:DropDownList>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                <asp:TextBox runat="server" ID="txtMonth" class="form-control" placeholder="Month of work" />
+                                <asp:CalendarExtender ID="CalendarExtender2" runat="server" Enabled="True" TargetControlID="txtMonth" DefaultView="Months">
+                                </asp:CalendarExtender>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="btn-group">
+                            <asp:Button ID="btnMonthlyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Report" OnClick="btnMonthlyEmployeeReport_Click" />
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <asp:Label ID="lblErrorMonthly" runat="server" Text=""></asp:Label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
         </div>
@@ -145,6 +180,39 @@
                 </div>
             </div>
         </div>
+        <%-- <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Monthly Project Summary</h4>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                </span>
+                                <asp:DropDownList ID="ddlMonthlyProjects" class="form-control" runat="server"></asp:DropDownList>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                <asp:TextBox runat="server" ID="txtProjectMonthlyDateStart" class="form-control" placeholder="week start date" />
+                                <asp:CalendarExtender ID="CalendarExtender3" runat="server" Enabled="True" TargetControlID="txtProjectMonthlyDateStart" DefaultView="Months">
+                                </asp:CalendarExtender>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="btn-group">
+                            <asp:Button ID="lblErrorProjectMonthlyReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Project Report" OnClick="btnMonthlyProjectsReport_Click" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <asp:Label ID="btnMonthlyProjectsReport" runat="server" Text=""></asp:Label>
+                    </div>
+                </div>
+            </div>
+        </div>--%>
         <%--<div class="row">
                     <div class="col-md-6">
                         <div class="panel panel-default">

@@ -12,7 +12,7 @@ namespace AIS_Time.classes
         public int HoursOfWork;
         public int TimeEmployeeID;
         public int TimeProjectID;
-        public string ClassCode;
+        public string CEAClassCode;
         public decimal HourlyRate;
 
         //[QueryExpression]

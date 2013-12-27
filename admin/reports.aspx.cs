@@ -48,10 +48,10 @@ namespace AIS_Time.admin
             ddlProjects.DataTextField = "ProjectName";
             ddlProjects.DataBind();
 
-            //ddlMonthlyProjects.DataSource = projects;
-            //ddlMonthlyProjects.DataValueField = "TimeProjectID";
-            //ddlMonthlyProjects.DataTextField = "ProjectName";
-            //ddlMonthlyProjects.DataBind();
+            ddlMonthlyProjects.DataSource = projects;
+            ddlMonthlyProjects.DataValueField = "TimeProjectID";
+            ddlMonthlyProjects.DataTextField = "ProjectName";
+            ddlMonthlyProjects.DataBind();
         }
 
         private void LoadEmployees()
@@ -67,6 +67,11 @@ namespace AIS_Time.admin
             ddlEmployeeMonthly.DataValueField = "TimeEmployeeID";
             ddlEmployeeMonthly.DataTextField = "LastName";
             ddlEmployeeMonthly.DataBind();
+
+            ddlEmployeeWeekly.DataSource = employees;
+            ddlEmployeeWeekly.DataValueField = "TimeEmployeeID";
+            ddlEmployeeWeekly.DataTextField = "LastName";
+            ddlEmployeeWeekly.DataBind();
         }
 
         protected void rptCustomers_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -84,7 +89,7 @@ namespace AIS_Time.admin
             }
         }
 
-        protected void btnWeeklyReport_Click(object sender, EventArgs e)
+        protected void btnWeeklyProjectReport_Click(object sender, EventArgs e)
         {
             try
             {
@@ -100,10 +105,11 @@ namespace AIS_Time.admin
                         "@TimeProjectID", ddlProjects.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(7));
 
                 string sql = "SELECT TimeProjectHours.DateOfWork, TimeProjectHours.HoursOfWork, TimeProjectHours.TimeEmployeeID ";
-                sql += "  , TimeProjectHours.TimeProjectID, TimeResources.HourlyRate, TimeCEAClassCodes.CEAClassCode ";
+                sql += "  , TimeProjectHours.TimeProjectID, TimeResources.HourlyRate, TimeCEAClassCodes.CEAClassCode, TimeCEAClassCodes.TimeDepartmentID ";
                 sql += " FROM dbo.TimeProjectHours ";
                 sql += " INNER JOIN dbo.TimeResources ON TimeProjectHours.TimeResourceID = TimeResources.TimeResourceID ";
                 sql += " INNER JOIN dbo.TimeCEAClassCodes ON TimeResources.TimeAISCodeID = TimeCEAClassCodes.TimeCEAClassCodeID ";
+                sql += " INNER JOIN dbo.TimeDepartments ON TimeProjectHours.TimeDepartmentID = TimeDepartments.TimeDepartmentID ";
                 sql += " WHERE TimeProjectHours.TimeProjectID = @TimeProjectID";
                 sql += " AND TimeProjectHours.DateOfWork >= @DateOfWorkStart AND TimeProjectHours.DateOfWork <= @DateOfWorkEnd";
 
@@ -132,56 +138,57 @@ namespace AIS_Time.admin
             }
         }
 
-        //protected void btnMonthlyProjectsReport_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        //grab the details on the project
-        //        TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", ddlMonthlyProjects.SelectedValue);
+        protected void btnMonthlyProjectsReport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //grab the details on the project
+                TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", ddlMonthlyProjects.SelectedValue);
+                
+                //date wanted
+                DateTime dt = DateTime.ParseExact(txtProjectMonthlyDateStart.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
 
-        //        //date wanted
-        //        DateTime dt = DateTime.ParseExact(txtProjectMonthlyDateStart.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
+                //find out how many days are in the month
+                int days = DateTime.DaysInMonth(dt.Year, dt.Month);
 
-        //        //find out how many days are in the month
-        //        int days = DateTime.DaysInMonth(dt.Year, dt.Month);
+                //grab the project hours drecords for the specified user
+                //on the specified date
+                CSList<TimeProjectHours> projects = TimeProjectHours.List("TimeProjectID = @TimeProjectID AND DateOfWork >= @DateOfWorkStart AND DateOfWork <= @DateOfWorkEnd",
+                        "@TimeProjectID", ddlMonthlyProjects.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(days));
 
-        //        //grab the project hours drecords for the specified user
-        //        //on the specified date
-        //        CSList<TimeProjectHours> projects = TimeProjectHours.List("TimeProjectID = @TimeProjectID AND DateOfWork >= @DateOfWorkStart AND DateOfWork <= @DateOfWorkEnd",
-        //                "@TimeProjectID", ddlMonthlyProjects.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(days));
+                string sql = "SELECT TimeProjectHours.DateOfWork, TimeProjectHours.HoursOfWork, TimeProjectHours.TimeEmployeeID ";
+                sql += "  , TimeProjectHours.TimeProjectID, TimeResources.HourlyRate, TimeCEAClassCodes.CEAClassCode, TimeCEAClassCodes.TimeDepartmentID ";
+                sql += " FROM dbo.TimeProjectHours ";
+                sql += " INNER JOIN dbo.TimeResources ON TimeProjectHours.TimeResourceID = TimeResources.TimeResourceID ";
+                sql += " INNER JOIN dbo.TimeCEAClassCodes ON TimeResources.TimeAISCodeID = TimeCEAClassCodes.TimeCEAClassCodeID ";
+                sql += " INNER JOIN dbo.TimeDepartments ON TimeProjectHours.TimeDepartmentID = TimeDepartments.TimeDepartmentID ";
+                sql += " WHERE TimeProjectHours.TimeProjectID = @TimeProjectID";
+                sql += " AND TimeProjectHours.DateOfWork >= @DateOfWorkStart AND TimeProjectHours.DateOfWork <= @DateOfWorkEnd";
 
-        //        string sql = "SELECT TimeProjectHours.DateOfWork, TimeProjectHours.HoursOfWork, TimeProjectHours.TimeEmployeeID ";
-        //        sql += "  , TimeProjectHours.TimeProjectID, TimeResources.HourlyRate, TimeCEAClassCodes.CEAClassCode ";
-        //        sql += " FROM dbo.TimeProjectHours ";
-        //        sql += " INNER JOIN dbo.TimeResources ON TimeProjectHours.TimeResourceID = TimeResources.TimeResourceID ";
-        //        sql += " INNER JOIN dbo.TimeCEAClassCodes ON TimeResources.TimeAISCodeID = TimeCEAClassCodes.TimeCEAClassCodeID ";
-        //        sql += " WHERE TimeProjectHours.TimeProjectID = @TimeProjectID";
-        //        sql += " AND TimeProjectHours.DateOfWork >= @DateOfWorkStart AND TimeProjectHours.DateOfWork <= @DateOfWorkEnd";
+                //add in the parameters
+                var collection = new CSParameterCollection
+                {
+                    {"@TimeProjectID", ddlProjects.SelectedValue},
+                    {"@DateOfWorkStart", dt},
+                    {"@DateOfWorkEnd", dt.AddDays(7)}
+                };
 
-        //        //add in the parameters
-        //        var collection = new CSParameterCollection
-        //        {
-        //            {"@TimeProjectID", ddlMonthlyProjects.SelectedValue},
-        //            {"@DateOfWorkStart", dt},
-        //            {"@DateOfWorkEnd", dt.AddDays(days)}
-        //        };
+                WeeklyReportResult[] results = CSDatabase.RunQuery<WeeklyReportResult>(sql, collection);
 
-        //        WeeklyReportResult[] results = CSDatabase.RunQuery<WeeklyReportResult>(sql, collection);
-
-        //        if (projects.Count > 0)
-        //        {
-        //            CreateProjectMonthlyPDFReport(projects, dt, project, results);
-        //        }
-        //        else
-        //        {
-        //            lblErrorProjectMonthlyReport.Text = "No time cards to print";
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        lblErrorProjectMonthlyReport.Text = "Error: " + ex.Message;
-        //    }
-        //}
+                if (projects.Count > 0)
+                {
+                    CreateProjectMonthlyPDFReport(projects, dt, project, results);
+                }
+                else
+                {
+                    lblErrorProjectMonthlyReport.Text = "No time cards to print";
+                }
+            }
+            catch (Exception ex)
+            {
+                lblErrorProjectMonthlyReport.Text = "Error: " + ex.Message;
+            }
+        }
 
         protected void btnMonthlyEmployeeReport_Click(object sender, EventArgs e)
         {
@@ -199,12 +206,14 @@ namespace AIS_Time.admin
                 //grab the project hours drecords for the specified user
                 //on the specified date BETWEEN '19/12/2012' AND '1/17/2013'
                 //must use the $ for the sql specific BETWEEN keyword
-                CSList<TimeProjectHours> projects = TimeProjectHours.List("TimeEmployeeID = @TimeEmployeeID AND DateOfWork >= @DateOfWorkStart AND DateOfWork <= @DateOfWorkEnd",
-                        "@TimeEmployeeID", ddlEmployeeMonthly.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(days));
+                CSList<TimeProjectHours> projects = TimeProjectHours.List(
+                    "TimeEmployeeID = @TimeEmployeeID AND DateOfWork >= @DateOfWorkStart AND DateOfWork <= @DateOfWorkEnd",
+                    "@TimeEmployeeID", ddlEmployeeMonthly.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd",
+                    dt.AddDays(days)).OrderedBy("DateOfWork");
 
                 if (projects.Count > 0)
                 {
-                    CreateMonthlyPDFReport(projects, employee, dt);
+                    CreateMonthlyEmployeePDFReport(projects, employee, dt);
                 }
                 else
                 {
@@ -217,7 +226,40 @@ namespace AIS_Time.admin
             }
         }
 
-        protected void btnDailyReport_Click(object sender, EventArgs e)
+        protected void btnWeeklyEmployeeReport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //grab the details on the employee
+                TimeEmployees employee = TimeEmployees.ReadFirst("TimeEmployeeID = @TimeEmployeeID", "@TimeEmployeeID", ddlEmployeeWeekly.SelectedValue);
+
+                //date wanted
+                DateTime dt = DateTime.ParseExact(txtEmployeeWeekly.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
+
+                //grab the project hours drecords for the specified user
+                //on the specified date BETWEEN '19/12/2012' AND '1/17/2013'
+                //must use the $ for the sql specific BETWEEN keyword
+                CSList<TimeProjectHours> projects = TimeProjectHours.List(
+                    "TimeEmployeeID = @TimeEmployeeID AND DateOfWork >= @DateOfWorkStart AND DateOfWork <= @DateOfWorkEnd",
+                    "@TimeEmployeeID", ddlEmployeeWeekly.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd",
+                    dt.AddDays(7)).OrderedBy("DateOfWork");
+
+                if (projects.Count > 0)
+                {
+                    CreateEmployeeWeeklyPDFReport(projects, employee, dt);
+                }
+                else
+                {
+                    lblErrorEmployeeWeekly.Text = "No time cards to print";
+                }
+            }
+            catch (Exception ex)
+            {
+                lblErrorEmployeeWeekly.Text = "Error: " + ex.Message;
+            }
+        }
+
+        protected void btnDailyEmployeeReport_Click(object sender, EventArgs e)
         {
             try
             {
@@ -235,7 +277,7 @@ namespace AIS_Time.admin
                 if (projects.Count > 0)
                 {
 
-                    CreateDailyPDFReport(projects, employee, dt);
+                    CreateDailyEmployeePDFReport(projects, employee, dt);
                 }
                 else
                 {
@@ -248,14 +290,14 @@ namespace AIS_Time.admin
             }
         }
 
-        private void CreateDailyPDFReport(CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        private void CreateDailyEmployeePDFReport(CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
         {
             try
             {
                 string templatePdfPath = Server.MapPath("PDFimages");
                 string oldFile = templatePdfPath + "\\DailyTemplate.pdf";
 
-                byte[] b = WriteToPdfForDaily(oldFile, projects, employee, dt);
+                byte[] b = WriteToPdfForEmployeeDaily(oldFile, projects, employee, dt);
                 if (b == null) return;
                 HttpResponse response = HttpContext.Current.Response;
                 response.Clear();
@@ -271,7 +313,30 @@ namespace AIS_Time.admin
             }
         }
 
-        private void CreateMonthlyPDFReport(CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        private void CreateEmployeeWeeklyPDFReport(CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        {
+            try
+            {
+                string templatePdfPath = Server.MapPath("PDFimages");
+                string oldFile = templatePdfPath + "\\EmployeeWeeklyTemplate.pdf";
+
+                byte[] b = WriteToPdfForEmployeeWeekly(oldFile, projects, employee, dt);
+                if (b == null) return;
+                HttpResponse response = HttpContext.Current.Response;
+                response.Clear();
+                response.ContentType = "application/pdf";
+                response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}-{1}.pdf", "EmployeeWeeklyTimeCard-", employee.FirstName + "_" + employee.LastName));
+                response.BinaryWrite(b);
+                response.Flush();
+                response.End();
+            }
+            catch (Exception ex)
+            {
+                lblErrorEmployeeWeekly.Text = "Error: " + ex.Message;
+            }
+        }
+
+        private void CreateMonthlyEmployeePDFReport(CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
         {
             try
             {
@@ -299,7 +364,7 @@ namespace AIS_Time.admin
             try
             {
                 string templatePdfPath = Server.MapPath("PDFimages");
-                string oldFile = templatePdfPath + "\\WeeklyTemplate.pdf";
+                string oldFile = templatePdfPath + "\\WeeklyProjectTemplate.pdf";
 
                 byte[] b = WriteToPdfForProjectWeekly(oldFile, projects, dt, projectDetails, results);
                 if (b == null) return;
@@ -317,30 +382,30 @@ namespace AIS_Time.admin
             }
         }
 
-        //private void CreateProjectMonthlyPDFReport(CSList<TimeProjectHours> projects, DateTime dt, TimeProjects projectDetails, WeeklyReportResult[] results)
-        //{
-        //    try
-        //    {
-        //        string templatePdfPath = Server.MapPath("PDFimages");
-        //        string oldFile = templatePdfPath + "\\WeeklyTemplate.pdf";
+        private void CreateProjectMonthlyPDFReport(CSList<TimeProjectHours> projects, DateTime dt, TimeProjects projectDetails, WeeklyReportResult[] results)
+        {
+            try
+            {
+                string templatePdfPath = Server.MapPath("PDFimages");
+                string oldFile = templatePdfPath + "\\MonthlyProjectTemplate.pdf";
 
-        //        byte[] b = WriteToPdfForProjectMonthly(oldFile, projects, dt, projectDetails, results);
-        //        if (b == null) return;
-        //        HttpResponse response = HttpContext.Current.Response;
-        //        response.Clear();
-        //        response.ContentType = "application/pdf";
-        //        response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}.pdf", "MonthlyProjectTimeCard"));
-        //        response.BinaryWrite(b);
-        //        response.Flush();
-        //        response.End();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        lblErrorProjectMonthlyReport.Text = "Error: " + ex.Message;
-        //    }
-        //}
+                byte[] b = WriteToPdfForProjectMonthly(oldFile, projects, dt, projectDetails, results);
+                if (b == null) return;
+                HttpResponse response = HttpContext.Current.Response;
+                response.Clear();
+                response.ContentType = "application/pdf";
+                response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}.pdf", "MonthlyProjectTimeCard"));
+                response.BinaryWrite(b);
+                response.Flush();
+                response.End();
+            }
+            catch (Exception ex)
+            {
+                lblErrorProjectMonthlyReport.Text = "Error: " + ex.Message;
+            }
+        }
 
-        public byte[] WriteToPdfForDaily(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        public byte[] WriteToPdfForEmployeeDaily(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
         {
             PdfReader reader = new PdfReader(sourceFile);
 
@@ -393,6 +458,73 @@ namespace AIS_Time.admin
 
                 //Total
                 pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 500, (pageSize.Height - 685), 0);
+
+                pdfPageContents.EndText(); // Done working with text
+                pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
+                pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
+
+                return memoryStream.ToArray();
+            }
+
+        }
+
+        public byte[] WriteToPdfForEmployeeWeekly(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        {
+            PdfReader reader = new PdfReader(sourceFile);
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
+                PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
+
+                Rectangle pageSize = reader.GetPageSizeWithRotation(1);
+
+                PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
+                pdfPageContents.BeginText(); // Start working with text.
+
+                BaseFont baseFont = BaseFont.CreateFont(BaseFont.COURIER, Encoding.ASCII.EncodingName, false);
+                pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
+                pdfPageContents.SetRGBColorFill(0, 0, 0);
+
+                // Note: The x,y of the Pdf Matrix is from bottom left corner. 
+                // This command tells iTextSharp to write the text at a certain location with a certain angle.
+                // Again, this will angle the text from bottom left corner to top right corner and it will 
+                // place the text in the middle of the page. 
+                //
+                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, playerName, pageSize.Width / 2, (pageSize.Height / 2) + 115, 0);
+                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, teamName, pageSize.Width / 2, (pageSize.Height / 2) + 80, 0);
+
+                //user Name
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, employee.FirstName + " " + employee.LastName + " (AIS-0" + employee.TimeEmployeeID + ")", 200, (pageSize.Height - 150), 0);
+
+                //Date of report
+                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 155, (pageSize.Height - 188), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMM d}", dt) + " to ", 200, (pageSize.Height - 172), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMM d}", dt.AddDays(7)), 270, (pageSize.Height - 172), 0);
+                
+                int yPos = 221;
+                int totalHours = 0;
+                foreach (var timeProjectHourse in projects)
+                {
+                    TimeResources resource = TimeResources.ReadFirst("TimeResourceID = @TimeResourceID", "@TimeResourceID", timeProjectHourse.TimeResourceID);
+                    TimeCEAClassCodes classCode = TimeCEAClassCodes.ReadFirst("TimeCEAClassCodeID = @TimeCEAClassCodeID", "@TimeCEAClassCodeID", resource.TimeCEAClassCodeID);
+                    TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", timeProjectHourse.TimeDepartmentID);
+                    TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", timeProjectHourse.TimeProjectID);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMM d}", timeProjectHourse.DateOfWork), 70, (pageSize.Height - yPos), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectNumber, 125, (pageSize.Height - yPos), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.CEAClassCode, 185, (pageSize.Height - yPos), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentCode, 225, (pageSize.Height - yPos), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectName, 280, (pageSize.Height - yPos), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.HoursOfWork.ToString(), 725, (pageSize.Height - yPos), 0);
+
+                    //increment the total hours
+                    totalHours += timeProjectHourse.HoursOfWork;
+
+                    yPos += 20;
+                }
+
+                //Total
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 725, (pageSize.Height - 525), 0);
 
                 pdfPageContents.EndText(); // Done working with text
                 pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using AIS_Time.classes;
 using Vici.CoolStorage;
@@ -25,7 +21,7 @@ namespace AIS_Time.admin
         private void RefreshEntries()
         {
 
-            CSList<TimeCustomers> customerList = TimeCustomers.List();
+            CSList<TimeCustomers> customerList = TimeCustomers.List().OrderedBy("CustomerName");
 
             if (customerList.Count > 0)
             {

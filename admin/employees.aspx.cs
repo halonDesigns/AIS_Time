@@ -24,7 +24,7 @@ namespace AIS_Time.admin
         private void RefreshEntries()
         {
 
-            CSList<TimeEmployees> employeeList = TimeEmployees.List();
+            CSList<TimeEmployees> employeeList = TimeEmployees.List().OrderedBy("LastName");
 
             if (employeeList.Count > 0)
             {

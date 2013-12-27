@@ -23,7 +23,7 @@ namespace AIS_Time.admin
         private void RefreshEntries()
         {
 
-            CSList<TimeResources> resourceList = TimeResources.List();
+            CSList<TimeResources> resourceList = TimeResources.List().OrderedBy("ResourceName");
 
             if (resourceList.Count > 0)
             {

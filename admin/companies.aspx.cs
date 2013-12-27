@@ -25,7 +25,7 @@ namespace AIS_Time.admin
         private void RefreshEntries()
         {
 
-            CSList<TimeCompanies> companyList = TimeCompanies.List();
+            CSList<TimeCompanies> companyList = TimeCompanies.List().OrderedBy("CompanyName");
 
             if (companyList.Count > 0)
             {

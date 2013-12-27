@@ -21,14 +21,11 @@ namespace AIS_Time.admin
 
         private void RefreshEntries()
         {
+            CSList<TimeDepartments> departmentList = TimeDepartments.List().OrderedBy("DepartmentName");
 
-            CSList<TimeDepartments> departmentList = TimeDepartments.List();
-
-            if (departmentList.Count > 0)
-            {
-                rptDepartments.DataSource = departmentList;
-                rptDepartments.DataBind();
-            }
+            if (departmentList.Count <= 0) return;
+            rptDepartments.DataSource = departmentList;
+            rptDepartments.DataBind();
         }
 
         protected void cmdSubmit_Click(object sender, EventArgs e)
@@ -36,12 +33,17 @@ namespace AIS_Time.admin
             if (txtName.Text == "")
             {
                 lblError.Text = "Please enter a department name.";
+                txtName.Focus();
                 return;
             }
-            else
+            if (txtCode.Text == "")
             {
-                lblError.Text = "";
+                lblError.Text = "Please enter a department code.";
+                txtCode.Focus();
+                return;
             }
+            lblError.Text = "";
+
             _currentDepartment = (TimeDepartments)Session["CurrentDepartment"];
             if (_currentDepartment == null)
             {
@@ -50,6 +52,7 @@ namespace AIS_Time.admin
 
                 //fill object with data
                 department.DepartmentName = txtName.Text;
+                department.DepartmentCode = txtCode.Text;
                 department.Description = txtDescription.Text;
                 department.Status = 1;
                 department.Type = 1;
@@ -60,6 +63,7 @@ namespace AIS_Time.admin
             else
             {
                 _currentDepartment.DepartmentName = txtName.Text;
+                _currentDepartment.DepartmentCode = txtCode.Text;
                 _currentDepartment.Description = txtDescription.Text;
                 _currentDepartment.Status = 1;
                 _currentDepartment.Type = 1;
@@ -70,6 +74,7 @@ namespace AIS_Time.admin
 
             txtName.Text = "";
             txtDescription.Text = "";
+            txtCode.Text = "";
             _currentDepartment = null;
             Session["CurrentDepartment"] = _currentDepartment;
             RefreshEntries();
@@ -85,6 +90,7 @@ namespace AIS_Time.admin
                 _currentDepartment = TimeDepartments.Read(pkID);
                 Session["CurrentDepartment"] = _currentDepartment;
                 txtName.Text = _currentDepartment.DepartmentName;
+                txtCode.Text = _currentDepartment.DepartmentCode;
                 txtDescription.Text = _currentDepartment.Description;
             }
 

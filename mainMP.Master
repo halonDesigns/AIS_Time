@@ -44,7 +44,7 @@
                     <ul class="nav navbar-nav side-nav">
                         <li class="active"><a href="<%= Page.ResolveClientUrl("~/index.aspx") %>"><i class="fa fa-dashboard"></i> Home</a></li>
                          <li><a href="<%= Page.ResolveClientUrl("~/admin/project-hours.aspx") %>"><i class="fa fa-bar-chart-o"></i> Log Hours</a></li>
-                        <li><a href="<%= Page.ResolveClientUrl("~/admin/companies.aspx") %>"><i class="fa fa-bar-chart-o"></i> Companies</a></li>
+<%--                        <li><a href="<%= Page.ResolveClientUrl("~/admin/companies.aspx") %>"><i class="fa fa-bar-chart-o"></i> Companies</a></li>--%>
                         <li><a href="<%= Page.ResolveClientUrl("~/admin/customers.aspx") %>"><i class="fa fa-table"></i> Customers</a></li>
                         <li><a href="<%= Page.ResolveClientUrl("~/admin/employees.aspx") %>"><i class="fa fa-edit"></i> Employees</a></li>
                         <li><a href="<%= Page.ResolveClientUrl("~/admin/departments.aspx") %>"><i class="fa fa-font"></i> Departments</a></li>

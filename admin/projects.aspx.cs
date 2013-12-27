@@ -20,7 +20,7 @@ namespace AIS_Time.admin
 
         private void RefreshEntries()
         {
-            CSList<TimeProjects> projectList = TimeProjects.List();
+            CSList<TimeProjects> projectList = TimeProjects.List().OrderedBy("ProjectName");
 
             if (projectList.Count > 0)
             {

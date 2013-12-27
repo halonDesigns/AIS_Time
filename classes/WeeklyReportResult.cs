@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI.WebControls.Expressions;
 
 namespace AIS_Time.classes
 {
@@ -12,6 +8,7 @@ namespace AIS_Time.classes
         public int HoursOfWork;
         public int TimeEmployeeID;
         public int TimeProjectID;
+        public int TimeDepartmentID;
         public string CEAClassCode;
         public decimal HourlyRate;
 

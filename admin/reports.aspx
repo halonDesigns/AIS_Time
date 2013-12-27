@@ -94,12 +94,47 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="btnDailyReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Daily Report" OnClick="btnDailyReport_Click" />
+                            <asp:Button ID="btnDailyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Daily Report" OnClick="btnDailyEmployeeReport_Click" />
                         </div>
 
                     </div>
                     <div class="form-group">
                         <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Weekly Employee Time Card</h4>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                </span>
+                                <asp:DropDownList ID="ddlEmployeeWeekly" class="form-control" runat="server"></asp:DropDownList>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                <asp:TextBox runat="server" ID="txtEmployeeWeekly" class="form-control" placeholder="Week of work" />
+                                <asp:CalendarExtender ID="CalendarExtender4" runat="server" Enabled="True" TargetControlID="txtEmployeeWeekly" DefaultView="Months">
+                                </asp:CalendarExtender>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="btn-group">
+                            <asp:Button ID="btnWeeklyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Weekly Report" OnClick="btnWeeklyEmployeeReport_Click" />
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <asp:Label ID="lblErrorEmployeeWeekly" runat="server" Text=""></asp:Label>
                     </div>
                 </div>
             </div>
@@ -167,11 +202,10 @@
                                 </asp:CalendarExtender>
                             </div>
                         </div>
-
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="btnWeeklyReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Weekly Project Report" OnClick="btnWeeklyReport_Click" />
+                            <asp:Button ID="btnWeeklyProjectReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Weekly Project Report" OnClick="btnWeeklyProjectReport_Click" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -180,7 +214,7 @@
                 </div>
             </div>
         </div>
-        <%-- <div class="row">
+         <div class="row">
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -200,19 +234,18 @@
                                 </asp:CalendarExtender>
                             </div>
                         </div>
-
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="lblErrorProjectMonthlyReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Project Report" OnClick="btnMonthlyProjectsReport_Click" />
+                            <asp:Button ID="btnMonthlyProjectsReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Project Report" OnClick="btnMonthlyProjectsReport_Click" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <asp:Label ID="btnMonthlyProjectsReport" runat="server" Text=""></asp:Label>
+                        <asp:Label ID="lblErrorProjectMonthlyReport" runat="server" Text=""></asp:Label>
                     </div>
                 </div>
             </div>
-        </div>--%>
+        </div>
         <%--<div class="row">
                     <div class="col-md-6">
                         <div class="panel panel-default">

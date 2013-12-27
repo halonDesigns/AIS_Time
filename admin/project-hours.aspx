@@ -75,7 +75,7 @@
                     <div class="col-md-12">
                       <br />
                         <br />
-                         <h2>Project Manager</h2>
+                         <h2>Project Hours Log</h2>
                         <br />
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>New Project</h4>
+                                <h4>Log Hours on Project</h4>
                                 <%-- <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
@@ -100,7 +100,8 @@
                                     </div>
                                 </div>
                                  <div class="form-group">
-                                     <h5>Resource Type</h5>
+                                     <h5>Resource Type  <asp:HyperLink ID="hlnkDownloadGuide" runat="server" NavigateUrl="../Content/2013-CEA-Rate-Guideline.pdf">Download Guide (right click ... save link as)</asp:HyperLink></h5>
+                                    
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>

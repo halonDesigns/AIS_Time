@@ -7,6 +7,7 @@ namespace AIS_Time.classes
     {
         public abstract int TimeDepartmentID { get; }
         public abstract string DepartmentName { get; set; }
+        public abstract string DepartmentCode { get; set; }
         public abstract string Description { get; set; }
         public abstract int Status { get; set; }
         public abstract int Type { get; set; }

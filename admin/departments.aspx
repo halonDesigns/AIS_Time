@@ -93,6 +93,12 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <asp:TextBox runat="server" ID="txtCode" class="form-control" placeholder="department code" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
                                         <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />

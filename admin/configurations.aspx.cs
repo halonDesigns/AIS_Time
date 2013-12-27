@@ -26,7 +26,7 @@ namespace AIS_Time.admin
         private void RefreshCEAClassCodeEntries()
         {
 
-            CSList<TimeCEAClassCodes> ceaClassCodeList = TimeCEAClassCodes.List();
+            CSList<TimeCEAClassCodes> ceaClassCodeList = TimeCEAClassCodes.List().OrderedBy("CEAClassCode");
 
             if (ceaClassCodeList.Count > 0)
             {
@@ -37,7 +37,7 @@ namespace AIS_Time.admin
         private void RefreshAISCodeEntries()
         {
 
-            CSList<TimeAISCodes> aisCodeList = TimeAISCodes.List();
+            CSList<TimeAISCodes> aisCodeList = TimeAISCodes.List().OrderedBy("AISCode");
 
             if (aisCodeList.Count > 0)
             {

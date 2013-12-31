@@ -229,7 +229,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                <asp:TextBox runat="server" ID="txtProjectMonthlyDateStart" class="form-control" placeholder="week start date" />
+                                <asp:TextBox runat="server" ID="txtProjectMonthlyDateStart" class="form-control" placeholder="month start date" />
                                 <asp:CalendarExtender ID="CalendarExtender3" runat="server" Enabled="True" TargetControlID="txtProjectMonthlyDateStart" DefaultView="Months">
                                 </asp:CalendarExtender>
                             </div>

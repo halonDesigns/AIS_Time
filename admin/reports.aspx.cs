@@ -105,7 +105,7 @@ namespace AIS_Time.admin
                         "@TimeProjectID", ddlProjects.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(7));
 
                 string sql = "SELECT TimeProjectHours.DateOfWork, TimeProjectHours.HoursOfWork, TimeProjectHours.TimeEmployeeID ";
-                sql += "  , TimeProjectHours.TimeProjectID, TimeResources.HourlyRate, TimeCEAClassCodes.CEAClassCode, TimeCEAClassCodes.TimeDepartmentID ";
+                sql += "  , TimeProjectHours.TimeProjectID, TimeResources.HourlyRate, TimeCEAClassCodes.CEAClassCode, TimeProjectHours.TimeDepartmentID ";
                 sql += " FROM dbo.TimeProjectHours ";
                 sql += " INNER JOIN dbo.TimeResources ON TimeProjectHours.TimeResourceID = TimeResources.TimeResourceID ";
                 sql += " INNER JOIN dbo.TimeCEAClassCodes ON TimeResources.TimeAISCodeID = TimeCEAClassCodes.TimeCEAClassCodeID ";
@@ -157,7 +157,7 @@ namespace AIS_Time.admin
                         "@TimeProjectID", ddlMonthlyProjects.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(days));
 
                 string sql = "SELECT TimeProjectHours.DateOfWork, TimeProjectHours.HoursOfWork, TimeProjectHours.TimeEmployeeID ";
-                sql += "  , TimeProjectHours.TimeProjectID, TimeResources.HourlyRate, TimeCEAClassCodes.CEAClassCode, TimeCEAClassCodes.TimeDepartmentID ";
+                sql += "  , TimeProjectHours.TimeProjectID, TimeResources.HourlyRate, TimeCEAClassCodes.CEAClassCode, TimeProjectHours.TimeDepartmentID ";
                 sql += " FROM dbo.TimeProjectHours ";
                 sql += " INNER JOIN dbo.TimeResources ON TimeProjectHours.TimeResourceID = TimeResources.TimeResourceID ";
                 sql += " INNER JOIN dbo.TimeCEAClassCodes ON TimeResources.TimeAISCodeID = TimeCEAClassCodes.TimeCEAClassCodeID ";
@@ -168,9 +168,9 @@ namespace AIS_Time.admin
                 //add in the parameters
                 var collection = new CSParameterCollection
                 {
-                    {"@TimeProjectID", ddlProjects.SelectedValue},
+                    {"@TimeProjectID", ddlMonthlyProjects.SelectedValue},
                     {"@DateOfWorkStart", dt},
-                    {"@DateOfWorkEnd", dt.AddDays(7)}
+                    {"@DateOfWorkEnd", dt.AddDays(days)}
                 };
 
                 WeeklyReportResult[] results = CSDatabase.RunQuery<WeeklyReportResult>(sql, collection);
@@ -624,17 +624,17 @@ namespace AIS_Time.admin
 
                 //customer
                 TimeCustomers customer = TimeCustomers.ReadFirst("TimeCustomerID = @TimeCustomerID", "@TimeCustomerID", projectDetails.TimeCustomerID);
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 155, (pageSize.Height - 168), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 165, (pageSize.Height - 151), 0);
 
                 //Project Number
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 155, (pageSize.Height - 190), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 165, (pageSize.Height - 173), 0);
 
                 //project name
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 155, (pageSize.Height - 213), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 165, (pageSize.Height - 196), 0);
 
                 //Date of report, shows week span
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 225, (pageSize.Height - 236), 0);
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.AddDays(5).ToShortDateString(), 385, (pageSize.Height - 236), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 265, (pageSize.Height - 219), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.AddDays(6).ToShortDateString(), 485, (pageSize.Height - 219), 0);
 
                 //set array of current dates
                 DateTime[] dtArr = new DateTime[7];
@@ -644,21 +644,9 @@ namespace AIS_Time.admin
                 pdfPageContents.SetFontAndSize(baseFont, 8); // 8 point font
 
                 //show the dates along the line
-                int startX = 163;
-                //int upperY = 237;
-                int lowerY = 265;
-                const int INCREMENTER = 44;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt), startX, (pageSize.Height - upperY), 0);
-                //startX = startX + INCREMENTER;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt.AddDays(1)), startX, (pageSize.Height - upperY), 0);
-                //startX = startX + INCREMENTER;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt.AddDays(2)), startX, (pageSize.Height - upperY), 0);
-                //startX = startX + INCREMENTER;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt.AddDays(3)), startX, (pageSize.Height - upperY), 0);
-                //startX = startX + INCREMENTER;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt.AddDays(4)), startX, (pageSize.Height - upperY), 0);
-                //startX = startX + INCREMENTER;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt.AddDays(5)), startX, (pageSize.Height - upperY), 0);
+                int startX = 230;
+                int lowerY = 245;
+                const int INCREMENTER = 53;
 
                 //startX = 135;
                 pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt), startX, (pageSize.Height - lowerY), 0);
@@ -676,13 +664,14 @@ namespace AIS_Time.admin
                 pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(6)), startX, (pageSize.Height - lowerY), 0);
 
                 //pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
-                int yPos = 283; //start line y pixel for table values
+                int yPos = 266; //start line y pixel for table values
                 int totalHours = 0;
                 double totalCharge = 0.0;
-                int dateStartX = 163;
+                int dateStartX = 225;
                 List<string> codeList = new List<string>();
                 List<double> hourlyRateForCodeList = new List<double>();
                 List<int> employeeIDList = new List<int>();
+                List<int> departmentIDList = new List<int>();
 
                 bool firstRun = true;
                 foreach (var timeProjectHourse in results)
@@ -692,6 +681,7 @@ namespace AIS_Time.admin
                         codeList.Add(timeProjectHourse.CEAClassCode);
                         hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
                         employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
+                        departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
                         firstRun = false;
                     }
                     else
@@ -700,6 +690,7 @@ namespace AIS_Time.admin
                         {
                             codeList.Add(timeProjectHourse.CEAClassCode);
                             employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
+                            departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
                             hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
                         }
                     }
@@ -760,6 +751,9 @@ namespace AIS_Time.admin
                     //show the code in the second column
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, codeList[finCodeArr], 115, (pageSize.Height - yPos), 0);
 
+                    TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", departmentIDList[finCodeArr]);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentCode, 160, (pageSize.Height - yPos), 0);
+
                     //now list the totals for this code per day
                     for (int finArr = 0; finArr < 7; finArr++)
                     {
@@ -776,10 +770,10 @@ namespace AIS_Time.admin
                     }
 
                     //show the total hours for the code for the week
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalCodeHours.ToString(), 465, (pageSize.Height - yPos), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalCodeHours.ToString(), 615, (pageSize.Height - yPos), 0);
                     totalHours += totalCodeHours;
                     //show the total charged for the code for the week
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCodeCharge, 508, (pageSize.Height - yPos), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCodeCharge, 660, (pageSize.Height - yPos), 0);
                     totalCharge += totalCodeCharge;
 
                     //now increment the y val line
@@ -787,9 +781,9 @@ namespace AIS_Time.admin
                 }
 
                 //Total Hours
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 465, (pageSize.Height - 727), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 615, (pageSize.Height - 527), 0);
                 //Total Charge
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCharge, 508, (pageSize.Height - 727), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCharge, 660, (pageSize.Height - 527), 0);
 
                 pdfPageContents.EndText(); // Done working with text
                 pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
@@ -825,17 +819,19 @@ namespace AIS_Time.admin
 
                 //customer
                 TimeCustomers customer = TimeCustomers.ReadFirst("TimeCustomerID = @TimeCustomerID", "@TimeCustomerID", projectDetails.TimeCustomerID);
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 155, (pageSize.Height - 168), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 165, (pageSize.Height - 151), 0);
 
                 //Project Number
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 155, (pageSize.Height - 190), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 165, (pageSize.Height - 173), 0);
 
                 //project name
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 155, (pageSize.Height - 213), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 165, (pageSize.Height - 196), 0);
 
                 //Date of report, shows week span
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 225, (pageSize.Height - 236), 0);
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.AddDays(5).ToShortDateString(), 385, (pageSize.Height - 236), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 265, (pageSize.Height - 219), 0);
+                //find out how many days are in the month
+                int days = DateTime.DaysInMonth(dt.Year, dt.Month);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.AddDays(days).ToShortDateString(), 485, (pageSize.Height - 219), 0);
 
                 //set array of current dates
                 DateTime[] dtArr = new DateTime[7];
@@ -845,21 +841,9 @@ namespace AIS_Time.admin
                 pdfPageContents.SetFontAndSize(baseFont, 8); // 8 point font
 
                 //show the dates along the line
-                int startX = 163;
-                //int upperY = 237;
-                int lowerY = 265;
-                const int INCREMENTER = 44;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt), startX, (pageSize.Height - upperY), 0);
-                //startX = startX + INCREMENTER;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt.AddDays(1)), startX, (pageSize.Height - upperY), 0);
-                //startX = startX + INCREMENTER;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt.AddDays(2)), startX, (pageSize.Height - upperY), 0);
-                //startX = startX + INCREMENTER;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt.AddDays(3)), startX, (pageSize.Height - upperY), 0);
-                //startX = startX + INCREMENTER;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt.AddDays(4)), startX, (pageSize.Height - upperY), 0);
-                //startX = startX + INCREMENTER;
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:dddd}", dt.AddDays(5)), startX, (pageSize.Height - upperY), 0);
+                int startX = 230;
+                int lowerY = 245;
+                const int INCREMENTER = 53;
 
                 //startX = 135;
                 pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt), startX, (pageSize.Height - lowerY), 0);
@@ -877,13 +861,14 @@ namespace AIS_Time.admin
                 pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(6)), startX, (pageSize.Height - lowerY), 0);
 
                 //pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
-                int yPos = 283; //start line y pixel for table values
+                int yPos = 266; //start line y pixel for table values
                 int totalHours = 0;
                 double totalCharge = 0.0;
-                int dateStartX = 163;
+                int dateStartX = 225;
                 List<string> codeList = new List<string>();
                 List<double> hourlyRateForCodeList = new List<double>();
                 List<int> employeeIDList = new List<int>();
+                List<int> departmentIDList = new List<int>();
 
                 bool firstRun = true;
                 foreach (var timeProjectHourse in results)
@@ -893,6 +878,7 @@ namespace AIS_Time.admin
                         codeList.Add(timeProjectHourse.CEAClassCode);
                         hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
                         employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
+                        departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
                         firstRun = false;
                     }
                     else
@@ -901,6 +887,7 @@ namespace AIS_Time.admin
                         {
                             codeList.Add(timeProjectHourse.CEAClassCode);
                             employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
+                            departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
                             hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
                         }
                     }
@@ -961,6 +948,9 @@ namespace AIS_Time.admin
                     //show the code in the second column
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, codeList[finCodeArr], 115, (pageSize.Height - yPos), 0);
 
+                    TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", departmentIDList[finCodeArr]);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentCode, 160, (pageSize.Height - yPos), 0);
+
                     //now list the totals for this code per day
                     for (int finArr = 0; finArr < 7; finArr++)
                     {
@@ -977,10 +967,10 @@ namespace AIS_Time.admin
                     }
 
                     //show the total hours for the code for the week
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalCodeHours.ToString(), 465, (pageSize.Height - yPos), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalCodeHours.ToString(), 615, (pageSize.Height - yPos), 0);
                     totalHours += totalCodeHours;
                     //show the total charged for the code for the week
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCodeCharge, 508, (pageSize.Height - yPos), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCodeCharge, 660, (pageSize.Height - yPos), 0);
                     totalCharge += totalCodeCharge;
 
                     //now increment the y val line
@@ -988,9 +978,9 @@ namespace AIS_Time.admin
                 }
 
                 //Total Hours
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 465, (pageSize.Height - 727), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 615, (pageSize.Height - 527), 0);
                 //Total Charge
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCharge, 508, (pageSize.Height - 727), 0);
+                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCharge, 660, (pageSize.Height - 527), 0);
 
                 pdfPageContents.EndText(); // Done working with text
                 pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
@@ -998,9 +988,6 @@ namespace AIS_Time.admin
 
                 return memoryStream.ToArray();
             }
-
         }
-
-      
     }
 }

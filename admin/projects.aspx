@@ -57,6 +57,7 @@
         var ModalProgress = '<%= ModalProgress.ClientID %>';         
     </script>
     <script src="admin.js" type="text/javascript"></script>
+
     <asp:UpdatePanel runat="server" ID="updEntries" UpdateMode="Conditional" ChildrenAsTriggers="True">
         <ContentTemplate>
 
@@ -127,7 +128,7 @@
                                     <ItemTemplate>
                                         <tr>
                                             <td>
-                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("ProjectName") %>'></asp:Label></td>
+                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("ProjectName") + " - " + Eval("ProjectNumber") %>'></asp:Label></td>
                                             <asp:Literal ID="editChildColumn" runat="server"></asp:Literal>
                                             <td id="Td1" style="width: 10%" runat="server">
                                                 <asp:LinkButton ID="btnEditCustomer" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeProjectID") %>'> EDIT </asp:LinkButton>

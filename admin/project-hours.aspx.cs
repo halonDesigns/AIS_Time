@@ -70,6 +70,7 @@ namespace AIS_Time.admin
             if (txtDate.Text == "" || txtHours.Text == "" || txtHours.Text == "0" || ddlDepartment.SelectedIndex == -1
                 || ddlProject.SelectedIndex == -1)
             {
+                lblError.Text = "Please fill in all fields";
                 return;
             }
 
@@ -116,6 +117,7 @@ namespace AIS_Time.admin
             ddlResoures.SelectedIndex = -1;
             ddlProject.SelectedIndex = -1;
             txtDescription.Text = "";
+            lblError.Text = "";
             _currentProjectHours = null;
             Session["CurrentProjectHours"] = _currentProjectHours;
             RefreshEntries();
@@ -152,6 +154,21 @@ namespace AIS_Time.admin
                 RefreshEntries();
                 updEntries.Update();
             }
+        }
+
+        protected void cmdNew_Click(object sender, EventArgs e)
+        {
+            txtDate.Text = "";
+            txtHours.Text = "0";
+            ddlDepartment.SelectedIndex = -1;
+            ddlResoures.SelectedIndex = -1;
+            ddlProject.SelectedIndex = -1;
+            txtDescription.Text = "";
+            lblError.Text = "";
+            _currentProjectHours = null;
+            Session["CurrentProjectHours"] = _currentProjectHours;
+            RefreshEntries();
+            updEntries.Update();
         }
     }
 }

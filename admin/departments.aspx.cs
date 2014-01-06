@@ -32,13 +32,13 @@ namespace AIS_Time.admin
         {
             if (txtName.Text == "")
             {
-                lblError.Text = "Please enter a department name.";
+                lblError.Text = "Please enter a Function name.";
                 txtName.Focus();
                 return;
             }
             if (txtCode.Text == "")
             {
-                lblError.Text = "Please enter a department code.";
+                lblError.Text = "Please enter a Function code.";
                 txtCode.Focus();
                 return;
             }

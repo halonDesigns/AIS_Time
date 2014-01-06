@@ -75,7 +75,7 @@
                     <div class="col-md-12">
                         <br />
                         <br />
-                         <h2>Department Manager</h2>
+                         <h2>Function Manager</h2>
                         <br />
                     </div>
                 </div>
@@ -83,18 +83,18 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>New Department</h4>
+                                <h4>New Function</h4>
 
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="department name" />
+                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="function name" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtCode" class="form-control" placeholder="department code" />
+                                        <asp:TextBox runat="server" ID="txtCode" class="form-control" placeholder="function code" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -123,7 +123,7 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>Existing Departments</h4>
+                                <h4>Existing Functions</h4>
                                 <asp:Repeater ID="rptDepartments" runat="server" OnItemCommand="rptCustomers_ItemCommand">
                                     <HeaderTemplate>
                                         <table>
@@ -131,7 +131,7 @@
                                     <ItemTemplate>
                                         <tr>
                                             <td>
-                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("DepartmentName") %>'></asp:Label></td>
+                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("DepartmentName") + " - " + Eval("DepartmentCode") %>'></asp:Label></td>
                                             <asp:Literal ID="editChildColumn" runat="server"></asp:Literal>
                                             <td id="Td1" style="width: 10%" runat="server">
                                                 <asp:LinkButton ID="btnEditCustomer" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeDepartmentID") %>'> EDIT </asp:LinkButton>

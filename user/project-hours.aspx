@@ -66,6 +66,19 @@
             $find(ModalBehaviour).hide();
         }
     </script>
+        <script type="text/javascript">
+            function checkIt(evt) {
+                evt = (evt) ? evt : window.event;
+                var charCode = (evt.which) ? evt.which : evt.keyCode;
+                if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                    //alert("Only Numbers allowed");
+                    return false;
+                }
+
+                //document.getElementById("errorMessage").innerHTML = "";
+                return true;
+            }
+</script>
     <script src="user.js" type="text/javascript"></script>
     <asp:UpdatePanel runat="server" ID="updEntries" UpdateMode="Conditional" ChildrenAsTriggers="True">
         <ContentTemplate>
@@ -83,14 +96,10 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>New Project</h4>
-                                <%-- <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
-                                        </span>
-                                        <asp:DropDownList ID="ddlEmployee" class="form-control" runat="server"></asp:DropDownList>
-                                    </div>
-                                </div>--%>
+                                 <h4>Log Hours on Project</h4>
+                                <div class="form-group">
+                                      <asp:Button ID="Button1" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="New" Text="New" OnClick="cmdNew_Click" />
+                                </div>
                                 <div class="form-group">
                                     <h5>Project</h5>
                                     <div class="input-group">
@@ -108,7 +117,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <h5>Department</h5>
+                                    <h5>Function</h5>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
@@ -127,7 +136,7 @@
                                  <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtHours" class="form-control" placeholder="project hours" />
+                                        <asp:TextBox runat="server" ID="txtHours" class="form-control" placeholder="project hours" onKeyPress="return checkIt(event)" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -137,6 +146,9 @@
                                         <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />
                                     </div>
                                 </div>
+                                <div class="form-group">
+ <asp:Label ID="lblError" runat="server" Font-Bold="True" ForeColor="Red"></asp:Label>
+                    </div>
                             </div>
                             <asp:Button ID="cmdSubmit" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmit_Click" />
                         </div>
@@ -154,7 +166,7 @@
                                     <ItemTemplate>
                                         <tr>
                                             <td>
-                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("DateOfWork") %>'></asp:Label></td>
+                                                <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("DateOfWork", "{0:MMMM d, yyyy}") + " (" + Eval("HoursOfWork") + " hrs)" %>'></asp:Label></td>
                                             <asp:Literal ID="editChildColumn" runat="server"></asp:Literal>
                                             <td id="Td1" style="width: 10%" runat="server">
                                                 <asp:LinkButton ID="btnEditCustomer" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeProjectHoursID") %>'> EDIT </asp:LinkButton>

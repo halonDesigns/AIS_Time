@@ -343,7 +343,7 @@ namespace AIS_Time.admin
                 string templatePdfPath = Server.MapPath("PDFimages");
                 string oldFile = templatePdfPath + "\\MonthlyEmployeeTemplate.pdf";
 
-                byte[] b = WriteToPdfForMonthly(oldFile, projects, employee, dt);
+                byte[] b = WriteToPdfForEmployeeMonthly(oldFile, projects, employee, dt);
                 if (b == null) return;
                 HttpResponse response = HttpContext.Current.Response;
                 response.Clear();
@@ -535,7 +535,7 @@ namespace AIS_Time.admin
 
         }
 
-        public byte[] WriteToPdfForMonthly(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        public byte[] WriteToPdfForEmployeeMonthly(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
         {
             PdfReader reader = new PdfReader(sourceFile);
 
@@ -550,7 +550,7 @@ namespace AIS_Time.admin
                 pdfPageContents.BeginText(); // Start working with text.
 
                 BaseFont baseFont = BaseFont.CreateFont(BaseFont.COURIER, Encoding.ASCII.EncodingName, false);
-                pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
+                pdfPageContents.SetFontAndSize(baseFont, 10); // 10 point font
                 pdfPageContents.SetRGBColorFill(0, 0, 0);
 
                 // Note: The x,y of the Pdf Matrix is from bottom left corner. 
@@ -579,6 +579,9 @@ namespace AIS_Time.admin
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectNumber, 115, (pageSize.Height - yPos), 0);
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.CEAClassCode, 185, (pageSize.Height - yPos), 0);
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectName, 245, (pageSize.Height - yPos), 0);
+
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.Description, 325, (pageSize.Height - yPos), 0);
+
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.HoursOfWork.ToString(), 525, (pageSize.Height - yPos), 0);
 
                     //increment the total hours

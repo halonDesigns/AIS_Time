@@ -65,7 +65,7 @@
         <div class="row">
             <div class="col-md-12">
                <br />
-                <h2>Project Hours Manager</h2>
+                <h2>Time Card Manager</h2>
                 <br />
             </div>
         </div>

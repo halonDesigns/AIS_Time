@@ -88,7 +88,7 @@
                     <div class="col-md-12">
                       <br />
                         <br />
-                         <h2>Project Hours Log</h2>
+                         <h2>Time Card</h2>
                         <br />
                     </div>
                 </div>
@@ -150,7 +150,7 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
-                                        <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />
+                                       <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" MaxLength="250" Rows="5" TextMode="MultiLine" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -165,7 +165,7 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4>Existing Projects</h4>
+                                <h4>Existing Time Cards</h4>
                                 <asp:Repeater ID="rptProjectHours" runat="server" OnItemCommand="rptCustomers_ItemCommand">
                                     <HeaderTemplate>
                                         <table>

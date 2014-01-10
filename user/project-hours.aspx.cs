@@ -25,14 +25,22 @@ namespace AIS_Time.user
 
         private void RefreshEntries()
         {
-            CSList<TimeProjectHours> projectList = TimeProjectHours.List("TimeEmployeeID = @TimeEmployeeID",
-                "@TimeEmployeeID", (int)Session["TimeEmployeeID"]);
-
-            if (projectList.Count > 0)
+            try
             {
-                rptProjectHours.DataSource = projectList;
-                rptProjectHours.DataBind();
+                CSList<TimeProjectHours> projectList = TimeProjectHours.List("TimeEmployeeID = @TimeEmployeeID",
+                               "@TimeEmployeeID", (int)Session["TimeEmployeeID"]);
+
+                if (projectList.Count > 0)
+                {
+                    rptProjectHours.DataSource = projectList;
+                    rptProjectHours.DataBind();
+                }
             }
+            catch (Exception)
+            {
+             
+            }
+           
         }
 
         private void LoadResources()
@@ -125,31 +133,39 @@ namespace AIS_Time.user
 
         protected void rptCustomers_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            if (e.CommandName == "Edit")
+            try
             {
-                string allKeys = Convert.ToString(e.CommandArgument);
-                int pkID = Convert.ToInt32(allKeys);
-                _currentProjectHours = TimeProjectHours.Read(pkID);
-                Session["CurrentProjectHours"] = _currentProjectHours;
-                txtDate.Text = _currentProjectHours.DateOfWork.ToString("M/d/yyyy", CultureInfo.InvariantCulture);
-                txtHours.Text = _currentProjectHours.HoursOfWork.ToString();
-                ddlDepartment.SelectedValue = ddlDepartment.Items.FindByValue(_currentProjectHours.TimeDepartmentID.ToString()).Value;
-                ddlResoures.SelectedValue = ddlResoures.Items.FindByValue(_currentProjectHours.TimeResourceID.ToString()).Value;
-                ddlProject.SelectedValue = ddlProject.Items.FindByValue(_currentProjectHours.TimeProjectID.ToString()).Value;
-                txtDescription.Text = _currentProjectHours.Description;
-            }
+                if (e.CommandName == "Edit")
+                {
+                    string allKeys = Convert.ToString(e.CommandArgument);
+                    int pkID = Convert.ToInt32(allKeys);
+                    _currentProjectHours = TimeProjectHours.Read(pkID);
+                    Session["CurrentProjectHours"] = _currentProjectHours;
+                    txtDate.Text = _currentProjectHours.DateOfWork.ToString("M/d/yyyy", CultureInfo.InvariantCulture);
+                    txtHours.Text = _currentProjectHours.HoursOfWork.ToString();
+                    ddlDepartment.SelectedValue = ddlDepartment.Items.FindByValue(_currentProjectHours.TimeDepartmentID.ToString()).Value;
+                    ddlResoures.SelectedValue = ddlResoures.Items.FindByValue(_currentProjectHours.TimeResourceID.ToString()).Value;
+                    ddlProject.SelectedValue = ddlProject.Items.FindByValue(_currentProjectHours.TimeProjectID.ToString()).Value;
+                    txtDescription.Text = _currentProjectHours.Description;
+                }
 
-            if (e.CommandName == "Delete")
-            {
-                string allKeys = Convert.ToString(e.CommandArgument);
-                int pkID = Convert.ToInt32(allKeys);
-                _currentProjectHours = TimeProjectHours.Read(pkID);
-                _currentProjectHours.Delete();
-                _currentProjectHours = null;
-                Session["CurrentProjectHours"] = _currentProjectHours;
-                RefreshEntries();
-                updEntries.Update();
+                if (e.CommandName == "Delete")
+                {
+                    string allKeys = Convert.ToString(e.CommandArgument);
+                    int pkID = Convert.ToInt32(allKeys);
+                    _currentProjectHours = TimeProjectHours.Read(pkID);
+                    _currentProjectHours.Delete();
+                    _currentProjectHours = null;
+                    Session["CurrentProjectHours"] = _currentProjectHours;
+                    RefreshEntries();
+                    updEntries.Update();
+                }
             }
+            catch (Exception ex)
+            {
+                
+            }
+           
         }
 
         protected void cmdNew_Click(object sender, EventArgs e)

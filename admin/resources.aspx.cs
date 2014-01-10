@@ -16,7 +16,7 @@ namespace AIS_Time.admin
             {
                 RefreshEntries();
                 LoadAISCodes();
-                LoadCEAClassCodes();
+                //LoadCEAClassCodes();
             }
         }
 
@@ -42,15 +42,15 @@ namespace AIS_Time.admin
             ddlAISCode.DataBind();
         }
 
-        private void LoadCEAClassCodes()
-        {
-            CSList<TimeCEAClassCodes> companies = TimeCEAClassCodes.OrderedList("CEAClassCode");
+        //private void LoadCEAClassCodes()
+        //{
+        //    CSList<TimeCEAClassCodes> companies = TimeCEAClassCodes.OrderedList("CEAClassCode");
 
-            ddlCEAClassCode.DataSource = companies;
-            ddlCEAClassCode.DataValueField = "TimeCEAClassCodeID";
-            ddlCEAClassCode.DataTextField = "CEAClassCode";
-            ddlCEAClassCode.DataBind();
-        }
+        //    ddlCEAClassCode.DataSource = companies;
+        //    ddlCEAClassCode.DataValueField = "TimeCEAClassCodeID";
+        //    ddlCEAClassCode.DataTextField = "CEAClassCode";
+        //    ddlCEAClassCode.DataBind();
+        //}
 
         protected void cmdSubmit_Click(object sender, EventArgs e)
         {
@@ -77,7 +77,7 @@ namespace AIS_Time.admin
                 resource.ResourceName = txtName.Text;
                 resource.Description = txtDescription.Text;
                 resource.TimeAISCodeID = Convert.ToInt32(ddlAISCode.SelectedValue);
-                resource.TimeCEAClassCodeID = Convert.ToInt32(ddlCEAClassCode.SelectedValue);
+                //resource.TimeCEAClassCodeID = Convert.ToInt32(ddlCEAClassCode.SelectedValue);
                 decimal res;
                 resource.HourlyRate = decimal.TryParse(txtHourlyRate.Text, out res) ? res : new decimal(0.0);
                 resource.Status = 1;
@@ -91,7 +91,7 @@ namespace AIS_Time.admin
                 _currentResource.ResourceName = txtName.Text;
                 _currentResource.Description = txtDescription.Text;
                 _currentResource.TimeAISCodeID = Convert.ToInt32(ddlAISCode.SelectedValue);
-                _currentResource.TimeCEAClassCodeID = Convert.ToInt32(ddlCEAClassCode.SelectedValue);
+                //_currentResource.TimeCEAClassCodeID = Convert.ToInt32(ddlCEAClassCode.SelectedValue);
                 decimal res;
                 _currentResource.HourlyRate = decimal.TryParse(txtHourlyRate.Text, out res) ? res : new decimal(0.0);
                 _currentResource.Status = 1;
@@ -104,7 +104,7 @@ namespace AIS_Time.admin
             txtName.Text = "";
             txtDescription.Text = "";
             ddlAISCode.SelectedIndex = -1;
-            ddlCEAClassCode.SelectedIndex = -1;
+            //ddlCEAClassCode.SelectedIndex = -1;
             txtHourlyRate.Text = "0.0";
             _currentResource = null;
             Session["CurrentResource"] = _currentResource;
@@ -123,7 +123,7 @@ namespace AIS_Time.admin
                 txtName.Text = _currentResource.ResourceName;
                 txtDescription.Text = _currentResource.Description;
                 ddlAISCode.SelectedValue = ddlAISCode.Items.FindByValue(_currentResource.TimeAISCodeID.ToString()).Value;
-                ddlCEAClassCode.SelectedValue = ddlCEAClassCode.Items.FindByValue(_currentResource.TimeCEAClassCodeID.ToString()).Value;
+                //ddlCEAClassCode.SelectedValue = ddlCEAClassCode.Items.FindByValue(_currentResource.TimeCEAClassCodeID.ToString()).Value;
                 txtHourlyRate.Text = _currentResource.HourlyRate.ToString();
             }
 

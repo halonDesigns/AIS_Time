@@ -99,10 +99,10 @@ namespace AIS_Time.admin
                 //date wanted
                 DateTime dt = DateTime.ParseExact(txtWeeklyDateStart.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
 
-                //grab the project hours drecords for the specified user
+                //grab the project hours records for the specified user
                 //on the specified date
                 CSList<TimeProjectHours> projects = TimeProjectHours.List("TimeProjectID = @TimeProjectID AND DateOfWork >= @DateOfWorkStart AND DateOfWork <= @DateOfWorkEnd",
-                        "@TimeProjectID", ddlProjects.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(7));
+                        "@TimeProjectID", ddlProjects.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(7)).OrderedBy("DateOfWork");
 
                 string sql = "SELECT TimeProjectHours.DateOfWork, TimeProjectHours.HoursOfWork, TimeProjectHours.TimeEmployeeID ";
                 sql += "  , TimeProjectHours.TimeProjectID, TimeResources.HourlyRate, TimeCEAClassCodes.CEAClassCode, TimeProjectHours.TimeDepartmentID ";
@@ -144,7 +144,7 @@ namespace AIS_Time.admin
             {
                 //grab the details on the project
                 TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", ddlMonthlyProjects.SelectedValue);
-                
+
                 //date wanted
                 DateTime dt = DateTime.ParseExact(txtProjectMonthlyDateStart.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
 
@@ -154,7 +154,7 @@ namespace AIS_Time.admin
                 //grab the project hours drecords for the specified user
                 //on the specified date
                 CSList<TimeProjectHours> projects = TimeProjectHours.List("TimeProjectID = @TimeProjectID AND DateOfWork >= @DateOfWorkStart AND DateOfWork <= @DateOfWorkEnd",
-                        "@TimeProjectID", ddlMonthlyProjects.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(days));
+                        "@TimeProjectID", ddlMonthlyProjects.SelectedValue, "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(days)).OrderedBy("DateOfWork");
 
                 string sql = "SELECT TimeProjectHours.DateOfWork, TimeProjectHours.HoursOfWork, TimeProjectHours.TimeEmployeeID ";
                 sql += "  , TimeProjectHours.TimeProjectID, TimeResources.HourlyRate, TimeCEAClassCodes.CEAClassCode, TimeProjectHours.TimeDepartmentID ";
@@ -320,15 +320,43 @@ namespace AIS_Time.admin
                 string templatePdfPath = Server.MapPath("PDFimages");
                 string oldFile = templatePdfPath + "\\EmployeeWeeklyTemplate.pdf";
 
-                byte[] b = WriteToPdfForEmployeeWeekly(oldFile, projects, employee, dt);
-                if (b == null) return;
-                HttpResponse response = HttpContext.Current.Response;
-                response.Clear();
-                response.ContentType = "application/pdf";
-                response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}-{1}.pdf", "EmployeeWeeklyTimeCard-", employee.FirstName + "_" + employee.LastName));
-                response.BinaryWrite(b);
-                response.Flush();
-                response.End();
+                List<byte[]> pages = WriteToPdfForEmployeeWeekly(oldFile, projects, employee, dt);
+
+                //if (b == null) return;
+                //HttpResponse response = HttpContext.Current.Response;
+                //response.Clear();
+                //response.ContentType = "application/pdf";
+                //response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}-{1}.pdf", "EmployeeWeeklyTimeCard-", employee.FirstName + "_" + employee.LastName));
+                //response.BinaryWrite(b);
+                //response.Flush();
+                //response.End();
+
+                if (pages == null) return;
+                using (var output = new MemoryStream())
+                {
+                    var document = new Document();
+                    var writer = new PdfCopy(document, output);
+                    document.Open();
+                    for (int index = 0; index < pages.Count; index++)
+                    {
+                        var file = pages[index];
+                        var reader = new PdfReader(file);
+                        int n = reader.NumberOfPages;
+                        PdfImportedPage page;
+                        for (int p = 1; p <= n; p++)
+                        {
+                            page = writer.GetImportedPage(reader, p);
+                            writer.AddPage(page);
+                        }
+                    }
+                    document.Close();
+                    Response.ContentType = "application/pdf";
+                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}-{1}.pdf", "EmployeeWeeklyTimeCard-", employee.FirstName + "_" + employee.LastName));
+                    Response.BinaryWrite(output.ToArray());
+                    Response.Flush();
+                    Response.End();
+                }
+
             }
             catch (Exception ex)
             {
@@ -343,15 +371,44 @@ namespace AIS_Time.admin
                 string templatePdfPath = Server.MapPath("PDFimages");
                 string oldFile = templatePdfPath + "\\MonthlyEmployeeTemplate.pdf";
 
-                byte[] b = WriteToPdfForEmployeeMonthly(oldFile, projects, employee, dt);
-                if (b == null) return;
-                HttpResponse response = HttpContext.Current.Response;
-                response.Clear();
-                response.ContentType = "application/pdf";
-                response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}-{1}.pdf", "MonthlyTimeCard-", employee.FirstName + "_" + employee.LastName));
-                response.BinaryWrite(b);
-                response.Flush();
-                response.End();
+                List<byte[]> pages = WriteToPdfForEmployeeMonthly(oldFile, projects, employee, dt);
+
+                //if (b == null) return;
+                //HttpResponse response = HttpContext.Current.Response;
+                //response.Clear();
+                //response.ContentType = "application/pdf";
+                //response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}-{1}.pdf", "MonthlyTimeCard-", employee.FirstName + "_" + employee.LastName));
+                //response.BinaryWrite(b);
+                //response.Flush();
+                //response.End();
+
+                if (pages == null) return;
+                using (var output = new MemoryStream())
+                {
+                    var document = new Document();
+                    var writer = new PdfCopy(document, output);
+                    document.Open();
+                    for (int index = 0; index < pages.Count; index++)
+                    {
+                        var file = pages[index];
+                        var reader = new PdfReader(file);
+                        int n = reader.NumberOfPages;
+                        PdfImportedPage page;
+                        for (int p = 1; p <= n; p++)
+                        {
+                            page = writer.GetImportedPage(reader, p);
+                            writer.AddPage(page);
+                        }
+                    }
+                    document.Close();
+                    Response.ContentType = "application/pdf";
+                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}-{1}.pdf", "MonthlyTimeCard-", employee.FirstName + "_" + employee.LastName));
+                    Response.BinaryWrite(output.ToArray());
+                    Response.Flush();
+                    Response.End();
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -366,15 +423,42 @@ namespace AIS_Time.admin
                 string templatePdfPath = Server.MapPath("PDFimages");
                 string oldFile = templatePdfPath + "\\WeeklyProjectTemplate.pdf";
 
-                byte[] b = WriteToPdfForProjectWeekly(oldFile, projects, dt, projectDetails, results);
-                if (b == null) return;
-                HttpResponse response = HttpContext.Current.Response;
-                response.Clear();
-                response.ContentType = "application/pdf";
-                response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}.pdf", "WeeklyProjectTimeCard"));
-                response.BinaryWrite(b);
-                response.Flush();
-                response.End();
+                List<byte[]> pages = WriteToPdfForProjectWeekly(oldFile, projects, dt, projectDetails, results);
+
+                //if (b == null) return;
+                //HttpResponse response = HttpContext.Current.Response;
+                //response.Clear();
+                //response.ContentType = "application/pdf";
+                //response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}.pdf", "WeeklyProjectTimeCard"));
+                //response.BinaryWrite(b);
+                //response.Flush();
+                //response.End();
+
+                if (pages == null) return;
+                using (var output = new MemoryStream())
+                {
+                    var document = new Document();
+                    var writer = new PdfCopy(document, output);
+                    document.Open();
+                    for (int index = 0; index < pages.Count; index++)
+                    {
+                        var file = pages[index];
+                        var reader = new PdfReader(file);
+                        int n = reader.NumberOfPages;
+                        PdfImportedPage page;
+                        for (int p = 1; p <= n; p++)
+                        {
+                            page = writer.GetImportedPage(reader, p);
+                            writer.AddPage(page);
+                        }
+                    }
+                    document.Close();
+                    Response.ContentType = "application/pdf";
+                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}.pdf", "WeeklyProjectTimeCard"));
+                    Response.BinaryWrite(output.ToArray());
+                    Response.Flush();
+                    Response.End();
+                }
             }
             catch (Exception ex)
             {
@@ -389,15 +473,43 @@ namespace AIS_Time.admin
                 string templatePdfPath = Server.MapPath("PDFimages");
                 string oldFile = templatePdfPath + "\\MonthlyProjectTemplate.pdf";
 
-                byte[] b = WriteToPdfForProjectMonthly(oldFile, projects, dt, projectDetails, results);
-                if (b == null) return;
-                HttpResponse response = HttpContext.Current.Response;
-                response.Clear();
-                response.ContentType = "application/pdf";
-                response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}.pdf", "MonthlyProjectTimeCard"));
-                response.BinaryWrite(b);
-                response.Flush();
-                response.End();
+                List<byte[]> pages = WriteToPdfForProjectMonthly(oldFile, projects, dt, projectDetails, results);
+
+                //if (b == null) return;
+                //HttpResponse response = HttpContext.Current.Response;
+                //response.Clear();
+                //response.ContentType = "application/pdf";
+                //response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}.pdf", "MonthlyProjectTimeCard"));
+                //response.BinaryWrite(b);
+                //response.Flush();
+                //response.End();
+
+                if (pages == null) return;
+                using (var output = new MemoryStream())
+                {
+                    var document = new Document();
+                    var writer = new PdfCopy(document, output);
+                    document.Open();
+                    for (int index = 0; index < pages.Count; index++)
+                    {
+                        var file = pages[index];
+                        var reader = new PdfReader(file);
+                        int n = reader.NumberOfPages;
+                        PdfImportedPage page;
+                        for (int p = 1; p <= n; p++)
+                        {
+                            page = writer.GetImportedPage(reader, p);
+                            writer.AddPage(page);
+                        }
+                    }
+                    document.Close();
+                    Response.ContentType = "application/pdf";
+                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}.pdf", "MonthlyProjectTimeCard"));
+                    Response.BinaryWrite(output.ToArray());
+                    Response.Flush();
+                    Response.End();
+                }
+
             }
             catch (Exception ex)
             {
@@ -442,11 +554,11 @@ namespace AIS_Time.admin
                 foreach (var timeProjectHourse in projects)
                 {
                     TimeResources resource = TimeResources.ReadFirst("TimeResourceID = @TimeResourceID", "@TimeResourceID", timeProjectHourse.TimeResourceID);
-                    TimeCEAClassCodes classCode = TimeCEAClassCodes.ReadFirst("TimeCEAClassCodeID = @TimeCEAClassCodeID", "@TimeCEAClassCodeID", resource.TimeCEAClassCodeID);
+                    TimeAISCodes classCode = TimeAISCodes.ReadFirst("TimeAISCodeID = @TimeAISCodeID", "@TimeAISCodeID", resource.TimeAISCodeID);
 
                     TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", timeProjectHourse.TimeProjectID);
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectNumber, 55, (pageSize.Height - yPos), 0);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.CEAClassCode, 125, (pageSize.Height - yPos), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.AISCode, 125, (pageSize.Height - yPos), 0);
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectName, 185, (pageSize.Height - yPos), 0);
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.HoursOfWork.ToString(), 500, (pageSize.Height - yPos), 0);
 
@@ -468,529 +580,1228 @@ namespace AIS_Time.admin
 
         }
 
-        public byte[] WriteToPdfForEmployeeWeekly(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        public List<byte[]> WriteToPdfForEmployeeWeekly(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
         {
-            PdfReader reader = new PdfReader(sourceFile);
+            List<byte[]> pages = new List<byte[]>();
 
-            using (MemoryStream memoryStream = new MemoryStream())
+            int totalItemCount = 0;
+            int currentLoopCount = 0;
+            int totalHours = 0;
+
+            while (totalItemCount < projects.Count)
             {
-                // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
-                PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
+                PdfReader reader = new PdfReader(sourceFile);
 
-                Rectangle pageSize = reader.GetPageSizeWithRotation(1);
-
-                PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
-                pdfPageContents.BeginText(); // Start working with text.
-
-                BaseFont baseFont = BaseFont.CreateFont(BaseFont.COURIER, Encoding.ASCII.EncodingName, false);
-                pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
-                pdfPageContents.SetRGBColorFill(0, 0, 0);
-
-                // Note: The x,y of the Pdf Matrix is from bottom left corner. 
-                // This command tells iTextSharp to write the text at a certain location with a certain angle.
-                // Again, this will angle the text from bottom left corner to top right corner and it will 
-                // place the text in the middle of the page. 
-                //
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, playerName, pageSize.Width / 2, (pageSize.Height / 2) + 115, 0);
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, teamName, pageSize.Width / 2, (pageSize.Height / 2) + 80, 0);
-
-                //user Name
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, employee.FirstName + " " + employee.LastName + " (AIS-0" + employee.TimeEmployeeID + ")", 200, (pageSize.Height - 150), 0);
-
-                //Date of report
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 155, (pageSize.Height - 188), 0);
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMM d}", dt) + " to ", 200, (pageSize.Height - 172), 0);
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMM d}", dt.AddDays(7)), 270, (pageSize.Height - 172), 0);
-                
-                int yPos = 221;
-                int totalHours = 0;
-                foreach (var timeProjectHourse in projects)
+                using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    TimeResources resource = TimeResources.ReadFirst("TimeResourceID = @TimeResourceID", "@TimeResourceID", timeProjectHourse.TimeResourceID);
-                    TimeCEAClassCodes classCode = TimeCEAClassCodes.ReadFirst("TimeCEAClassCodeID = @TimeCEAClassCodeID", "@TimeCEAClassCodeID", resource.TimeCEAClassCodeID);
-                    TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", timeProjectHourse.TimeDepartmentID);
-                    TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", timeProjectHourse.TimeProjectID);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMM d}", timeProjectHourse.DateOfWork), 70, (pageSize.Height - yPos), 0);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectNumber, 125, (pageSize.Height - yPos), 0);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.CEAClassCode, 185, (pageSize.Height - yPos), 0);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentCode, 225, (pageSize.Height - yPos), 0);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectName, 280, (pageSize.Height - yPos), 0);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.HoursOfWork.ToString(), 725, (pageSize.Height - yPos), 0);
+                    // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
+                    PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
 
-                    //increment the total hours
-                    totalHours += timeProjectHourse.HoursOfWork;
+                    Rectangle pageSize = reader.GetPageSizeWithRotation(1);
 
-                    yPos += 20;
-                }
+                    PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
+                    pdfPageContents.BeginText(); // Start working with text.
 
-                //Total
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 725, (pageSize.Height - 525), 0);
+                    BaseFont baseFont = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, Encoding.ASCII.EncodingName, false);
+                    pdfPageContents.SetFontAndSize(baseFont, 10); // 10 point font
+                    pdfPageContents.SetRGBColorFill(0, 0, 0);
 
-                pdfPageContents.EndText(); // Done working with text
-                pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
-                pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
+                    //Name
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, employee.FirstName + " " + employee.LastName + " (AIS-0" + employee.TimeEmployeeID + ")", 200, (pageSize.Height - 150), 0);
 
-                return memoryStream.ToArray();
-            }
+                    //Date of report
+                    //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 155, (pageSize.Height - 188), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMMM dd, yyyy}", dt) + " to " + String.Format("{0:MMMM dd, yyyy}", dt.AddDays(7)), 200, (pageSize.Height - 172), 0);
 
-        }
-
-        public byte[] WriteToPdfForEmployeeMonthly(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
-        {
-            PdfReader reader = new PdfReader(sourceFile);
-
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
-                PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
-
-                Rectangle pageSize = reader.GetPageSizeWithRotation(1);
-
-                PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
-                pdfPageContents.BeginText(); // Start working with text.
-
-                BaseFont baseFont = BaseFont.CreateFont(BaseFont.COURIER, Encoding.ASCII.EncodingName, false);
-                pdfPageContents.SetFontAndSize(baseFont, 10); // 10 point font
-                pdfPageContents.SetRGBColorFill(0, 0, 0);
-
-                // Note: The x,y of the Pdf Matrix is from bottom left corner. 
-                // This command tells iTextSharp to write the text at a certain location with a certain angle.
-                // Again, this will angle the text from bottom left corner to top right corner and it will 
-                // place the text in the middle of the page. 
-                //
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, playerName, pageSize.Width / 2, (pageSize.Height / 2) + 115, 0);
-                //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, teamName, pageSize.Width / 2, (pageSize.Height / 2) + 80, 0);
-
-                //user Name
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, employee.FirstName + " " + employee.LastName + " (AIS-0" + employee.TimeEmployeeID + ")", 155, (pageSize.Height - 168), 0);
-
-                //Date of report
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:y}", dt), 155, (pageSize.Height - 188), 0);
-
-                int yPos = 241;
-                int totalHours = 0;
-                foreach (var timeProjectHourse in projects)
-                {
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.DateOfWork.Day.ToString(), 65, (pageSize.Height - yPos), 0);
-                    TimeResources resource = TimeResources.ReadFirst("TimeResourceID = @TimeResourceID", "@TimeResourceID", timeProjectHourse.TimeResourceID);
-                    TimeCEAClassCodes classCode = TimeCEAClassCodes.ReadFirst("TimeCEAClassCodeID = @TimeCEAClassCodeID", "@TimeCEAClassCodeID", resource.TimeCEAClassCodeID);
-
-                    TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", timeProjectHourse.TimeProjectID);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectNumber, 115, (pageSize.Height - yPos), 0);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.CEAClassCode, 185, (pageSize.Height - yPos), 0);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectName, 245, (pageSize.Height - yPos), 0);
-
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.Description, 325, (pageSize.Height - yPos), 0);
-
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.HoursOfWork.ToString(), 525, (pageSize.Height - yPos), 0);
-
-                    //increment the total hours
-                    totalHours += timeProjectHourse.HoursOfWork;
-
-                    yPos += 20;
-                }
-
-                //Total
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 525, (pageSize.Height - 725), 0);
-
-                pdfPageContents.EndText(); // Done working with text
-                pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
-                pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
-
-                return memoryStream.ToArray();
-            }
-
-        }
-
-        public byte[] WriteToPdfForProjectWeekly(string sourceFile, CSList<TimeProjectHours> projects, DateTime dt, TimeProjects projectDetails, WeeklyReportResult[] results)
-        {
-            PdfReader reader = new PdfReader(sourceFile);
-
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
-                PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
-
-                Rectangle pageSize = reader.GetPageSizeWithRotation(1);
-
-                PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
-                pdfPageContents.BeginText(); // Start working with text.
-
-                BaseFont baseFont = BaseFont.CreateFont(BaseFont.COURIER, Encoding.ASCII.EncodingName, false);
-                pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
-                pdfPageContents.SetRGBColorFill(0, 0, 0);
-
-                // Note: The x,y of the Pdf Matrix is from bottom left corner. 
-                // This command tells iTextSharp to write the text at a certain location with a certain angle.
-                // Again, this will angle the text from bottom left corner to top right corner and it will 
-                // place the text in the middle of the page. 
-
-                //customer
-                TimeCustomers customer = TimeCustomers.ReadFirst("TimeCustomerID = @TimeCustomerID", "@TimeCustomerID", projectDetails.TimeCustomerID);
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 165, (pageSize.Height - 151), 0);
-
-                //Project Number
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 165, (pageSize.Height - 173), 0);
-
-                //project name
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 165, (pageSize.Height - 196), 0);
-
-                //Date of report, shows week span
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 265, (pageSize.Height - 219), 0);
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.AddDays(6).ToShortDateString(), 485, (pageSize.Height - 219), 0);
-
-                //set array of current dates
-                DateTime[] dtArr = new DateTime[7];
-                for (int y = 0; y < 7; y++)
-                    dtArr[y] = dt.AddDays(y);
-
-                pdfPageContents.SetFontAndSize(baseFont, 8); // 8 point font
-
-                //show the dates along the line
-                int startX = 230;
-                int lowerY = 245;
-                const int INCREMENTER = 53;
-
-                //startX = 135;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(1)), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(2)), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(3)), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(4)), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(5)), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(6)), startX, (pageSize.Height - lowerY), 0);
-
-                //pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
-                int yPos = 266; //start line y pixel for table values
-                int totalHours = 0;
-                double totalCharge = 0.0;
-                int dateStartX = 225;
-                List<string> codeList = new List<string>();
-                List<double> hourlyRateForCodeList = new List<double>();
-                List<int> employeeIDList = new List<int>();
-                List<int> departmentIDList = new List<int>();
-
-                bool firstRun = true;
-                foreach (var timeProjectHourse in results)
-                {
-                    if (firstRun)
+                    int yPos = 221;
+                    int localLoopCount = 0;
+                    foreach (var timeProjectHourse in projects)
                     {
-                        codeList.Add(timeProjectHourse.CEAClassCode);
-                        hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
-                        employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
-                        departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
-                        firstRun = false;
+                        if (localLoopCount > currentLoopCount || currentLoopCount == 0)
+                        {
+                            TimeResources resource = TimeResources.ReadFirst("TimeResourceID = @TimeResourceID", "@TimeResourceID", timeProjectHourse.TimeResourceID);
+                            TimeAISCodes classCode = TimeAISCodes.ReadFirst("TimeAISCodeID = @TimeAISCodeID", "@TimeAISCodeID", resource.TimeAISCodeID);
+                            TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", timeProjectHourse.TimeDepartmentID);
+                            TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", timeProjectHourse.TimeProjectID);
+
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMM d}", timeProjectHourse.DateOfWork), 70, (pageSize.Height - yPos), 0);
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectNumber, 125, (pageSize.Height - yPos), 0);
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.AISCode, 185, (pageSize.Height - yPos), 0);
+
+                            //show the function
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentName, 225, (pageSize.Height - yPos), 0);
+
+                            //show the hours worked
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.HoursOfWork.ToString(), 725, (pageSize.Height - yPos), 0);
+
+                            const int NUM_CHARS_ALLOWED = 85;
+                            int numLines = 0;
+                            if (timeProjectHourse.Description.Length <= NUM_CHARS_ALLOWED)
+                                numLines = 1;
+                            else if (timeProjectHourse.Description.Length > NUM_CHARS_ALLOWED && timeProjectHourse.Description.Length <= (NUM_CHARS_ALLOWED * 2))
+                                numLines = 2;
+                            else if (timeProjectHourse.Description.Length > (NUM_CHARS_ALLOWED * 2) && timeProjectHourse.Description.Length <= (NUM_CHARS_ALLOWED * 3))
+                                numLines = 3;
+
+                            int partCount = numLines;
+                            string input = timeProjectHourse.Description;
+                            var results = new string[partCount];
+                            int rem = timeProjectHourse.Description.Length % NUM_CHARS_ALLOWED;
+                            for (var i = 0; i < partCount; i++)
+                            {
+                                if (i == partCount - 1)
+                                    results[i] = input.Substring(NUM_CHARS_ALLOWED * i, rem);
+                                else
+                                    results[i] = input.Substring(NUM_CHARS_ALLOWED * i, NUM_CHARS_ALLOWED);
+                            }
+
+                            for (var l = 0; l < numLines; l++)
+                            {
+                                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, results[l], 350, (pageSize.Height - yPos), 0);
+                                yPos += 10;
+                            }
+
+                            //increment the total hours
+                            totalHours += timeProjectHourse.HoursOfWork;
+
+                            var botPos = (int)(pageSize.Height - yPos);
+                            pdfPageContents.SetLineWidth((float).5);
+                            pdfPageContents.MoveTo(65, botPos);
+                            pdfPageContents.LineTo(pageSize.Width - 35, botPos);
+                            pdfPageContents.Stroke();
+
+                            yPos += 10;
+
+                            totalItemCount++;
+
+                            //check to see if we are at the bottom of the page
+                            if (yPos > 540)
+                            {
+                                break;
+                            }
+                        }
+                        localLoopCount++;
+                    }
+
+                    currentLoopCount = localLoopCount;
+
+                    if (totalItemCount == projects.Count)
+                    {
+                        //Total
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Total Hours " + totalHours.ToString(), 730, (pageSize.Height - yPos), 0);
+                    }
+
+                    pdfPageContents.EndText(); // Done working with text
+                    pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
+                    pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
+
+                    pages.Add(memoryStream.ToArray());
+                }
+            }
+
+            return pages;
+        }
+
+        static string WordCut(string text, int cutOffLength, char[] separators)
+        {
+            cutOffLength = cutOffLength > text.Length ? text.Length : cutOffLength;
+            int separatorIndex = text.Substring(0, cutOffLength).LastIndexOfAny(separators);
+            if (separatorIndex > 0)
+                return text.Substring(0, separatorIndex);
+            return text.Substring(0, cutOffLength);
+        }
+
+        public List<byte[]> WriteToPdfForEmployeeMonthly(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        {
+            List<byte[]> pages = new List<byte[]>();
+
+            int totalItemCount = 0;
+            int currentLoopCount = 0;
+            int totalHours = 0;
+
+            while (totalItemCount < projects.Count)
+            {
+                PdfReader reader = new PdfReader(sourceFile);
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
+                    PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
+
+                    Rectangle pageSize = reader.GetPageSizeWithRotation(1);
+
+                    PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
+                    pdfPageContents.BeginText(); // Start working with text.
+
+                    BaseFont baseFont = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, Encoding.ASCII.EncodingName, false);
+                    pdfPageContents.SetFontAndSize(baseFont, 10); // 10 point font
+                    pdfPageContents.SetRGBColorFill(0, 0, 0);
+
+                    //Name
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, employee.FirstName + " " + employee.LastName, 210, (pageSize.Height - 150), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "AIS-0" + employee.TimeEmployeeID, 525, (pageSize.Height - 150), 0);
+
+                    //find out how many days are in the month
+                    int days = DateTime.DaysInMonth(dt.Year, dt.Month);
+
+                    //Date of report
+                    //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 155, (pageSize.Height - 188), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMMM dd, yyyy}", dt), 210, (pageSize.Height - 172), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMMM dd, yyyy}", dt.AddDays(days - 1)), 525, (pageSize.Height - 172), 0);
+
+                    int yPos = 221;
+                    int localLoopCount = 0;
+                    foreach (var timeProjectHourse in projects)
+                    {
+                        if (localLoopCount > currentLoopCount || currentLoopCount == 0)
+                        {
+                            TimeResources resource = TimeResources.ReadFirst("TimeResourceID = @TimeResourceID", "@TimeResourceID", timeProjectHourse.TimeResourceID);
+                            TimeAISCodes classCode = TimeAISCodes.ReadFirst("TimeAISCodeID = @TimeAISCodeID", "@TimeAISCodeID", resource.TimeAISCodeID);
+                            TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", timeProjectHourse.TimeDepartmentID);
+                            TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", timeProjectHourse.TimeProjectID);
+
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMM d}", timeProjectHourse.DateOfWork), 70, (pageSize.Height - yPos), 0);
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectNumber, 115, (pageSize.Height - yPos), 0);
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.AISCode, 175, (pageSize.Height - yPos), 0);
+
+                            //show the function
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentName, 220, (pageSize.Height - yPos), 0);
+
+                            //show the hours worked
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.HoursOfWork.ToString(), 730, (pageSize.Height - yPos), 0);
+
+                            const int NUM_CHARS_ALLOWED = 85;
+                            int numLines = 0;
+                            if (timeProjectHourse.Description.Length <= NUM_CHARS_ALLOWED)
+                                numLines = 1;
+                            else if (timeProjectHourse.Description.Length > NUM_CHARS_ALLOWED && timeProjectHourse.Description.Length <= (NUM_CHARS_ALLOWED * 2))
+                                numLines = 2;
+                            else if (timeProjectHourse.Description.Length > (NUM_CHARS_ALLOWED * 2) && timeProjectHourse.Description.Length <= (NUM_CHARS_ALLOWED * 3))
+                                numLines = 3;
+
+                            int partCount = numLines;
+                            string input = timeProjectHourse.Description;
+                            var results = new string[partCount];
+                            int rem = timeProjectHourse.Description.Length % NUM_CHARS_ALLOWED;
+                            for (var i = 0; i < partCount; i++)
+                            {
+                                if (i == partCount - 1)
+                                    results[i] = input.Substring(NUM_CHARS_ALLOWED * i, rem);
+                                else
+                                    results[i] = input.Substring(NUM_CHARS_ALLOWED * i, NUM_CHARS_ALLOWED);
+                            }
+
+                            for (var l = 0; l < numLines; l++)
+                            {
+                                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, results[l], 345, (pageSize.Height - yPos), 0);
+                                yPos += 10;
+                            }
+
+                            //increment the total hours
+                            totalHours += timeProjectHourse.HoursOfWork;
+
+                            var botPos = (int)(pageSize.Height - yPos);
+                            pdfPageContents.SetLineWidth((float).5);
+                            pdfPageContents.MoveTo(65, botPos);
+                            pdfPageContents.LineTo(pageSize.Width - 35, botPos);
+                            pdfPageContents.Stroke();
+
+                            yPos += 10;
+
+                            totalItemCount++;
+
+                            //check to see if we are at the bottom of the page
+                            if (yPos > 540)
+                            {
+                                break;
+                            }
+                        }
+                        localLoopCount++;
+                    }
+
+                    currentLoopCount = localLoopCount;
+
+                    if (totalItemCount == projects.Count)
+                    {
+                        //Total
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Total Hours " + totalHours.ToString(), 730, (pageSize.Height - yPos), 0);
+                    }
+
+                    pdfPageContents.EndText(); // Done working with text
+                    pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
+                    pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
+
+                    pages.Add(memoryStream.ToArray());
+                }
+            }
+
+            return pages;
+        }
+
+        public List<byte[]> WriteToPdfForProjectWeekly(string sourceFile, CSList<TimeProjectHours> projects, DateTime dt, TimeProjects projectDetails, WeeklyReportResult[] results)
+        {
+            List<byte[]> pages = new List<byte[]>();
+
+            int totalItemCount = 0;
+            int currentLoopCount = 0;
+            int totalHours = 0;
+            decimal totalCharge = 0;
+
+            int pageCount = 0;
+            while (totalItemCount < projects.Count)
+            {
+                pageCount += 1;
+                PdfReader reader = new PdfReader(sourceFile);
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
+                    PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
+
+                    Rectangle pageSize = reader.GetPageSizeWithRotation(1);
+
+                    PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
+                    pdfPageContents.BeginText(); // Start working with text.
+
+                    BaseFont baseFont = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, Encoding.ASCII.EncodingName, false);
+                    pdfPageContents.SetFontAndSize(baseFont, 10); // 10 point font
+                    pdfPageContents.SetRGBColorFill(0, 0, 0);
+
+                    //      //customer
+                    //TimeCustomers customer = TimeCustomers.ReadFirst("TimeCustomerID = @TimeCustomerID", "@TimeCustomerID", projectDetails.TimeCustomerID);
+                    //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 210, (pageSize.Height - 150), 0);
+
+                    //project name
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 210, (pageSize.Height - 150), 0);
+
+                    //Project Number
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 525, (pageSize.Height - 150), 0);
+
+                    //Date of report, shows week span
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMMM dd, yyyy}", dt), 210, (pageSize.Height - 172), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMMM dd, yyyy}", dt.AddDays(6)), 525, (pageSize.Height - 172), 0);
+
+
+                    int yPos = 221;
+                    int localLoopCount = 0;
+                    foreach (var timeProjectHourse in projects)
+                    {
+                        if (localLoopCount > currentLoopCount || currentLoopCount == 0)
+                        {
+                            TimeResources resource = TimeResources.ReadFirst("TimeResourceID = @TimeResourceID", "@TimeResourceID", timeProjectHourse.TimeResourceID);
+                            TimeAISCodes classCode = TimeAISCodes.ReadFirst("TimeAISCodeID = @TimeAISCodeID", "@TimeAISCodeID", resource.TimeAISCodeID);
+                            TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", timeProjectHourse.TimeDepartmentID);
+                            TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", timeProjectHourse.TimeProjectID);
+                            //TimeEmployees employee = TimeEmployees.ReadFirst("TimeEmployeeID = @TimeEmployeeID", "@TimeEmployeeID", timeProjectHourse.TimeEmployeeID);
+
+                            //show the date worked
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMM d}", timeProjectHourse.DateOfWork), 82, (pageSize.Height - yPos), 0);
+                            //show the employee id
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "AIS-0" + timeProjectHourse.TimeEmployeeID, 121, (pageSize.Height - yPos), 0);
+                            //show the code
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.AISCode, 176, (pageSize.Height - yPos), 0);
+                            //show the function
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentName, 205, (pageSize.Height - yPos), 0);
+                            //show the hours worked
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.HoursOfWork.ToString(), 640, (pageSize.Height - yPos), 0);
+                            //show the hourly rate
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:C}", resource.HourlyRate), 662, (pageSize.Height - yPos), 0);
+
+                            decimal totalForDay = timeProjectHourse.HoursOfWork * resource.HourlyRate;
+
+                            //show the total dollars for that day
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:C}", totalForDay), 705, (pageSize.Height - yPos), 0);
+
+                            const int NUM_CHARS_ALLOWED = 65;
+                            int numLines = 0;
+                            if (timeProjectHourse.Description.Length <= NUM_CHARS_ALLOWED)
+                                numLines = 1;
+                            else if (timeProjectHourse.Description.Length > NUM_CHARS_ALLOWED && timeProjectHourse.Description.Length <= (NUM_CHARS_ALLOWED * 2))
+                                numLines = 2;
+                            else if (timeProjectHourse.Description.Length > (NUM_CHARS_ALLOWED * 2) && timeProjectHourse.Description.Length <= (NUM_CHARS_ALLOWED * 3))
+                                numLines = 3;
+                            else if (timeProjectHourse.Description.Length > (NUM_CHARS_ALLOWED * 3) && timeProjectHourse.Description.Length <= (NUM_CHARS_ALLOWED * 4))
+                                numLines = 4;
+
+                            int partCount = numLines;
+                            string input = timeProjectHourse.Description;
+                            var descResults = new string[partCount];
+                            int rem = timeProjectHourse.Description.Length % NUM_CHARS_ALLOWED;
+                            for (var i = 0; i < partCount; i++)
+                            {
+                                if (i == partCount - 1)
+                                    descResults[i] = input.Substring(NUM_CHARS_ALLOWED * i, rem);
+                                else
+                                    descResults[i] = input.Substring(NUM_CHARS_ALLOWED * i, NUM_CHARS_ALLOWED);
+                            }
+
+                            for (var l = 0; l < numLines; l++)
+                            {
+                                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, descResults[l], 325, (pageSize.Height - yPos), 0);
+                                yPos += 10;
+                            }
+
+                            //increment the total hours
+                            totalHours += timeProjectHourse.HoursOfWork;
+
+                            //increment the total charge-out
+                            totalCharge += totalForDay;
+
+                            var botPos = (int)(pageSize.Height - yPos);
+                            pdfPageContents.SetLineWidth((float).5);
+                            pdfPageContents.MoveTo(68, botPos);
+                            pdfPageContents.LineTo(pageSize.Width - 38, botPos);
+                            pdfPageContents.Stroke();
+
+                            yPos += 10;
+
+                            totalItemCount++;
+
+                            //check to see if we are at the bottom of the page
+                            if (yPos > 540)
+                            {
+                                break;
+                            }
+                        }
+                        localLoopCount++;
+                    }
+
+                    currentLoopCount = localLoopCount;
+
+                    if (totalItemCount == projects.Count)
+                    {
+                        //Total
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Totals", 620, (pageSize.Height - yPos), 0);
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 640, (pageSize.Height - yPos), 0);
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:C}", totalCharge), 705, (pageSize.Height - yPos), 0);
+
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Page " + pageCount, 705, (pageSize.Height - (yPos + 20)), 0);
                     }
                     else
                     {
-                        if (!codeList.Contains(timeProjectHourse.CEAClassCode))
-                        {
-                            codeList.Add(timeProjectHourse.CEAClassCode);
-                            employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
-                            departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
-                            hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
-                        }
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Page " + pageCount, 705, (pageSize.Height - (yPos + 20)), 0);
                     }
+
+                    pdfPageContents.EndText(); // Done working with text
+                    pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
+                    pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
+
+                    pages.Add(memoryStream.ToArray());
                 }
-
-                //6 days by the number of codes found
-                int[,] dailyTotalsForCodeArr = new int[7, codeList.Count];
-
-                foreach (var timeProjectHourse in results)
-                {
-                    if (timeProjectHourse.DateOfWork == dtArr[0])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[0, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[1])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[1, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[2])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[2, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[3])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[3, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[4])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[4, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[5])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[5, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[6])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[6, index] += timeProjectHourse.HoursOfWork;
-                    }
-                }
-
-                for (int finCodeArr = 0; finCodeArr < codeList.Count; finCodeArr++)
-                {
-                    int totalCodeHours = 0;
-                    double totalCodeCharge = 0.0;
-                    int printDateX;
-
-                    //show the employeeID in the first column
-                    TimeEmployees employee = TimeEmployees.ReadFirst("TimeEmployeeID = @TimeEmployeeID", "@TimeEmployeeID", employeeIDList[finCodeArr]);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "AIS-0" + employee.TimeEmployeeID, 55, (pageSize.Height - yPos), 0);
-
-                    //show the code in the second column
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, codeList[finCodeArr], 115, (pageSize.Height - yPos), 0);
-
-                    TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", departmentIDList[finCodeArr]);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentCode, 160, (pageSize.Height - yPos), 0);
-
-                    //now list the totals for this code per day
-                    for (int finArr = 0; finArr < 7; finArr++)
-                    {
-                        //where are we going to print
-                        printDateX = dateStartX + (INCREMENTER * finArr);
-
-                        //print the days total hours worked for this code
-                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dailyTotalsForCodeArr[finArr, finCodeArr].ToString(), printDateX, (pageSize.Height - yPos), 0);
-
-                        //increment the total hours
-                        totalCodeHours += dailyTotalsForCodeArr[finArr, finCodeArr];
-                        totalCodeCharge += (double)(hourlyRateForCodeList[finCodeArr] * dailyTotalsForCodeArr[finArr, finCodeArr]);
-
-                    }
-
-                    //show the total hours for the code for the week
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalCodeHours.ToString(), 615, (pageSize.Height - yPos), 0);
-                    totalHours += totalCodeHours;
-                    //show the total charged for the code for the week
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCodeCharge, 660, (pageSize.Height - yPos), 0);
-                    totalCharge += totalCodeCharge;
-
-                    //now increment the y val line
-                    yPos += 20;
-                }
-
-                //Total Hours
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 615, (pageSize.Height - 527), 0);
-                //Total Charge
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCharge, 660, (pageSize.Height - 527), 0);
-
-                pdfPageContents.EndText(); // Done working with text
-                pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
-                pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
-
-                return memoryStream.ToArray();
             }
 
+            return pages;
         }
 
-        public byte[] WriteToPdfForProjectMonthly(string sourceFile, CSList<TimeProjectHours> projects, DateTime dt, TimeProjects projectDetails, WeeklyReportResult[] results)
+        public List<byte[]> WriteToPdfForProjectMonthly(string sourceFile, CSList<TimeProjectHours> projects, DateTime dt, TimeProjects projectDetails, WeeklyReportResult[] results)
         {
-            PdfReader reader = new PdfReader(sourceFile);
+            List<byte[]> pages = new List<byte[]>();
 
-            using (MemoryStream memoryStream = new MemoryStream())
+            int totalItemCount = 0;
+            int currentLoopCount = 0;
+            int totalHours = 0;
+            decimal totalCharge = 0;
+
+            int pageCount = 0;
+            while (totalItemCount < projects.Count)
             {
-                // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
-                PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
+                pageCount += 1;
+                PdfReader reader = new PdfReader(sourceFile);
 
-                Rectangle pageSize = reader.GetPageSizeWithRotation(1);
-
-                PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
-                pdfPageContents.BeginText(); // Start working with text.
-
-                BaseFont baseFont = BaseFont.CreateFont(BaseFont.COURIER, Encoding.ASCII.EncodingName, false);
-                pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
-                pdfPageContents.SetRGBColorFill(0, 0, 0);
-
-                // Note: The x,y of the Pdf Matrix is from bottom left corner. 
-                // This command tells iTextSharp to write the text at a certain location with a certain angle.
-                // Again, this will angle the text from bottom left corner to top right corner and it will 
-                // place the text in the middle of the page. 
-
-                //customer
-                TimeCustomers customer = TimeCustomers.ReadFirst("TimeCustomerID = @TimeCustomerID", "@TimeCustomerID", projectDetails.TimeCustomerID);
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 165, (pageSize.Height - 151), 0);
-
-                //Project Number
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 165, (pageSize.Height - 173), 0);
-
-                //project name
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 165, (pageSize.Height - 196), 0);
-
-                //Date of report, shows week span
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 265, (pageSize.Height - 219), 0);
-                //find out how many days are in the month
-                int days = DateTime.DaysInMonth(dt.Year, dt.Month);
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.AddDays(days).ToShortDateString(), 485, (pageSize.Height - 219), 0);
-
-                //set array of current dates
-                DateTime[] dtArr = new DateTime[7];
-                for (int y = 0; y < 7; y++)
-                    dtArr[y] = dt.AddDays(y);
-
-                pdfPageContents.SetFontAndSize(baseFont, 8); // 8 point font
-
-                //show the dates along the line
-                int startX = 230;
-                int lowerY = 245;
-                const int INCREMENTER = 53;
-
-                //startX = 135;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(1)), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(2)), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(3)), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(4)), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(5)), startX, (pageSize.Height - lowerY), 0);
-                startX = startX + INCREMENTER;
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(6)), startX, (pageSize.Height - lowerY), 0);
-
-                //pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
-                int yPos = 266; //start line y pixel for table values
-                int totalHours = 0;
-                double totalCharge = 0.0;
-                int dateStartX = 225;
-                List<string> codeList = new List<string>();
-                List<double> hourlyRateForCodeList = new List<double>();
-                List<int> employeeIDList = new List<int>();
-                List<int> departmentIDList = new List<int>();
-
-                bool firstRun = true;
-                foreach (var timeProjectHourse in results)
+                using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    if (firstRun)
+                    // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
+                    PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
+
+                    Rectangle pageSize = reader.GetPageSizeWithRotation(1);
+
+                    PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
+                    pdfPageContents.BeginText(); // Start working with text.
+
+                    BaseFont baseFont = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, Encoding.ASCII.EncodingName, false);
+                    pdfPageContents.SetFontAndSize(baseFont, 10); // 10 point font
+                    pdfPageContents.SetRGBColorFill(0, 0, 0);
+
+                    //      //customer
+                    //TimeCustomers customer = TimeCustomers.ReadFirst("TimeCustomerID = @TimeCustomerID", "@TimeCustomerID", projectDetails.TimeCustomerID);
+                    //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 210, (pageSize.Height - 150), 0);
+
+                    //project name
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 210, (pageSize.Height - 150), 0);
+
+                    //Project Number
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 525, (pageSize.Height - 150), 0);
+
+                    //find out how many days are in the month
+                    int days = DateTime.DaysInMonth(dt.Year, dt.Month);
+
+                    //Date of report, shows week span
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMMM dd, yyyy}", dt), 210, (pageSize.Height - 172), 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMMM dd, yyyy}", dt.AddDays(days-1)), 525, (pageSize.Height - 172), 0);
+
+
+                    int yPos = 221;
+                    int localLoopCount = 0;
+                    foreach (var timeProjectHourse in projects)
                     {
-                        codeList.Add(timeProjectHourse.CEAClassCode);
-                        hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
-                        employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
-                        departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
-                        firstRun = false;
+                        if (localLoopCount > currentLoopCount || currentLoopCount == 0)
+                        {
+                            TimeResources resource = TimeResources.ReadFirst("TimeResourceID = @TimeResourceID", "@TimeResourceID", timeProjectHourse.TimeResourceID);
+                            TimeAISCodes classCode = TimeAISCodes.ReadFirst("TimeAISCodeID = @TimeAISCodeID", "@TimeAISCodeID", resource.TimeAISCodeID);
+                            TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", timeProjectHourse.TimeDepartmentID);
+                            TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", timeProjectHourse.TimeProjectID);
+                            //TimeEmployees employee = TimeEmployees.ReadFirst("TimeEmployeeID = @TimeEmployeeID", "@TimeEmployeeID", timeProjectHourse.TimeEmployeeID);
+
+                            //show the date worked
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:MMM d}", timeProjectHourse.DateOfWork), 82, (pageSize.Height - yPos), 0);
+                            //show the employee id
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "AIS-0" + timeProjectHourse.TimeEmployeeID, 121, (pageSize.Height - yPos), 0);
+                            //show the code
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.AISCode, 176, (pageSize.Height - yPos), 0);
+                            //show the function
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentName, 205, (pageSize.Height - yPos), 0);
+                            //show the hours worked
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.HoursOfWork.ToString(), 640, (pageSize.Height - yPos), 0);
+                            //show the hourly rate
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:C}", resource.HourlyRate), 662, (pageSize.Height - yPos), 0);
+
+                            decimal totalForDay = timeProjectHourse.HoursOfWork * resource.HourlyRate;
+
+                            //show the total dollars for that day
+                            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:C}", totalForDay), 705, (pageSize.Height - yPos), 0);
+
+                            const int NUM_CHARS_ALLOWED = 65;
+                            int numLines = 0;
+                            if (timeProjectHourse.Description.Length <= NUM_CHARS_ALLOWED)
+                                numLines = 1;
+                            else if (timeProjectHourse.Description.Length > NUM_CHARS_ALLOWED && timeProjectHourse.Description.Length <= (NUM_CHARS_ALLOWED * 2))
+                                numLines = 2;
+                            else if (timeProjectHourse.Description.Length > (NUM_CHARS_ALLOWED * 2) && timeProjectHourse.Description.Length <= (NUM_CHARS_ALLOWED * 3))
+                                numLines = 3;
+                            else if (timeProjectHourse.Description.Length > (NUM_CHARS_ALLOWED * 3) && timeProjectHourse.Description.Length <= (NUM_CHARS_ALLOWED * 4))
+                                numLines = 4;
+
+                            int partCount = numLines;
+                            string input = timeProjectHourse.Description;
+                            var descResults = new string[partCount];
+                            int rem = timeProjectHourse.Description.Length % NUM_CHARS_ALLOWED;
+                            for (var i = 0; i < partCount; i++)
+                            {
+                                if (i == partCount - 1)
+                                    descResults[i] = input.Substring(NUM_CHARS_ALLOWED * i, rem);
+                                else
+                                    descResults[i] = input.Substring(NUM_CHARS_ALLOWED * i, NUM_CHARS_ALLOWED);
+                            }
+
+                            for (var l = 0; l < numLines; l++)
+                            {
+                                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, descResults[l], 325, (pageSize.Height - yPos), 0);
+                                yPos += 10;
+                            }
+
+                            //increment the total hours
+                            totalHours += timeProjectHourse.HoursOfWork;
+
+                            //increment the total charge-out
+                            totalCharge += totalForDay;
+
+                            var botPos = (int)(pageSize.Height - yPos);
+                            pdfPageContents.SetLineWidth((float).5);
+                            pdfPageContents.MoveTo(68, botPos);
+                            pdfPageContents.LineTo(pageSize.Width - 38, botPos);
+                            pdfPageContents.Stroke();
+
+                            yPos += 10;
+
+                            totalItemCount++;
+
+                            //check to see if we are at the bottom of the page
+                            if (yPos > 540)
+                            {
+                                break;
+                            }
+                        }
+                        localLoopCount++;
+                    }
+
+                    currentLoopCount = localLoopCount;
+
+                    if (totalItemCount == projects.Count)
+                    {
+                        //Total
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Totals", 620, (pageSize.Height - yPos), 0);
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 640, (pageSize.Height - yPos), 0);
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:C}", totalCharge), 705, (pageSize.Height - yPos), 0);
+
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Page " + pageCount, 705, (pageSize.Height - (yPos + 20)), 0);
                     }
                     else
                     {
-                        if (!codeList.Contains(timeProjectHourse.CEAClassCode))
-                        {
-                            codeList.Add(timeProjectHourse.CEAClassCode);
-                            employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
-                            departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
-                            hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
-                        }
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Page " + pageCount, 705, (pageSize.Height - (yPos + 20)), 0);
                     }
+
+                    pdfPageContents.EndText(); // Done working with text
+                    pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
+                    pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
+
+                    pages.Add(memoryStream.ToArray());
                 }
-
-                //6 days by the number of codes found
-                int[,] dailyTotalsForCodeArr = new int[7, codeList.Count];
-
-                foreach (var timeProjectHourse in results)
-                {
-                    if (timeProjectHourse.DateOfWork == dtArr[0])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[0, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[1])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[1, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[2])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[2, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[3])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[3, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[4])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[4, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[5])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[5, index] += timeProjectHourse.HoursOfWork;
-                    }
-                    else if (timeProjectHourse.DateOfWork == dtArr[6])
-                    {
-                        int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
-                        dailyTotalsForCodeArr[6, index] += timeProjectHourse.HoursOfWork;
-                    }
-                }
-
-                for (int finCodeArr = 0; finCodeArr < codeList.Count; finCodeArr++)
-                {
-                    int totalCodeHours = 0;
-                    double totalCodeCharge = 0.0;
-                    int printDateX;
-
-                    //show the employeeID in the first column
-                    TimeEmployees employee = TimeEmployees.ReadFirst("TimeEmployeeID = @TimeEmployeeID", "@TimeEmployeeID", employeeIDList[finCodeArr]);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "AIS-0" + employee.TimeEmployeeID, 55, (pageSize.Height - yPos), 0);
-
-                    //show the code in the second column
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, codeList[finCodeArr], 115, (pageSize.Height - yPos), 0);
-
-                    TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", departmentIDList[finCodeArr]);
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentCode, 160, (pageSize.Height - yPos), 0);
-
-                    //now list the totals for this code per day
-                    for (int finArr = 0; finArr < 7; finArr++)
-                    {
-                        //where are we going to print
-                        printDateX = dateStartX + (INCREMENTER * finArr);
-
-                        //print the days total hours worked for this code
-                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dailyTotalsForCodeArr[finArr, finCodeArr].ToString(), printDateX, (pageSize.Height - yPos), 0);
-
-                        //increment the total hours
-                        totalCodeHours += dailyTotalsForCodeArr[finArr, finCodeArr];
-                        totalCodeCharge += (double)(hourlyRateForCodeList[finCodeArr] * dailyTotalsForCodeArr[finArr, finCodeArr]);
-
-                    }
-
-                    //show the total hours for the code for the week
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalCodeHours.ToString(), 615, (pageSize.Height - yPos), 0);
-                    totalHours += totalCodeHours;
-                    //show the total charged for the code for the week
-                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCodeCharge, 660, (pageSize.Height - yPos), 0);
-                    totalCharge += totalCodeCharge;
-
-                    //now increment the y val line
-                    yPos += 20;
-                }
-
-                //Total Hours
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 615, (pageSize.Height - 527), 0);
-                //Total Charge
-                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCharge, 660, (pageSize.Height - 527), 0);
-
-                pdfPageContents.EndText(); // Done working with text
-                pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
-                pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
-
-                return memoryStream.ToArray();
             }
+
+            return pages;
         }
+
+        //public byte[] WriteToPdfForProjectWeekly(string sourceFile, CSList<TimeProjectHours> projects, DateTime dt, TimeProjects projectDetails, WeeklyReportResult[] results)
+        //{
+        //    PdfReader reader = new PdfReader(sourceFile);
+
+        //    using (MemoryStream memoryStream = new MemoryStream())
+        //    {
+        //        // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
+        //        PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
+
+        //        Rectangle pageSize = reader.GetPageSizeWithRotation(1);
+
+        //        PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
+        //        pdfPageContents.BeginText(); // Start working with text.
+
+        //        BaseFont baseFont = BaseFont.CreateFont(BaseFont.COURIER, Encoding.ASCII.EncodingName, false);
+        //        pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
+        //        pdfPageContents.SetRGBColorFill(0, 0, 0);
+
+        //        // Note: The x,y of the Pdf Matrix is from bottom left corner. 
+        //        // This command tells iTextSharp to write the text at a certain location with a certain angle.
+        //        // Again, this will angle the text from bottom left corner to top right corner and it will 
+        //        // place the text in the middle of the page. 
+
+        //        //customer
+        //        TimeCustomers customer = TimeCustomers.ReadFirst("TimeCustomerID = @TimeCustomerID", "@TimeCustomerID", projectDetails.TimeCustomerID);
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 165, (pageSize.Height - 151), 0);
+
+        //        //Project Number
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 165, (pageSize.Height - 173), 0);
+
+        //        //project name
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 165, (pageSize.Height - 196), 0);
+
+        //        //Date of report, shows week span
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 265, (pageSize.Height - 219), 0);
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.AddDays(6).ToShortDateString(), 485, (pageSize.Height - 219), 0);
+
+        //        //set array of current dates
+        //        DateTime[] dtArr = new DateTime[7];
+        //        for (int y = 0; y < 7; y++)
+        //            dtArr[y] = dt.AddDays(y);
+
+        //        pdfPageContents.SetFontAndSize(baseFont, 8); // 8 point font
+
+        //        //show the dates along the line
+        //        int startX = 230;
+        //        int lowerY = 245;
+        //        const int INCREMENTER = 53;
+
+        //        //startX = 135;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(1)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(2)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(3)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(4)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(5)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(6)), startX, (pageSize.Height - lowerY), 0);
+
+        //        //pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
+        //        int yPos = 266; //start line y pixel for table values
+        //        int totalHours = 0;
+        //        double totalCharge = 0.0;
+        //        int dateStartX = 225;
+        //        List<string> codeList = new List<string>();
+        //        List<double> hourlyRateForCodeList = new List<double>();
+        //        List<int> employeeIDList = new List<int>();
+        //        List<int> departmentIDList = new List<int>();
+
+        //        bool firstRun = true;
+        //        foreach (var timeProjectHourse in results)
+        //        {
+        //            if (firstRun)
+        //            {
+        //                codeList.Add(timeProjectHourse.CEAClassCode);
+        //                hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
+        //                employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
+        //                departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
+        //                firstRun = false;
+        //            }
+        //            else
+        //            {
+        //                if (!codeList.Contains(timeProjectHourse.CEAClassCode))
+        //                {
+        //                    codeList.Add(timeProjectHourse.CEAClassCode);
+        //                    employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
+        //                    departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
+        //                    hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
+        //                }
+        //            }
+        //        }
+
+        //        //6 days by the number of codes found
+        //        int[,] dailyTotalsForCodeArr = new int[7, codeList.Count];
+
+        //        foreach (var timeProjectHourse in results)
+        //        {
+        //            if (timeProjectHourse.DateOfWork == dtArr[0])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[0, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[1])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[1, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[2])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[2, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[3])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[3, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[4])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[4, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[5])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[5, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[6])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[6, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //        }
+
+        //        for (int finCodeArr = 0; finCodeArr < codeList.Count; finCodeArr++)
+        //        {
+        //            int totalCodeHours = 0;
+        //            double totalCodeCharge = 0.0;
+        //            int printDateX;
+
+        //            //show the employeeID in the first column
+        //            TimeEmployees employee = TimeEmployees.ReadFirst("TimeEmployeeID = @TimeEmployeeID", "@TimeEmployeeID", employeeIDList[finCodeArr]);
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "AIS-0" + employee.TimeEmployeeID, 55, (pageSize.Height - yPos), 0);
+
+        //            //show the code in the second column
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, codeList[finCodeArr], 115, (pageSize.Height - yPos), 0);
+
+        //            TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", departmentIDList[finCodeArr]);
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentCode, 160, (pageSize.Height - yPos), 0);
+
+        //            //now list the totals for this code per day
+        //            for (int finArr = 0; finArr < 7; finArr++)
+        //            {
+        //                //where are we going to print
+        //                printDateX = dateStartX + (INCREMENTER * finArr);
+
+        //                //print the days total hours worked for this code
+        //                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dailyTotalsForCodeArr[finArr, finCodeArr].ToString(), printDateX, (pageSize.Height - yPos), 0);
+
+        //                //increment the total hours
+        //                totalCodeHours += dailyTotalsForCodeArr[finArr, finCodeArr];
+        //                totalCodeCharge += (double)(hourlyRateForCodeList[finCodeArr] * dailyTotalsForCodeArr[finArr, finCodeArr]);
+
+        //            }
+
+        //            //show the total hours for the code for the week
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalCodeHours.ToString(), 615, (pageSize.Height - yPos), 0);
+        //            totalHours += totalCodeHours;
+        //            //show the total charged for the code for the week
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCodeCharge, 660, (pageSize.Height - yPos), 0);
+        //            totalCharge += totalCodeCharge;
+
+        //            //now increment the y val line
+        //            yPos += 20;
+        //        }
+
+        //        //Total Hours
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 615, (pageSize.Height - 527), 0);
+        //        //Total Charge
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCharge, 660, (pageSize.Height - 527), 0);
+
+        //        pdfPageContents.EndText(); // Done working with text
+        //        pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
+        //        pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
+
+        //        return memoryStream.ToArray();
+        //    }
+
+        //}
+
+        //public byte[] WriteToPdfForEmployeeMonthly(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        //{
+        //    PdfReader reader = new PdfReader(sourceFile);
+
+        //    using (MemoryStream memoryStream = new MemoryStream())
+        //    {
+        //        // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
+        //        PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
+
+        //        Rectangle pageSize = reader.GetPageSizeWithRotation(1);
+
+        //        PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
+        //        pdfPageContents.BeginText(); // Start working with text.
+
+        //        BaseFont baseFont = BaseFont.CreateFont(BaseFont.COURIER, Encoding.ASCII.EncodingName, false);
+        //        pdfPageContents.SetFontAndSize(baseFont, 10); // 10 point font
+        //        pdfPageContents.SetRGBColorFill(0, 0, 0);
+
+        //        // Note: The x,y of the Pdf Matrix is from bottom left corner. 
+        //        // This command tells iTextSharp to write the text at a certain location with a certain angle.
+        //        // Again, this will angle the text from bottom left corner to top right corner and it will 
+        //        // place the text in the middle of the page. 
+        //        //
+        //        //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, playerName, pageSize.Width / 2, (pageSize.Height / 2) + 115, 0);
+        //        //pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, teamName, pageSize.Width / 2, (pageSize.Height / 2) + 80, 0);
+
+        //        //user Name
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, employee.FirstName + " " + employee.LastName + " (AIS-0" + employee.TimeEmployeeID + ")", 155, (pageSize.Height - 168), 0);
+
+        //        //Date of report
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:y}", dt), 155, (pageSize.Height - 188), 0);
+
+        //        int yPos = 241;
+        //        int totalHours = 0;
+        //        foreach (var timeProjectHourse in projects)
+        //        {
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.DateOfWork.Day.ToString(), 65, (pageSize.Height - yPos), 0);
+        //            TimeResources resource = TimeResources.ReadFirst("TimeResourceID = @TimeResourceID", "@TimeResourceID", timeProjectHourse.TimeResourceID);
+        //            TimeAISCodes classCode = TimeAISCodes.ReadFirst("TimeAISCodeID = @TimeAISCodeID", "@TimeAISCodeID", resource.TimeAISCodeID);
+
+        //            TimeProjects project = TimeProjects.ReadFirst("TimeProjectID = @TimeProjectID", "@TimeProjectID", timeProjectHourse.TimeProjectID);
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectNumber, 115, (pageSize.Height - yPos), 0);
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, classCode.AISCode, 185, (pageSize.Height - yPos), 0);
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, project.ProjectName, 245, (pageSize.Height - yPos), 0);
+
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.Description, 325, (pageSize.Height - yPos), 0);
+
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, timeProjectHourse.HoursOfWork.ToString(), 525, (pageSize.Height - yPos), 0);
+
+        //            //increment the total hours
+        //            totalHours += timeProjectHourse.HoursOfWork;
+
+        //            yPos += 20;
+        //        }
+
+        //        //Total
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 525, (pageSize.Height - 725), 0);
+
+        //        pdfPageContents.EndText(); // Done working with text
+        //        pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
+        //        pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
+
+        //        return memoryStream.ToArray();
+        //    }
+
+        //}
+
+        //public byte[] WriteToPdfForProjectWeekly(string sourceFile, CSList<TimeProjectHours> projects, DateTime dt, TimeProjects projectDetails, WeeklyReportResult[] results)
+        //{
+        //    PdfReader reader = new PdfReader(sourceFile);
+
+        //    using (MemoryStream memoryStream = new MemoryStream())
+        //    {
+        //        // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
+        //        PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
+
+        //        Rectangle pageSize = reader.GetPageSizeWithRotation(1);
+
+        //        PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
+        //        pdfPageContents.BeginText(); // Start working with text.
+
+        //        BaseFont baseFont = BaseFont.CreateFont(BaseFont.COURIER, Encoding.ASCII.EncodingName, false);
+        //        pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
+        //        pdfPageContents.SetRGBColorFill(0, 0, 0);
+
+        //        // Note: The x,y of the Pdf Matrix is from bottom left corner. 
+        //        // This command tells iTextSharp to write the text at a certain location with a certain angle.
+        //        // Again, this will angle the text from bottom left corner to top right corner and it will 
+        //        // place the text in the middle of the page. 
+
+        //        //customer
+        //        TimeCustomers customer = TimeCustomers.ReadFirst("TimeCustomerID = @TimeCustomerID", "@TimeCustomerID", projectDetails.TimeCustomerID);
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 165, (pageSize.Height - 151), 0);
+
+        //        //Project Number
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 165, (pageSize.Height - 173), 0);
+
+        //        //project name
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 165, (pageSize.Height - 196), 0);
+
+        //        //Date of report, shows week span
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 265, (pageSize.Height - 219), 0);
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.AddDays(6).ToShortDateString(), 485, (pageSize.Height - 219), 0);
+
+        //        //set array of current dates
+        //        DateTime[] dtArr = new DateTime[7];
+        //        for (int y = 0; y < 7; y++)
+        //            dtArr[y] = dt.AddDays(y);
+
+        //        pdfPageContents.SetFontAndSize(baseFont, 8); // 8 point font
+
+        //        //show the dates along the line
+        //        int startX = 230;
+        //        int lowerY = 245;
+        //        const int INCREMENTER = 53;
+
+        //        //startX = 135;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(1)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(2)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(3)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(4)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(5)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(6)), startX, (pageSize.Height - lowerY), 0);
+
+        //        //pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
+        //        int yPos = 266; //start line y pixel for table values
+        //        int totalHours = 0;
+        //        double totalCharge = 0.0;
+        //        int dateStartX = 225;
+        //        List<string> codeList = new List<string>();
+        //        List<double> hourlyRateForCodeList = new List<double>();
+        //        List<int> employeeIDList = new List<int>();
+        //        List<int> departmentIDList = new List<int>();
+
+        //        bool firstRun = true;
+        //        foreach (var timeProjectHourse in results)
+        //        {
+        //            if (firstRun)
+        //            {
+        //                codeList.Add(timeProjectHourse.CEAClassCode);
+        //                hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
+        //                employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
+        //                departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
+        //                firstRun = false;
+        //            }
+        //            else
+        //            {
+        //                if (!codeList.Contains(timeProjectHourse.CEAClassCode))
+        //                {
+        //                    codeList.Add(timeProjectHourse.CEAClassCode);
+        //                    employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
+        //                    departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
+        //                    hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
+        //                }
+        //            }
+        //        }
+
+        //        //6 days by the number of codes found
+        //        int[,] dailyTotalsForCodeArr = new int[7, codeList.Count];
+
+        //        foreach (var timeProjectHourse in results)
+        //        {
+        //            if (timeProjectHourse.DateOfWork == dtArr[0])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[0, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[1])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[1, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[2])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[2, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[3])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[3, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[4])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[4, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[5])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[5, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[6])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[6, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //        }
+
+        //        for (int finCodeArr = 0; finCodeArr < codeList.Count; finCodeArr++)
+        //        {
+        //            int totalCodeHours = 0;
+        //            double totalCodeCharge = 0.0;
+        //            int printDateX;
+
+        //            //show the employeeID in the first column
+        //            TimeEmployees employee = TimeEmployees.ReadFirst("TimeEmployeeID = @TimeEmployeeID", "@TimeEmployeeID", employeeIDList[finCodeArr]);
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "AIS-0" + employee.TimeEmployeeID, 55, (pageSize.Height - yPos), 0);
+
+        //            //show the code in the second column
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, codeList[finCodeArr], 115, (pageSize.Height - yPos), 0);
+
+        //            TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", departmentIDList[finCodeArr]);
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentCode, 160, (pageSize.Height - yPos), 0);
+
+        //            //now list the totals for this code per day
+        //            for (int finArr = 0; finArr < 7; finArr++)
+        //            {
+        //                //where are we going to print
+        //                printDateX = dateStartX + (INCREMENTER * finArr);
+
+        //                //print the days total hours worked for this code
+        //                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dailyTotalsForCodeArr[finArr, finCodeArr].ToString(), printDateX, (pageSize.Height - yPos), 0);
+
+        //                //increment the total hours
+        //                totalCodeHours += dailyTotalsForCodeArr[finArr, finCodeArr];
+        //                totalCodeCharge += (double)(hourlyRateForCodeList[finCodeArr] * dailyTotalsForCodeArr[finArr, finCodeArr]);
+
+        //            }
+
+        //            //show the total hours for the code for the week
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalCodeHours.ToString(), 615, (pageSize.Height - yPos), 0);
+        //            totalHours += totalCodeHours;
+        //            //show the total charged for the code for the week
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCodeCharge, 660, (pageSize.Height - yPos), 0);
+        //            totalCharge += totalCodeCharge;
+
+        //            //now increment the y val line
+        //            yPos += 20;
+        //        }
+
+        //        //Total Hours
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 615, (pageSize.Height - 527), 0);
+        //        //Total Charge
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCharge, 660, (pageSize.Height - 527), 0);
+
+        //        pdfPageContents.EndText(); // Done working with text
+        //        pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
+        //        pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
+
+        //        return memoryStream.ToArray();
+        //    }
+
+        //}
+
+        //public byte[] WriteToPdfForProjectMonthly(string sourceFile, CSList<TimeProjectHours> projects, DateTime dt, TimeProjects projectDetails, WeeklyReportResult[] results)
+        //{
+        //    PdfReader reader = new PdfReader(sourceFile);
+
+        //    using (MemoryStream memoryStream = new MemoryStream())
+        //    {
+        //        // PDFStamper is the class we use from iTextSharp to alter an existing PDF.
+        //        PdfStamper pdfStamper = new PdfStamper(reader, memoryStream);
+
+        //        Rectangle pageSize = reader.GetPageSizeWithRotation(1);
+
+        //        PdfContentByte pdfPageContents = pdfStamper.GetOverContent(1);
+        //        pdfPageContents.BeginText(); // Start working with text.
+
+        //        BaseFont baseFont = BaseFont.CreateFont(BaseFont.COURIER, Encoding.ASCII.EncodingName, false);
+        //        pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
+        //        pdfPageContents.SetRGBColorFill(0, 0, 0);
+
+        //        // Note: The x,y of the Pdf Matrix is from bottom left corner. 
+        //        // This command tells iTextSharp to write the text at a certain location with a certain angle.
+        //        // Again, this will angle the text from bottom left corner to top right corner and it will 
+        //        // place the text in the middle of the page. 
+
+        //        //customer
+        //        TimeCustomers customer = TimeCustomers.ReadFirst("TimeCustomerID = @TimeCustomerID", "@TimeCustomerID", projectDetails.TimeCustomerID);
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, customer.CustomerName, 165, (pageSize.Height - 151), 0);
+
+        //        //Project Number
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectNumber, 165, (pageSize.Height - 173), 0);
+
+        //        //project name
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, projectDetails.ProjectName, 165, (pageSize.Height - 196), 0);
+
+        //        //Date of report, shows week span
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.ToShortDateString(), 265, (pageSize.Height - 219), 0);
+        //        //find out how many days are in the month
+        //        int days = DateTime.DaysInMonth(dt.Year, dt.Month);
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dt.AddDays(days).ToShortDateString(), 485, (pageSize.Height - 219), 0);
+
+        //        //set array of current dates
+        //        DateTime[] dtArr = new DateTime[7];
+        //        for (int y = 0; y < 7; y++)
+        //            dtArr[y] = dt.AddDays(y);
+
+        //        pdfPageContents.SetFontAndSize(baseFont, 8); // 8 point font
+
+        //        //show the dates along the line
+        //        int startX = 230;
+        //        int lowerY = 245;
+        //        const int INCREMENTER = 53;
+
+        //        //startX = 135;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(1)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(2)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(3)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(4)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(5)), startX, (pageSize.Height - lowerY), 0);
+        //        startX = startX + INCREMENTER;
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_CENTER, String.Format("{0:MMM d}", dt.AddDays(6)), startX, (pageSize.Height - lowerY), 0);
+
+        //        //pdfPageContents.SetFontAndSize(baseFont, 11); // 11 point font
+        //        int yPos = 266; //start line y pixel for table values
+        //        int totalHours = 0;
+        //        double totalCharge = 0.0;
+        //        int dateStartX = 225;
+        //        List<string> codeList = new List<string>();
+        //        List<double> hourlyRateForCodeList = new List<double>();
+        //        List<int> employeeIDList = new List<int>();
+        //        List<int> departmentIDList = new List<int>();
+
+        //        bool firstRun = true;
+        //        foreach (var timeProjectHourse in results)
+        //        {
+        //            if (firstRun)
+        //            {
+        //                codeList.Add(timeProjectHourse.CEAClassCode);
+        //                hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
+        //                employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
+        //                departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
+        //                firstRun = false;
+        //            }
+        //            else
+        //            {
+        //                if (!codeList.Contains(timeProjectHourse.CEAClassCode))
+        //                {
+        //                    codeList.Add(timeProjectHourse.CEAClassCode);
+        //                    employeeIDList.Add(timeProjectHourse.TimeEmployeeID);
+        //                    departmentIDList.Add(timeProjectHourse.TimeDepartmentID);
+        //                    hourlyRateForCodeList.Add((double)timeProjectHourse.HourlyRate);
+        //                }
+        //            }
+        //        }
+
+        //        //6 days by the number of codes found
+        //        int[,] dailyTotalsForCodeArr = new int[7, codeList.Count];
+
+        //        foreach (var timeProjectHourse in results)
+        //        {
+        //            if (timeProjectHourse.DateOfWork == dtArr[0])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[0, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[1])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[1, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[2])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[2, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[3])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[3, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[4])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[4, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[5])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[5, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //            else if (timeProjectHourse.DateOfWork == dtArr[6])
+        //            {
+        //                int index = codeList.IndexOf(timeProjectHourse.CEAClassCode);
+        //                dailyTotalsForCodeArr[6, index] += timeProjectHourse.HoursOfWork;
+        //            }
+        //        }
+
+        //        for (int finCodeArr = 0; finCodeArr < codeList.Count; finCodeArr++)
+        //        {
+        //            int totalCodeHours = 0;
+        //            double totalCodeCharge = 0.0;
+        //            int printDateX;
+
+        //            //show the employeeID in the first column
+        //            TimeEmployees employee = TimeEmployees.ReadFirst("TimeEmployeeID = @TimeEmployeeID", "@TimeEmployeeID", employeeIDList[finCodeArr]);
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "AIS-0" + employee.TimeEmployeeID, 55, (pageSize.Height - yPos), 0);
+
+        //            //show the code in the second column
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, codeList[finCodeArr], 115, (pageSize.Height - yPos), 0);
+
+        //            TimeDepartments deptCode = TimeDepartments.ReadFirst("TimeDepartmentID = @TimeDepartmentID", "@TimeDepartmentID", departmentIDList[finCodeArr]);
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, deptCode.DepartmentCode, 160, (pageSize.Height - yPos), 0);
+
+        //            //now list the totals for this code per day
+        //            for (int finArr = 0; finArr < 7; finArr++)
+        //            {
+        //                //where are we going to print
+        //                printDateX = dateStartX + (INCREMENTER * finArr);
+
+        //                //print the days total hours worked for this code
+        //                pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, dailyTotalsForCodeArr[finArr, finCodeArr].ToString(), printDateX, (pageSize.Height - yPos), 0);
+
+        //                //increment the total hours
+        //                totalCodeHours += dailyTotalsForCodeArr[finArr, finCodeArr];
+        //                totalCodeCharge += (double)(hourlyRateForCodeList[finCodeArr] * dailyTotalsForCodeArr[finArr, finCodeArr]);
+
+        //            }
+
+        //            //show the total hours for the code for the week
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalCodeHours.ToString(), 615, (pageSize.Height - yPos), 0);
+        //            totalHours += totalCodeHours;
+        //            //show the total charged for the code for the week
+        //            pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCodeCharge, 660, (pageSize.Height - yPos), 0);
+        //            totalCharge += totalCodeCharge;
+
+        //            //now increment the y val line
+        //            yPos += 20;
+        //        }
+
+        //        //Total Hours
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 615, (pageSize.Height - 527), 0);
+        //        //Total Charge
+        //        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "$" + totalCharge, 660, (pageSize.Height - 527), 0);
+
+        //        pdfPageContents.EndText(); // Done working with text
+        //        pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 
+        //        pdfStamper.Close(); // Always close the stamper or you'll have a 0 byte stream. 
+
+        //        return memoryStream.ToArray();
+        //    }
+        //}
     }
 }

@@ -50,7 +50,7 @@
                         <li><a href="<%= Page.ResolveClientUrl("~/admin/departments.aspx") %>"><i class="fa fa-font"></i> Functions</a></li>
                         <li><a href="<%= Page.ResolveClientUrl("~/admin/projects.aspx") %>"><i class="fa fa-desktop"></i> Projects</a></li>
                         <li><a href="<%= Page.ResolveClientUrl("~/admin/resources.aspx") %>"><i class="fa fa-wrench"></i> Resources</a></li>
-                        <li><a href="<%= Page.ResolveClientUrl("~/admin/configurations.aspx") %>"><i class="fa fa-bar-chart-o"></i> Configurations</a></li>
+                        <li><a href="<%= Page.ResolveClientUrl("~/admin/configurations.aspx") %>"><i class="fa fa-bar-chart-o"></i> AIS Codes</a></li>
                         <li><a href="<%= Page.ResolveClientUrl("~/admin/reports.aspx") %>"><i class="fa fa-bar-chart-o"></i> Reports</a></li>
                     </ul>
 

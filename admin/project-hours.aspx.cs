@@ -25,6 +25,7 @@ namespace AIS_Time.admin
 
         private void RefreshEntries()
         {
+            try{
             CSList<TimeProjectHours> projectList = TimeProjectHours.List("TimeEmployeeID = @TimeEmployeeID",
                 "@TimeEmployeeID", (int) Session["TimeEmployeeID"]);
 
@@ -32,6 +33,11 @@ namespace AIS_Time.admin
             {
                 rptProjectHours.DataSource = projectList;
                 rptProjectHours.DataBind();
+            }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -126,6 +132,7 @@ namespace AIS_Time.admin
 
         protected void rptCustomers_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
+            try{
             if (e.CommandName == "Edit")
             {
                 string allKeys = Convert.ToString(e.CommandArgument);
@@ -153,6 +160,11 @@ namespace AIS_Time.admin
                 Session["CurrentProjectHours"] = _currentProjectHours;
                 RefreshEntries();
                 updEntries.Update();
+            }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 

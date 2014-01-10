@@ -49,15 +49,6 @@ namespace AIS_Time.admin {
         protected global::System.Web.UI.WebControls.DropDownList ddlAISCode;
         
         /// <summary>
-        /// ddlCEAClassCode control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCEAClassCode;
-        
-        /// <summary>
         /// txtHourlyRate control.
         /// </summary>
         /// <remarks>

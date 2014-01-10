@@ -101,7 +101,7 @@
                                         </asp:DropDownList>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                               <%-- <div class="form-group">
                                     <h5>CEA Class Code</h5>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
@@ -109,7 +109,7 @@
                                         <asp:DropDownList ID="ddlCEAClassCode" class="form-control" runat="server">
                                         </asp:DropDownList>
                                     </div>
-                                </div>
+                                </div>--%>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>

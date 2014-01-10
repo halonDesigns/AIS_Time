@@ -476,7 +476,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="classes\Icons.cs" />
     <Compile Include="classes\TimeAISCodes.cs" />
-    <Compile Include="classes\TimeCEAClassCodes.cs" />
     <Compile Include="classes\TimeCompanies.cs" />
     <Compile Include="classes\TimeCustomers.cs" />
     <Compile Include="classes\TimeDepartments.cs" />

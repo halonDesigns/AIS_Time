@@ -12,7 +12,7 @@ namespace AIS_Time.classes
         public abstract int TimeResourceID { get; }
         public abstract string ResourceName { get; set; }
         public abstract int TimeAISCodeID { get; set; }
-        public abstract int TimeCEAClassCodeID { get; set; }
+        //public abstract int TimeCEAClassCodeID { get; set; }
         public abstract decimal HourlyRate { get; set; }
         public abstract string Description { get; set; }
         public abstract int Status { get; set; }

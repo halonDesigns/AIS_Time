@@ -103,7 +103,7 @@
                                           <asp:Button ID="cmdSubmitAISCode" class="btn btn-lg btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmitAISCode_Click" />
                                 </div>
                                 <div class="form-group">
-                                    <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                                    <asp:Label ID="lblErrorAIS" runat="server" Text=""></asp:Label>
                                 </div>
                                 
 
@@ -143,15 +143,15 @@
                     </div>
                 </div>
                 
-                    <div class="row">
+                   <%-- <div class="row">
                     <div class="col-md-12">
                         <br />
                         <br />
                          <h2>CEA Class Code Manager</h2>
                         <br />
                     </div>
-                </div>
-                <div class="row">
+                </div>--%>
+                <%--<div class="row">
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -175,7 +175,7 @@
                                         <asp:Button ID="btnSaveCEAClassCode" class="btn btn-lg btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmitCEAClassCode_Click" />
                                 </div>
                                 <div class="form-group">
-                                    <asp:Label ID="lblErrorAIS" runat="server" Text=""></asp:Label>
+                                    <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
                                 </div>
                                 
 
@@ -213,7 +213,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>--%>
             </div>
             <!-- START PROGRESS LOADING PANEL -->
             <asp:ModalPopupExtender ID="ModalProgress" runat="server" PopupControlID="PanLoad"

@@ -58,51 +58,6 @@ namespace AIS_Time.admin {
         protected global::System.Web.UI.WebControls.Button cmdSubmitAISCode;
         
         /// <summary>
-        /// lblError control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblError;
-        
-        /// <summary>
-        /// rptAISCodes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptAISCodes;
-        
-        /// <summary>
-        /// txtCEAClassCodeName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCEAClassCodeName;
-        
-        /// <summary>
-        /// txtCEAClassCodeDescription control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCEAClassCodeDescription;
-        
-        /// <summary>
-        /// btnSaveCEAClassCode control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSaveCEAClassCode;
-        
-        /// <summary>
         /// lblErrorAIS control.
         /// </summary>
         /// <remarks>
@@ -112,13 +67,13 @@ namespace AIS_Time.admin {
         protected global::System.Web.UI.WebControls.Label lblErrorAIS;
         
         /// <summary>
-        /// rptCEAClassCodes control.
+        /// rptAISCodes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptCEAClassCodes;
+        protected global::System.Web.UI.WebControls.Repeater rptAISCodes;
         
         /// <summary>
         /// ModalProgress control.

@@ -174,7 +174,7 @@
                                 <ItemTemplate>
                                     <tr>
                                         <td>
-                                            <asp:Label ID="lblEmployeeName" runat="server" Text='<%# Eval("FirstName") + " " + Eval("LastName") %>'></asp:Label></td>
+                                            <asp:Label ID="lblEmployeeName" runat="server" Text='<%# Eval("FirstName") + " " + Eval("LastName") + " - AIS-0" + Eval("TimeEmployeeID") %>'></asp:Label></td>
                                         <asp:Literal ID="editChildColumn" runat="server"></asp:Literal>
                                         <td id="Td1" style="width: 10%" runat="server">
                                             <asp:LinkButton ID="btnEditCustomer" runat="server" CssClass="btn btn-success" type="submit" CommandName="Edit" CommandArgument='<%# Eval("TimeEmployeeID") %>'> EDIT </asp:LinkButton>

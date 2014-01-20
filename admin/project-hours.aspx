@@ -113,6 +113,7 @@
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
                                         <asp:DropDownList ID="ddlProject" class="form-control" runat="server"></asp:DropDownList>
+                                           <asp:Label ID="lblProjectCheck" runat="server" ForeColor="red" />
                                     </div>
                                 </div>
                                  <div class="form-group">
@@ -122,6 +123,7 @@
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
                                         <asp:DropDownList ID="ddlResoures" class="form-control" runat="server"></asp:DropDownList>
+                                          <asp:Label ID="lblResouresCheck" runat="server" ForeColor="red" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -130,6 +132,7 @@
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
                                         <asp:DropDownList ID="ddlDepartment" class="form-control" runat="server"></asp:DropDownList>
+                                         <asp:Label ID="lblDepartmentCheck" runat="server" ForeColor="red" />
                                     </div>
                                 </div>
                                  <div class="form-group">
@@ -138,12 +141,14 @@
                                         <asp:TextBox runat="server" ID="txtDate" class="form-control" placeholder="date of work" />
                                         <asp:CalendarExtender ID="txtDate_CalendarExtender" runat="server" Enabled="True" TargetControlID="txtDate">
                                         </asp:CalendarExtender>
+                                         <asp:Label ID="lblDateCheck" runat="server" ForeColor="red" />
                                     </div>
                                 </div>
                                  <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                                         <asp:TextBox runat="server" ID="txtHours" class="form-control" placeholder="project hours" onKeyPress="return checkIt(event)" />
+                                     <asp:Label ID="lblHoursCheck" runat="server" ForeColor="red" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -218,6 +223,28 @@
                 </asp:UpdatePanel>
             </asp:Panel>
             <!-- END PROGRESS LOADING PANEL -->
+                <asp:ModalPopupExtender ID="mpSuccess" runat="server" PopupControlID="pnlSuccess"
+                TargetControlID="btnHidden" BackgroundCssClass="modalBackground">
+            </asp:ModalPopupExtender>
+            <asp:Panel ID="pnlSuccess" runat="server" CssClass="modalPopup">
+                <div class="modal-body">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="span6">
+                                <h3>
+                                    Success!</h3>
+                                <p class="help-block">
+                                     <asp:Label ID="lblSuccessMessage" runat="server" /></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <asp:Button ID="btnSubmit" runat="server" Text="Close" OnClick="btnSubmit_Click"
+                        class="btn btn-large btn-info btn-block" />
+                </div>
+            </asp:Panel>
+            <asp:Button ID="btnHidden" runat="server" Text="" Style="display: none;" />
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>

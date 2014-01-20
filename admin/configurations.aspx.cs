@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using AIS_Time.classes;
 using Vici.CoolStorage;
@@ -130,6 +126,9 @@ namespace AIS_Time.admin
             Session["CurrentAISCode"] = _currentAISCode;
             RefreshAISCodeEntries();
             updEntries.Update();
+
+            lblSuccessMessage.Text = "Successfully submitted data!";
+            mpSuccess.Show();
         }
 
         protected void rptAISCodes_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -154,6 +153,8 @@ namespace AIS_Time.admin
                 Session["CurrentAISCode"] = _currentAISCode;
                 RefreshAISCodeEntries();
                 updEntries.Update();
+                lblSuccessMessage.Text = "Successfully deleted data!";
+                mpSuccess.Show();
             }
         }
         //protected void rptCEAClassCodes_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -180,5 +181,11 @@ namespace AIS_Time.admin
         //        updEntries.Update();
         //    }
         //}
+
+        protected void btnSubmit_Click(object sender, EventArgs args)
+        {
+            //all good
+            mpSuccess.Hide();
+        }
     }
 }

@@ -96,6 +96,9 @@ namespace AIS_Time.admin
             Session["CurrentProject"] = _currentProject;
             RefreshEntries();
             updEntries.Update();
+
+            lblSuccessMessage.Text = "Successfully submitted data!";
+            mpSuccess.Show();
         }
 
         protected void rptCustomers_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -122,7 +125,15 @@ namespace AIS_Time.admin
                 Session["CurrentProject"] = _currentProject;
                 RefreshEntries();
                 updEntries.Update();
+                lblSuccessMessage.Text = "Successfully deleted data!";
+                mpSuccess.Show();
             }
+        }
+
+        protected void btnSubmit_Click(object sender, EventArgs args)
+        {
+            //all good
+            mpSuccess.Hide();
         }
     }
 }

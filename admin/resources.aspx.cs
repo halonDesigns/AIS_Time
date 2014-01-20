@@ -110,6 +110,9 @@ namespace AIS_Time.admin
             Session["CurrentResource"] = _currentResource;
             RefreshEntries();
             updEntries.Update();
+
+            lblSuccessMessage.Text = "Successfully submitted data!";
+            mpSuccess.Show();
         }
 
         protected void rptResource_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -137,7 +140,15 @@ namespace AIS_Time.admin
                 Session["CurrentResource"] = _currentResource;
                 RefreshEntries();
                 updEntries.Update();
+                lblSuccessMessage.Text = "Successfully deleted data!";
+                mpSuccess.Show();
             }
+        }
+
+        protected void btnSubmit_Click(object sender, EventArgs args)
+        {
+            //all good
+            mpSuccess.Hide();
         }
     }
 }

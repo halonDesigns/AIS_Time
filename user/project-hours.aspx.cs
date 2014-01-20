@@ -38,9 +38,7 @@ namespace AIS_Time.user
             }
             catch (Exception)
             {
-             
             }
-           
         }
 
         private void LoadResources()
@@ -51,6 +49,7 @@ namespace AIS_Time.user
             ddlResoures.DataValueField = "TimeResourceID";
             ddlResoures.DataTextField = "ResourceName";
             ddlResoures.DataBind();
+            ddlResoures.Items.Insert(0, new ListItem("Please select a resource type", "0"));
         }
 
         private void LoadProjects()
@@ -61,6 +60,7 @@ namespace AIS_Time.user
             ddlProject.DataValueField = "TimeProjectID";
             ddlProject.DataTextField = "ProjectName";
             ddlProject.DataBind();
+            ddlProject.Items.Insert(0, new ListItem("Please select a project", "0"));
         }
 
         private void LoadDepartments()
@@ -71,16 +71,52 @@ namespace AIS_Time.user
             ddlDepartment.DataValueField = "TimeDepartmentID";
             ddlDepartment.DataTextField = "DepartmentName";
             ddlDepartment.DataBind();
+            ddlDepartment.Items.Insert(0, new ListItem("Please select a department type", "0"));
         }
 
         protected void cmdSubmit_Click(object sender, EventArgs e)
         {
-            if (txtDate.Text == "" || txtHours.Text == "" || txtHours.Text == "0" || ddlDepartment.SelectedIndex == -1
-                || ddlProject.SelectedIndex == -1)
+            if (ddlProject.SelectedIndex == 0)
             {
-                lblError.Text = "Please fill in all fields"; 
+                lblProjectCheck.Text = "Please select a project.";
+                Page.SetFocus(ddlProject);
                 return;
             }
+            lblProjectCheck.Text = "";
+            if (ddlResoures.SelectedIndex == 0)
+            {
+                lblResouresCheck.Text = "Please select a resource type.";
+                Page.SetFocus(ddlResoures);
+                return;
+            }
+            lblResouresCheck.Text = "";
+           
+            if (ddlDepartment.SelectedIndex == 0)
+            {
+                lblDepartmentCheck.Text = "Please select a department.";
+                Page.SetFocus(ddlDepartment);
+                return;
+            }
+            lblDepartmentCheck.Text = "";
+            if (txtDate.Text == "" || txtHours.Text == "" || txtHours.Text == "0")
+            {
+                lblError.Text = "Please fill in all fields";
+                return;
+            }
+            if (txtDate.Text == "")
+            {
+                lblDateCheck.Text = "Please select a date.";
+                Page.SetFocus(txtDate);
+                return;
+            }
+            lblDateCheck.Text = "";
+            if (txtHours.Text == "" || txtHours.Text == "0")
+            {
+                lblHoursCheck.Text = "Please input your hours.";
+                Page.SetFocus(txtHours);
+                return;
+            }
+            lblHoursCheck.Text = "";
 
             _currentProjectHours = (TimeProjectHours)Session["CurrentProjectHours"];
             if (_currentProjectHours == null)
@@ -129,6 +165,9 @@ namespace AIS_Time.user
             Session["CurrentProjectHours"] = _currentProjectHours;
             RefreshEntries();
             updEntries.Update();
+
+            lblSuccessMessage.Text = "Successfully submitted data!";
+            mpSuccess.Show();
         }
 
         protected void rptCustomers_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -147,6 +186,7 @@ namespace AIS_Time.user
                     ddlResoures.SelectedValue = ddlResoures.Items.FindByValue(_currentProjectHours.TimeResourceID.ToString()).Value;
                     ddlProject.SelectedValue = ddlProject.Items.FindByValue(_currentProjectHours.TimeProjectID.ToString()).Value;
                     txtDescription.Text = _currentProjectHours.Description;
+                    ddlProject.Focus();
                 }
 
                 if (e.CommandName == "Delete")
@@ -159,6 +199,9 @@ namespace AIS_Time.user
                     Session["CurrentProjectHours"] = _currentProjectHours;
                     RefreshEntries();
                     updEntries.Update();
+                    ddlProject.Focus();
+                    lblSuccessMessage.Text = "Successfully deleted data!";
+                    mpSuccess.Show();
                 }
             }
             catch (Exception ex)
@@ -181,6 +224,11 @@ namespace AIS_Time.user
             Session["CurrentProjectHours"] = _currentProjectHours;
             RefreshEntries();
             updEntries.Update();
+        }
+        protected void btnSubmit_Click(object sender, EventArgs args)
+        {
+            //all good
+            mpSuccess.Hide();
         }
     }
 }

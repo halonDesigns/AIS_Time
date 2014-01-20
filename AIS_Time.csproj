@@ -315,6 +315,7 @@
     <Content Include="admin\PDFimages\MonthlyProjectTemplate.pdf" />
     <Content Include="admin\PDFimages\EmployeeWeeklyTemplate.pdf" />
     <Content Include="admin\PDFimages\WeeklyProjectTemplate.pdf" />
+    <Content Include="admin\Web.config" />
     <None Include="Properties\PublishProfiles\athena-track - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\athena-track - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
@@ -358,6 +359,7 @@
     <None Include="Scripts\_references.js" />
     <Content Include="Site.Mobile.Master" />
     <Content Include="userMP.Master" />
+    <Content Include="user\Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

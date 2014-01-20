@@ -49,6 +49,15 @@ namespace AIS_Time.user {
         protected global::System.Web.UI.WebControls.DropDownList ddlProject;
         
         /// <summary>
+        /// lblProjectCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblProjectCheck;
+        
+        /// <summary>
         /// hlnkDownloadGuide control.
         /// </summary>
         /// <remarks>
@@ -67,6 +76,15 @@ namespace AIS_Time.user {
         protected global::System.Web.UI.WebControls.DropDownList ddlResoures;
         
         /// <summary>
+        /// lblResouresCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblResouresCheck;
+        
+        /// <summary>
         /// ddlDepartment control.
         /// </summary>
         /// <remarks>
@@ -74,6 +92,15 @@ namespace AIS_Time.user {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlDepartment;
+        
+        /// <summary>
+        /// lblDepartmentCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDepartmentCheck;
         
         /// <summary>
         /// txtDate control.
@@ -94,6 +121,15 @@ namespace AIS_Time.user {
         protected global::AjaxControlToolkit.CalendarExtender txtDate_CalendarExtender;
         
         /// <summary>
+        /// lblDateCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDateCheck;
+        
+        /// <summary>
         /// txtHours control.
         /// </summary>
         /// <remarks>
@@ -101,6 +137,15 @@ namespace AIS_Time.user {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtHours;
+        
+        /// <summary>
+        /// lblHoursCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblHoursCheck;
         
         /// <summary>
         /// txtDescription control.
@@ -173,5 +218,50 @@ namespace AIS_Time.user {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdateProgress UpdateProgress1;
+        
+        /// <summary>
+        /// mpSuccess control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpSuccess;
+        
+        /// <summary>
+        /// pnlSuccess control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSuccess;
+        
+        /// <summary>
+        /// lblSuccessMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSuccessMessage;
+        
+        /// <summary>
+        /// btnSubmit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSubmit;
+        
+        /// <summary>
+        /// btnHidden control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnHidden;
     }
 }

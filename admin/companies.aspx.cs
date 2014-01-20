@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using AIS_Time.classes;
 using Vici.CoolStorage;
@@ -77,6 +73,9 @@ namespace AIS_Time.admin
             Session["CurrentCompany"] = _currentCompany;
             RefreshEntries();
             updEntries.Update();
+
+            lblSuccessMessage.Text = "Successfully submitted data!";
+            mpSuccess.Show();
         }
 
         //protected void btnDelete_Click(object sender, CommandEventArgs e)
@@ -112,7 +111,15 @@ namespace AIS_Time.admin
                 Session["CurrentCompany"] = _currentCompany;
                 RefreshEntries();
                 updEntries.Update();
+                lblSuccessMessage.Text = "Successfully deleted data!";
+                mpSuccess.Show();
             }
+        }
+
+        protected void btnSubmit_Click(object sender, EventArgs args)
+        {
+            //all good
+            mpSuccess.Hide();
         }
     }
 }

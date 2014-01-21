@@ -28,7 +28,7 @@ namespace AIS_Time.user
             try
             {
                 CSList<TimeProjectHours> projectList = TimeProjectHours.List("TimeEmployeeID = @TimeEmployeeID",
-                               "@TimeEmployeeID", (int)Session["TimeEmployeeID"]);
+                               "@TimeEmployeeID", (int)Session["TimeEmployeeID"]).OrderedBy("DateOfWork");
 
                 if (projectList.Count > 0)
                 {

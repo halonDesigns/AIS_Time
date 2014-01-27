@@ -165,6 +165,17 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <h4>Existing Time Cards</h4>
+                                <h5>Week to show?</h5>
+                                 <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                <asp:TextBox runat="server" ID="txtEmployeeWeekly" class="form-control" placeholder="Week of work" />
+                                <asp:CalendarExtender ID="CalendarExtender4" runat="server" Enabled="True" TargetControlID="txtEmployeeWeekly" DefaultView="Months">
+                                </asp:CalendarExtender>
+                                 <asp:Label ID="lblDaysBackCheck" runat="server" ForeColor="red" />
+                                         <asp:Button ID="cmdListByDate" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Generate" OnClick="cmdListByDate_Click" />
+                            </div>
+                        </div>
                                 <asp:Repeater ID="rptProjectHours" runat="server" OnItemCommand="rptCustomers_ItemCommand">
                                     <HeaderTemplate>
                                         <table>
@@ -190,7 +201,17 @@
                         </div>
                     </div>
                 </div>
+               
             </div>
+             <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+              <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+             <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
             <!-- START PROGRESS LOADING PANEL -->
             <asp:ModalPopupExtender ID="ModalProgress" runat="server" PopupControlID="PanLoad"
                 TargetControlID="PanLoad" BackgroundCssClass="modalBackground">

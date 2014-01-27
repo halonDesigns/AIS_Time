@@ -14,7 +14,7 @@ namespace AIS_Time.admin
         {
             if (!Page.IsPostBack)
             {
-                RefreshEntries();
+                RefreshEntriesDateSpread();
                 LoadResources();
                 LoadDepartments();
                 LoadProjects();
@@ -23,17 +23,46 @@ namespace AIS_Time.admin
             }
         }
 
-        private void RefreshEntries()
-        {
-            try{
-            CSList<TimeProjectHours> projectList = TimeProjectHours.List("TimeEmployeeID = @TimeEmployeeID",
-                "@TimeEmployeeID", (int)Session["TimeEmployeeID"]).OrderedBy("DateOfWork");
+        //private void RefreshEntries()
+        //{
+        //    try{
+        //    CSList<TimeProjectHours> projectList = TimeProjectHours.List("TimeEmployeeID = @TimeEmployeeID",
+        //        "@TimeEmployeeID", (int)Session["TimeEmployeeID"]).OrderedBy("DateOfWork");
 
-            if (projectList.Count > 0)
+        //    if (projectList.Count > 0)
+        //    {
+        //        rptProjectHours.DataSource = projectList;
+        //        rptProjectHours.DataBind();
+        //    }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //}
+
+        private void RefreshEntriesDateSpread()
+        {
+            try
             {
-                rptProjectHours.DataSource = projectList;
-                rptProjectHours.DataBind();
-            }
+                //date wanted
+                DateTime dt = DateTime.ParseExact(txtEmployeeWeekly.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
+
+                CSList<TimeProjectHours> projectList = TimeProjectHours.List("TimeEmployeeID = @TimeEmployeeID AND DateOfWork >= @DateOfWorkStart AND DateOfWork <= @DateOfWorkEnd",
+                    "@TimeEmployeeID", (int)Session["TimeEmployeeID"], "@DateOfWorkStart", dt, "@DateOfWorkEnd", dt.AddDays(7)).OrderedBy("DateOfWork");
+
+                if (projectList.Count > 0)
+                {
+                    rptProjectHours.DataSource = projectList;
+                    rptProjectHours.DataBind();
+                    lblDaysBackCheck.Text = "";
+                }
+                else
+                {
+                    rptProjectHours.DataSource = null;
+                    rptProjectHours.DataBind();
+                    lblDaysBackCheck.Text = "No records to show.";
+                }
             }
             catch (Exception ex)
             {
@@ -159,7 +188,7 @@ namespace AIS_Time.admin
             lblError.Text = "";
             _currentProjectHours = null;
             Session["CurrentProjectHours"] = _currentProjectHours;
-            RefreshEntries();
+            RefreshEntriesDateSpread();
             updEntries.Update();
 
             lblSuccessMessage.Text = "Successfully submitted data!";
@@ -192,7 +221,7 @@ namespace AIS_Time.admin
                 _currentProjectHours.Delete();
                 _currentProjectHours = null;
                 Session["CurrentProjectHours"] = _currentProjectHours;
-                RefreshEntries();
+                RefreshEntriesDateSpread();
                 updEntries.Update();
                 ddlProject.Focus();
                 lblSuccessMessage.Text = "Successfully deleted data!";
@@ -216,7 +245,7 @@ namespace AIS_Time.admin
             lblError.Text = "";
             _currentProjectHours = null;
             Session["CurrentProjectHours"] = _currentProjectHours;
-            RefreshEntries();
+            RefreshEntriesDateSpread();
             updEntries.Update();
         }
 
@@ -224,6 +253,11 @@ namespace AIS_Time.admin
         {
             //all good
            mpSuccess.Hide();
+        }
+
+        protected void cmdListByDate_Click(object sender, EventArgs e)
+        {
+            RefreshEntriesDateSpread();
         }
     }
 }

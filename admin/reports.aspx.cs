@@ -1142,20 +1142,50 @@ namespace AIS_Time.admin
 
                     pdfPageContents.SetLineWidth((float).5);
                     pdfPageContents.MoveTo(68, 55);
-                    pdfPageContents.LineTo(pageSize.Width - 300, 55);
+                    pdfPageContents.LineTo(pageSize.Width - 325, 55);
                     pdfPageContents.Stroke();
 
                     pdfPageContents.MoveTo(68, 70);
-                    pdfPageContents.LineTo(pageSize.Width - 300, 70);
+                    pdfPageContents.LineTo(pageSize.Width - 325, 70);
                     pdfPageContents.Stroke();
 
                     pdfPageContents.MoveTo(68, 85);
-                    pdfPageContents.LineTo(pageSize.Width - 300, 85);
+                    pdfPageContents.LineTo(pageSize.Width - 325, 85);
                     pdfPageContents.Stroke();
 
                     pdfPageContents.MoveTo(68, 100);
-                    pdfPageContents.LineTo(pageSize.Width - 300, 100);
+                    pdfPageContents.LineTo(pageSize.Width - 325, 100);
                     pdfPageContents.Stroke();
+
+                    //vertical
+                    pdfPageContents.MoveTo(68, 55);
+                    pdfPageContents.LineTo(68, 100);
+                    pdfPageContents.Stroke();
+
+                    pdfPageContents.MoveTo(191, 55);
+                    pdfPageContents.LineTo(191, 100);
+                    pdfPageContents.Stroke();
+
+                    pdfPageContents.MoveTo(204, 55);
+                    pdfPageContents.LineTo(204, 100);
+                    pdfPageContents.Stroke();
+
+                    pdfPageContents.MoveTo(304, 55);
+                    pdfPageContents.LineTo(304, 100);
+                    pdfPageContents.Stroke();
+
+                    pdfPageContents.MoveTo(318, 55);
+                    pdfPageContents.LineTo(318, 100);
+                    pdfPageContents.Stroke();
+
+                    pdfPageContents.MoveTo(445, 55);
+                    pdfPageContents.LineTo(445, 100);
+                    pdfPageContents.Stroke();
+                    
+                    pdfPageContents.MoveTo(pageSize.Width - 325, 55);
+                    pdfPageContents.LineTo(pageSize.Width - 325, 100);
+                    pdfPageContents.Stroke();
+                    //end vertical
 
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, " Assistant Project Engineer   B   Software Developer       D   Advanced Specialist Engineer   F+   ", 78, 90, 0);
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, " General Management           C   Specialist Engineer        D   Report Writing                           R   ", 78, 75, 0);

@@ -1116,7 +1116,7 @@ namespace AIS_Time.admin
                             totalItemCount++;
 
                             //check to see if we are at the bottom of the page
-                            if (yPos > 540)
+                            if (yPos > 480) //540
                             {
                                 break;
                             }
@@ -1133,12 +1133,34 @@ namespace AIS_Time.admin
                         pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, totalHours.ToString(), 640, (pageSize.Height - yPos), 0);
                         pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, String.Format("{0:C}", totalCharge), 705, (pageSize.Height - yPos), 0);
 
-                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Page " + pageCount, 705, (pageSize.Height - (yPos + 20)), 0);
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Page " + pageCount, 705, 60, 0);
                     }
                     else
                     {
-                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Page " + pageCount, 705, (pageSize.Height - (yPos + 20)), 0);
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Page " + pageCount, 705, 60, 0);
                     }
+
+                    pdfPageContents.SetLineWidth((float).5);
+                    pdfPageContents.MoveTo(68, 55);
+                    pdfPageContents.LineTo(pageSize.Width - 300, 55);
+                    pdfPageContents.Stroke();
+
+                    pdfPageContents.MoveTo(68, 70);
+                    pdfPageContents.LineTo(pageSize.Width - 300, 70);
+                    pdfPageContents.Stroke();
+
+                    pdfPageContents.MoveTo(68, 85);
+                    pdfPageContents.LineTo(pageSize.Width - 300, 85);
+                    pdfPageContents.Stroke();
+
+                    pdfPageContents.MoveTo(68, 100);
+                    pdfPageContents.LineTo(pageSize.Width - 300, 100);
+                    pdfPageContents.Stroke();
+
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, " Assistant Project Engineer   B   Software Developer       D   Advanced Specialist Engineer   F+   ", 78, 90, 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, " General Management           C   Specialist Engineer        D   Report Writing                           R   ", 78, 75, 0);
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, " Mathematician                     D   User Experience (GUI)  D   Technician                                  T4   ", 78, 60, 0);
+                   
 
                     pdfPageContents.EndText(); // Done working with text
                     pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 

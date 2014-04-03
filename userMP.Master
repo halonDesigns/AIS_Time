@@ -44,6 +44,7 @@
                     <ul class="nav navbar-nav side-nav">
                         <li class="active"><a href="<%= Page.ResolveClientUrl("~/index.aspx") %>"><i class="fa fa-dashboard"></i> Home</a></li>
                          <li><a href="<%= Page.ResolveClientUrl("~/user/project-hours.aspx") %>"><i class="fa fa-bar-chart-o"></i> Time Cards</a></li>
+                     <li><a href="<%= Page.ResolveClientUrl("~/user/reports.aspx") %>"><i class="fa fa-bar-chart-o"></i> Reports</a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right navbar-user">

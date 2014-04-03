@@ -316,6 +316,8 @@
     <Content Include="admin\PDFimages\EmployeeWeeklyTemplate.pdf" />
     <Content Include="admin\PDFimages\WeeklyProjectTemplate.pdf" />
     <Content Include="admin\Web.config" />
+    <None Include="Properties\PublishProfiles\athena-timekeeper - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\athena-timekeeper - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\athena-track - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\athena-track - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
@@ -350,6 +352,7 @@
     <Content Include="shared\Vici.Core.dll" />
     <Content Include="user\index.aspx" />
     <Content Include="user\project-hours.aspx" />
+    <Content Include="user\reports.aspx" />
     <Content Include="user\user.js" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config">
@@ -362,6 +365,8 @@
     <Content Include="Site.Mobile.Master" />
     <Content Include="userMP.Master" />
     <Content Include="user\Web.config" />
+    <Content Include="user\PDFimages\EmployeeWeeklyTemplate.pdf" />
+    <Content Include="user\PDFimages\MonthlyEmployeeTemplate.pdf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -547,6 +552,13 @@
     </Compile>
     <Compile Include="user\project-hours.aspx.designer.cs">
       <DependentUpon>project-hours.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="user\reports.aspx.cs">
+      <DependentUpon>reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="user\reports.aspx.designer.cs">
+      <DependentUpon>reports.aspx</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>

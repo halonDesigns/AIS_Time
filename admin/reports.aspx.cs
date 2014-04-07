@@ -1140,6 +1140,10 @@ namespace AIS_Time.admin
                         pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Page " + pageCount, 705, 60, 0);
                     }
 
+                    pdfPageContents.MoveTo(68, 40);
+                    pdfPageContents.LineTo(pageSize.Width - 325, 40);
+                    pdfPageContents.Stroke();
+
                     pdfPageContents.SetLineWidth((float).5);
                     pdfPageContents.MoveTo(68, 55);
                     pdfPageContents.LineTo(pageSize.Width - 325, 55);
@@ -1158,31 +1162,31 @@ namespace AIS_Time.admin
                     pdfPageContents.Stroke();
 
                     //vertical
-                    pdfPageContents.MoveTo(68, 55);
+                    pdfPageContents.MoveTo(68, 40);
                     pdfPageContents.LineTo(68, 100);
                     pdfPageContents.Stroke();
 
-                    pdfPageContents.MoveTo(191, 55);
+                    pdfPageContents.MoveTo(191, 40);
                     pdfPageContents.LineTo(191, 100);
                     pdfPageContents.Stroke();
 
-                    pdfPageContents.MoveTo(204, 55);
+                    pdfPageContents.MoveTo(204, 40);
                     pdfPageContents.LineTo(204, 100);
                     pdfPageContents.Stroke();
 
-                    pdfPageContents.MoveTo(304, 55);
+                    pdfPageContents.MoveTo(304, 40);
                     pdfPageContents.LineTo(304, 100);
                     pdfPageContents.Stroke();
 
-                    pdfPageContents.MoveTo(318, 55);
+                    pdfPageContents.MoveTo(318, 40);
                     pdfPageContents.LineTo(318, 100);
                     pdfPageContents.Stroke();
 
-                    pdfPageContents.MoveTo(445, 55);
+                    pdfPageContents.MoveTo(445, 40);
                     pdfPageContents.LineTo(445, 100);
                     pdfPageContents.Stroke();
-                    
-                    pdfPageContents.MoveTo(pageSize.Width - 325, 55);
+
+                    pdfPageContents.MoveTo(pageSize.Width - 325, 40);
                     pdfPageContents.LineTo(pageSize.Width - 325, 100);
                     pdfPageContents.Stroke();
                     //end vertical
@@ -1190,7 +1194,7 @@ namespace AIS_Time.admin
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, " Assistant Project Engineer   B   Software Developer       D   Advanced Specialist Engineer   F+   ", 78, 90, 0);
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, " General Management           C   Specialist Engineer        D   Report Writing                           R   ", 78, 75, 0);
                     pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, " Mathematician                     D   User Experience (GUI)  D   Technician                                  T4   ", 78, 60, 0);
-                   
+                    pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "                                                                                                 Technical Meeting                     TM", 78, 45, 0);
 
                     pdfPageContents.EndText(); // Done working with text
                     pdfStamper.FormFlattening = true; // enable this if you want the PDF flattened. 

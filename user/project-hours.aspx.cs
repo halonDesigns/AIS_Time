@@ -105,98 +105,106 @@ namespace AIS_Time.user
 
         protected void cmdSubmit_Click(object sender, EventArgs e)
         {
-            if (ddlProject.SelectedIndex == 0)
+            try
             {
-                lblProjectCheck.Text = "Please select a project.";
-                Page.SetFocus(ddlProject);
-                return;
-            }
-            lblProjectCheck.Text = "";
-            if (ddlResoures.SelectedIndex == 0)
-            {
-                lblResouresCheck.Text = "Please select a resource type.";
-                Page.SetFocus(ddlResoures);
-                return;
-            }
-            lblResouresCheck.Text = "";
-           
-            if (ddlDepartment.SelectedIndex == 0)
-            {
-                lblDepartmentCheck.Text = "Please select a department.";
-                Page.SetFocus(ddlDepartment);
-                return;
-            }
-            lblDepartmentCheck.Text = "";
-            if (txtDate.Text == "" || txtHours.Text == "" || txtHours.Text == "0")
-            {
-                lblError.Text = "Please fill in all fields";
-                return;
-            }
-            if (txtDate.Text == "")
-            {
-                lblDateCheck.Text = "Please select a date.";
-                Page.SetFocus(txtDate);
-                return;
-            }
-            lblDateCheck.Text = "";
-            if (txtHours.Text == "" || txtHours.Text == "0")
-            {
-                lblHoursCheck.Text = "Please input your hours.";
-                Page.SetFocus(txtHours);
-                return;
-            }
-            lblHoursCheck.Text = "";
+                if (ddlProject.SelectedIndex == 0)
+                {
+                    lblProjectCheck.Text = "Please select a project.";
+                    Page.SetFocus(ddlProject);
+                    return;
+                }
+                lblProjectCheck.Text = "";
+                if (ddlResoures.SelectedIndex == 0)
+                {
+                    lblResouresCheck.Text = "Please select a resource type.";
+                    Page.SetFocus(ddlResoures);
+                    return;
+                }
+                lblResouresCheck.Text = "";
 
-            _currentProjectHours = (TimeProjectHours)Session["CurrentProjectHours"];
-            if (_currentProjectHours == null)
-            {
-                //new projectHours object
-                TimeProjectHours projectHours = TimeProjectHours.New();
+                if (ddlDepartment.SelectedIndex == 0)
+                {
+                    lblDepartmentCheck.Text = "Please select a department.";
+                    Page.SetFocus(ddlDepartment);
+                    return;
+                }
+                lblDepartmentCheck.Text = "";
+                if (txtDate.Text == "" || txtHours.Text == "" || txtHours.Text == "0")
+                {
+                    lblError.Text = "Please fill in all fields";
+                    return;
+                }
+                if (txtDate.Text == "")
+                {
+                    lblDateCheck.Text = "Please select a date.";
+                    Page.SetFocus(txtDate);
+                    return;
+                }
+                lblDateCheck.Text = "";
+                if (txtHours.Text == "" || txtHours.Text == "0")
+                {
+                    lblHoursCheck.Text = "Please input your hours.";
+                    Page.SetFocus(txtHours);
+                    return;
+                }
+                lblHoursCheck.Text = "";
 
-                //fill object with data
-                projectHours.DateOfWork = DateTime.ParseExact(txtDate.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
-                projectHours.HoursOfWork = Convert.ToInt32(txtHours.Text);
-                projectHours.TimeDepartmentID = Convert.ToInt32(ddlDepartment.SelectedValue);
-                projectHours.TimeResourceID = Convert.ToInt32(ddlResoures.SelectedValue);
-                projectHours.TimeEmployeeID = (int)Session["TimeEmployeeID"];
-                projectHours.TimeProjectID = Convert.ToInt32(ddlProject.SelectedValue);
-                projectHours.Description = txtDescription.Text;
-                projectHours.Status = 1;
-                projectHours.Type = 1;
+                _currentProjectHours = (TimeProjectHours)Session["CurrentProjectHours"];
+                if (_currentProjectHours == null)
+                {
+                    //new projectHours object
+                    TimeProjectHours projectHours = TimeProjectHours.New();
 
-                //save the new projectHours
-                projectHours.Save();
+                    //fill object with data
+                    projectHours.DateOfWork = DateTime.ParseExact(txtDate.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
+                    projectHours.HoursOfWork = Convert.ToInt32(txtHours.Text);
+                    projectHours.TimeDepartmentID = Convert.ToInt32(ddlDepartment.SelectedValue);
+                    projectHours.TimeResourceID = Convert.ToInt32(ddlResoures.SelectedValue);
+                    projectHours.TimeEmployeeID = (int)Session["TimeEmployeeID"];
+                    projectHours.TimeProjectID = Convert.ToInt32(ddlProject.SelectedValue);
+                    projectHours.Description = txtDescription.Text;
+                    projectHours.Status = 1;
+                    projectHours.Type = 1;
+
+                    //save the new projectHours
+                    projectHours.Save();
+                }
+                else
+                {
+                    _currentProjectHours.DateOfWork = DateTime.ParseExact(txtDate.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
+                    _currentProjectHours.HoursOfWork = Convert.ToInt32(txtHours.Text);
+                    _currentProjectHours.TimeDepartmentID = Convert.ToInt32(ddlDepartment.SelectedValue);
+                    _currentProjectHours.TimeResourceID = Convert.ToInt32(ddlResoures.SelectedValue);
+                    _currentProjectHours.TimeEmployeeID = (int)Session["TimeEmployeeID"];
+                    _currentProjectHours.TimeProjectID = Convert.ToInt32(ddlProject.SelectedValue);
+                    _currentProjectHours.Description = txtDescription.Text;
+                    _currentProjectHours.Status = 1;
+                    _currentProjectHours.Type = 1;
+
+                    //save the new projectHours
+                    _currentProjectHours.Save();
+                }
+
+                txtDate.Text = "";
+                txtHours.Text = "0";
+                ddlDepartment.SelectedIndex = -1;
+                ddlResoures.SelectedIndex = -1;
+                ddlProject.SelectedIndex = -1;
+                txtDescription.Text = "";
+                lblError.Text = "";
+                _currentProjectHours = null;
+                Session["CurrentProjectHours"] = _currentProjectHours;
+                RefreshEntriesDateSpread();
+                updEntries.Update();
+
+                lblSuccessMessage.Text = "Successfully submitted data!";
+                mpSuccess.Show();
             }
-            else
+            catch (Exception ex)
             {
-                _currentProjectHours.DateOfWork = DateTime.ParseExact(txtDate.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
-                _currentProjectHours.HoursOfWork = Convert.ToInt32(txtHours.Text);
-                _currentProjectHours.TimeDepartmentID = Convert.ToInt32(ddlDepartment.SelectedValue);
-                _currentProjectHours.TimeResourceID = Convert.ToInt32(ddlResoures.SelectedValue);
-                _currentProjectHours.TimeEmployeeID = (int)Session["TimeEmployeeID"];
-                _currentProjectHours.TimeProjectID = Convert.ToInt32(ddlProject.SelectedValue);
-                _currentProjectHours.Description = txtDescription.Text;
-                _currentProjectHours.Status = 1;
-                _currentProjectHours.Type = 1;
-
-                //save the new projectHours
-                _currentProjectHours.Save();
+                lblSuccessMessage.Text = "Error submitting data! " + ex.Message;
             }
-
-            txtDate.Text = "";
-            txtHours.Text = "0";
-            ddlDepartment.SelectedIndex = -1;
-            ddlResoures.SelectedIndex = -1;
-            ddlProject.SelectedIndex = -1;
-            txtDescription.Text = "";
-            lblError.Text = "";
-            _currentProjectHours = null;
-            Session["CurrentProjectHours"] = _currentProjectHours;
-            RefreshEntriesDateSpread();
-            updEntries.Update();
-
-            lblSuccessMessage.Text = "Successfully submitted data!";
-            mpSuccess.Show();
+            
         }
 
         protected void rptCustomers_ItemCommand(object source, RepeaterCommandEventArgs e)

@@ -115,5 +115,37 @@
                 </div>
             </div>
         </div>
+           <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Monthly SRED Summary</h4>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                </span>
+                                <asp:DropDownList ID="ddlMonthlyProjectsSRED" class="form-control" runat="server"></asp:DropDownList>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                <asp:TextBox runat="server" ID="txtMonthSREDStart" class="form-control" placeholder="month start date" />
+                                <asp:CalendarExtender ID="CalendarExtender5" runat="server" Enabled="True" TargetControlID="txtMonthSREDStart" DefaultView="Months">
+                                </asp:CalendarExtender>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="btn-group">
+                            <asp:Button ID="btnMonthlyEmployeeSREDReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Project Report" OnClick="btnMonthlyEmployeeSREDReport_Click" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <asp:Label ID="lblErrorMonthlySRED" runat="server" Text=""></asp:Label>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </asp:Content>

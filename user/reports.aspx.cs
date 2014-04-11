@@ -24,8 +24,19 @@ namespace AIS_Time.user
         {
             if (!Page.IsPostBack)
             {
-             
+                LoadProjects();
             }
+        }
+
+        private void LoadProjects()
+        {
+            CSList<TimeProjects> projects = TimeProjects.OrderedList("ProjectName");
+
+            ddlMonthlyProjectsSRED.DataSource = projects;
+            ddlMonthlyProjectsSRED.DataValueField = "TimeProjectID";
+            ddlMonthlyProjectsSRED.DataTextField = "ProjectName";
+            ddlMonthlyProjectsSRED.DataBind();
+
         }
 
         protected void rptCustomers_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -62,7 +73,7 @@ namespace AIS_Time.user
                 CSList<TimeProjectHours> projects = TimeProjectHours.List(
                     "TimeEmployeeID = @TimeEmployeeID AND DateOfWork >= @DateOfWorkStart AND DateOfWork <= @DateOfWorkEnd",
                     "@TimeEmployeeID", (int)Session["TimeEmployeeID"], "@DateOfWorkStart", dt, "@DateOfWorkEnd",
-                    dt.AddDays(days)).OrderedBy("DateOfWork");
+                    dt.AddDays(days - 1)).OrderedBy("DateOfWork");
 
                 if (projects.Count > 0)
                 {
@@ -170,7 +181,7 @@ namespace AIS_Time.user
                 string templatePdfPath = Server.MapPath("PDFimages");
                 string oldFile = templatePdfPath + "\\MonthlyEmployeeTemplate.pdf";
 
-                List<byte[]> pages = WriteToPdfForEmployeeMonthly(oldFile, projects, employee, dt);
+                List<byte[]> pages = WriteToPdfForEmployeeMonthly(oldFile, projects, employee, dt,1);
 
                 //if (b == null) return;
                 //HttpResponse response = HttpContext.Current.Response;
@@ -411,7 +422,8 @@ namespace AIS_Time.user
             return text.Substring(0, cutOffLength);
         }
 
-        public List<byte[]> WriteToPdfForEmployeeMonthly(string sourceFile, CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        public List<byte[]> WriteToPdfForEmployeeMonthly(string sourceFile, CSList<TimeProjectHours> projects,
+            TimeEmployees employee, DateTime dt, int repType)
         {
             List<byte[]> pages = new List<byte[]>();
 
@@ -434,6 +446,13 @@ namespace AIS_Time.user
                     pdfPageContents.BeginText(); // Start working with text.
 
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, Encoding.ASCII.EncodingName, false);
+                    if (repType == 2)
+                    {
+                        pdfPageContents.SetFontAndSize(baseFont, 20); // 20 point font
+                        //show the project name for SRED
+                        pdfPageContents.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Project: " + ddlMonthlyProjectsSRED.SelectedItem, 75,
+                            (pageSize.Height - 125), 0);
+                    }
                     pdfPageContents.SetFontAndSize(baseFont, 10); // 10 point font
                     pdfPageContents.SetRGBColorFill(0, 0, 0);
 
@@ -906,6 +925,87 @@ namespace AIS_Time.user
         protected void ddlEmployeeWeekly_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        protected void btnMonthlyEmployeeSREDReport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //grab the details on the employee
+                TimeEmployees employee = TimeEmployees.ReadFirst("TimeEmployeeID = @TimeEmployeeID", "@TimeEmployeeID", (int)Session["TimeEmployeeID"]);
+
+                //date wanted
+                DateTime dt = DateTime.ParseExact(txtMonthSREDStart.Text, "M/d/yyyy", CultureInfo.InvariantCulture);
+
+                //find out how many days are in the month
+                int days = DateTime.DaysInMonth(dt.Year, dt.Month);
+
+                //add in the parameters  
+                //grab the project hours records for the specified user
+                //on the specified date BETWEEN '19/12/2012' AND '1/17/2013'
+                //must use the $ for the sql specific BETWEEN keyword
+                var collection = new CSParameterCollection
+                {
+                    {"@TimeProjectID", ddlMonthlyProjectsSRED.SelectedValue},
+                    {"@TimeEmployeeID", (int)Session["TimeEmployeeID"]},
+                    {"@DateOfWorkStart", dt},
+                    {"@DateOfWorkEnd", dt.AddDays(days-1)}
+                };
+
+                CSList<TimeProjectHours> projects = TimeProjectHours.List("TimeProjectID = @TimeProjectID AND TimeEmployeeID = @TimeEmployeeID AND DateOfWork >= @DateOfWorkStart AND DateOfWork <= @DateOfWorkEnd",
+                   collection).OrderedBy("DateOfWork");
+
+                if (projects.Count > 0)
+                    CreateMonthlyEmployeeSredPDFReport(projects, employee, dt);
+                else
+                    lblErrorMonthlySRED.Text = "No time cards to print";
+            }
+            catch (Exception ex)
+            {
+                lblErrorMonthlySRED.Text = "Error: " + ex.Message;
+            }
+        }
+        private void CreateMonthlyEmployeeSredPDFReport(CSList<TimeProjectHours> projects, TimeEmployees employee, DateTime dt)
+        {
+            try
+            {
+                string templatePdfPath = Server.MapPath("PDFimages");
+                string oldFile = templatePdfPath + "\\MonthlyEmployeeTemplate.pdf";
+
+                List<byte[]> pages = WriteToPdfForEmployeeMonthly(oldFile, projects, employee, dt, 2);
+
+                if (pages == null) return;
+                using (var output = new MemoryStream())
+                {
+                    var document = new Document();
+                    var writer = new PdfCopy(document, output);
+                    document.Open();
+                    for (int index = 0; index < pages.Count; index++)
+                    {
+                        var file = pages[index];
+                        var reader = new PdfReader(file);
+                        int n = reader.NumberOfPages;
+                        PdfImportedPage page;
+                        for (int p = 1; p <= n; p++)
+                        {
+                            page = writer.GetImportedPage(reader, p);
+                            writer.AddPage(page);
+                        }
+                    }
+                    document.Close();
+                    Response.ContentType = "application/pdf";
+                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}-{1}.pdf", "MonthlyTimeCard-", employee.FirstName + "_" + employee.LastName));
+                    Response.BinaryWrite(output.ToArray());
+                    Response.Flush();
+                    Response.End();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                lblErrorMonthly.Text = "Error: " + ex.Message;
+            }
         }
     }
 }

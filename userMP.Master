@@ -36,15 +36,15 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<%= Page.ResolveClientUrl("~/index.aspx") %>">AIT TimeKeeper</a>
+                    <a class="navbar-brand" href="<%= Page.ResolveUrl("~/index.aspx") %>">AIT TimeKeeper</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav side-nav">
-                        <li class="active"><a href="<%= Page.ResolveClientUrl("~/index.aspx") %>"><i class="fa fa-dashboard"></i> Home</a></li>
-                         <li><a href="<%= Page.ResolveClientUrl("~/user/project-hours.aspx") %>"><i class="fa fa-bar-chart-o"></i> Time Cards</a></li>
-                     <li><a href="<%= Page.ResolveClientUrl("~/user/reports.aspx") %>"><i class="fa fa-bar-chart-o"></i> Reports</a></li>
+                        <li class="active"><a href="<%= Page.ResolveUrl("~/index.aspx") %>"><i class="fa fa-dashboard"></i> Home</a></li>
+                         <li><a href="<%= Page.ResolveUrl("~/user/project-hours.aspx") %>"><i class="fa fa-bar-chart-o"></i> Time Cards</a></li>
+                     <li><a href="<%= Page.ResolveUrl("~/user/reports.aspx") %>"><i class="fa fa-bar-chart-o"></i> Reports</a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right navbar-user">
@@ -142,8 +142,8 @@
         <!-- /#wrapper -->
     </form>
     <!-- JavaScript -->
-    <script src="js/jquery-1.10.2.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="<%= Page.ResolveUrl("~/js/bootstrap.js") %>"></script>
+    <script type="text/javascript" src="<%= Page.ResolveUrl("~/js/jquery-1.10.2.js") %>"></script>
 
 </body>
 </html>

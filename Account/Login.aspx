@@ -135,9 +135,9 @@
                                 <div style="padding: 5px; border: dotted 1px #c3c3c3; text-align: center;">
                                     <div align="center">
                                         <br />
-                                        <img src="../Images/head_black.png" width="150px" alt="loading" title="loading" />
+                                        <img src="<%= Page.ResolveUrl("~/Images/head_black.png") %>" width="150px" alt="loading" title="loading" />
                                         <br />
-                                        <img src="../Images/ajax/loaders/ajax-loader.gif" alt="loading" title="loading" /><br />
+                                        <img src="<%= Page.ResolveUrl("~/Images/ajax/loaders/ajax-loader.gif") %>" alt="loading" title="loading" /><br />
                                         <asp:Label Width="100%" ID="lblProcessing" class="label_field_desc" runat="server"
                                             Text="Loading Data, please wait..."></asp:Label>
                                         <br />

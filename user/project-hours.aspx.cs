@@ -19,7 +19,7 @@ namespace AIS_Time.user
                 LoadDepartments();
                 LoadProjects();
                 //set the default date
-                txtDate.Text = DateTime.Now.ToString("M/d/yyyy", CultureInfo.InvariantCulture); 
+                txtDate.Text = DateTime.Now.ToString("M/d/yyyy", CultureInfo.InvariantCulture);
             }
         }
 
@@ -150,6 +150,7 @@ namespace AIS_Time.user
                 lblHoursCheck.Text = "";
 
                 _currentProjectHours = (TimeProjectHours)Session["CurrentProjectHours"];
+                bool insertGood = false;
                 if (_currentProjectHours == null)
                 {
                     //new projectHours object
@@ -168,6 +169,8 @@ namespace AIS_Time.user
 
                     //save the new projectHours
                     projectHours.Save();
+
+                    insertGood = projectHours.TimeProjectHoursID > 0;
                 }
                 else
                 {
@@ -183,28 +186,42 @@ namespace AIS_Time.user
 
                     //save the new projectHours
                     _currentProjectHours.Save();
+
+                    insertGood = _currentProjectHours.TimeProjectHoursID > 0;
                 }
 
-                txtDate.Text = "";
-                txtHours.Text = "0";
-                ddlDepartment.SelectedIndex = -1;
-                ddlResoures.SelectedIndex = -1;
-                ddlProject.SelectedIndex = -1;
-                txtDescription.Text = "";
-                lblError.Text = "";
-                _currentProjectHours = null;
-                Session["CurrentProjectHours"] = _currentProjectHours;
-                RefreshEntriesDateSpread();
-                updEntries.Update();
+                if (insertGood)
+                {
+                    txtDate.Text = "";
+                    txtHours.Text = "0";
+                    ddlDepartment.SelectedIndex = -1;
+                    ddlResoures.SelectedIndex = -1;
+                    ddlProject.SelectedIndex = -1;
+                    txtDescription.Text = "";
+                    lblError.Text = "";
+                    _currentProjectHours = null;
+                    Session["CurrentProjectHours"] = _currentProjectHours;
+                    RefreshEntriesDateSpread();
+                    updEntries.Update();
 
-                lblSuccessMessage.Text = "Successfully submitted data!";
-                mpSuccess.Show();
+                    lblSuccessTitle.Text = "Success!";
+                    lblSuccessMessage.Text = "Successfully submitted data!";
+                    mpSuccess.Show();
+                }
+                else
+                {
+                    lblSuccessTitle.Text = "Error!";
+                    lblSuccessMessage.Text = "Error submitting data!";
+                    mpSuccess.Show();
+                }
             }
             catch (Exception ex)
             {
+                lblSuccessTitle.Text = "Error!";
                 lblSuccessMessage.Text = "Error submitting data! " + ex.Message;
+                mpSuccess.Show();
             }
-            
+
         }
 
         protected void rptCustomers_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -243,9 +260,9 @@ namespace AIS_Time.user
             }
             catch (Exception ex)
             {
-                
+
             }
-           
+
         }
 
         protected void cmdNew_Click(object sender, EventArgs e)
@@ -270,7 +287,7 @@ namespace AIS_Time.user
 
         protected void cmdListByDate_Click(object sender, EventArgs e)
         {
-           
+
             RefreshEntriesDateSpread();
         }
     }

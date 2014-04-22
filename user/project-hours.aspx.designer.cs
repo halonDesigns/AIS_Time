@@ -274,6 +274,15 @@ namespace AIS_Time.user {
         protected global::System.Web.UI.WebControls.Panel pnlSuccess;
         
         /// <summary>
+        /// lblSuccessTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSuccessTitle;
+        
+        /// <summary>
         /// lblSuccessMessage control.
         /// </summary>
         /// <remarks>

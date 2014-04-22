@@ -37,13 +37,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<%= Page.ResolveClientUrl("~/index.aspx") %>">AIT TimeKeeper</a>
+                    <a class="navbar-brand" href="<%= Page.ResolveUrl("~/index.aspx") %>">AIT TimeKeeper</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav side-nav">
-                        <li class="active"><a href="<%= Page.ResolveClientUrl("~/index.aspx") %>"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li class="active"><a href="<%= Page.ResolveUrl("~/index.aspx") %>"><i class="fa fa-dashboard"></i> Home</a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right navbar-user">
@@ -108,7 +108,7 @@
                         </AnonymousTemplate>
                         <LoggedInTemplate>
                            <h3> <p>
-                                Hello, <a id="A1" runat="server" href="~/Account/Manage" title="Manage your account">
+                                Hello, <a id="A1" runat="server" href="~/Account/Manage.aspx" title="Manage your account">
                                     <asp:LoginName ID="LoginName1" runat="server" /></a>!
                                 <asp:LoginStatus ID="LoginStatus1" runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/index.aspx" />
                             </p></h3>
@@ -140,9 +140,9 @@
         </div>
         <!-- /#wrapper -->
     </form>
-    <!-- JavaScript -->
-    <script src="js/jquery-1.10.2.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <!-- JavaScript -->   
+    <script type="text/javascript" src="<%= Page.ResolveUrl("~/js/bootstrap.js") %>"></script>
+    <script type="text/javascript" src="<%= Page.ResolveUrl("~/js/jquery-1.10.2.js") %>"></script>
 
 </body>
 </html>

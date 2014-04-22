@@ -229,10 +229,10 @@
                             <ProgressTemplate>
                                 <div style="padding: 5px; border: dotted 1px #c3c3c3; text-align: center;">
                                     <div align="center">
+                                       <br />
+                                        <img src="<%= Page.ResolveUrl("~/Images/head_black.png") %>" width="150px" alt="loading" title="loading" />
                                         <br />
-                                        <img src="../Images/head_black.png" width="150px" alt="loading" title="loading" />
-                                        <br />
-                                        <img src="../Images/ajax/loaders/ajax-loader.gif" alt="loading" title="loading" /><br />
+                                        <img src="<%= Page.ResolveUrl("~/Images/ajax/loaders/ajax-loader.gif") %>" alt="loading" title="loading" /><br />
                                         <asp:Label Width="100%" ID="lblProcessing" class="label_field_desc" runat="server"
                                             Text="Loading Data, please wait..."></asp:Label>
                                         <br />
@@ -253,7 +253,7 @@
                         <div class="span12">
                             <div class="span6">
                                 <h3>
-                                    Success!</h3>
+                                    <asp:Label ID="lblSuccessTitle" runat="server" Text="Success!" /></h3>
                                 <p class="help-block">
                                      <asp:Label ID="lblSuccessMessage" runat="server" /></p>
                             </div>

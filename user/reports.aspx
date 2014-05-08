@@ -78,7 +78,7 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="btnWeeklyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Weekly Report" OnClick="btnWeeklyEmployeeReport_Click" />
+                            <asp:Button ID="btnWeeklyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Weekly Time Card" OnClick="btnWeeklyEmployeeReport_Click" />
                         </div>
 
                     </div>
@@ -105,7 +105,7 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="btnMonthlyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Report" OnClick="btnMonthlyEmployeeReport_Click" />
+                            <asp:Button ID="btnMonthlyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Time Card" OnClick="btnMonthlyEmployeeReport_Click" />
                         </div>
 
                     </div>
@@ -119,7 +119,7 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h4>Monthly SRED Summary</h4>
+                        <h4>Monthly SR&ED Report</h4>
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
@@ -138,7 +138,7 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="btnMonthlyEmployeeSREDReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Project Report" OnClick="btnMonthlyEmployeeSREDReport_Click" />
+                            <asp:Button ID="btnMonthlyEmployeeSREDReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly SR&ED Report" OnClick="btnMonthlyEmployeeSREDReport_Click" />
                         </div>
                     </div>
                     <div class="form-group">

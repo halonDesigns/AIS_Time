@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace AIS_Time.classes
+﻿namespace AIS_Time.classes
 {
     public static class Icons
     {

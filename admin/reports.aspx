@@ -74,7 +74,7 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h4>Daily Project Time Cards</h4>
+                        <h4>Daily Employee Time Cards</h4>
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
@@ -94,7 +94,7 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="btnDailyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Daily Report" OnClick="btnDailyEmployeeReport_Click" />
+                            <asp:Button ID="btnDailyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Daily Time Card" OnClick="btnDailyEmployeeReport_Click" />
                         </div>
 
                     </div>
@@ -129,7 +129,7 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="btnWeeklyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Weekly Report" OnClick="btnWeeklyEmployeeReport_Click" />
+                            <asp:Button ID="btnWeeklyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Weekly Time Card" OnClick="btnWeeklyEmployeeReport_Click" />
                         </div>
 
                     </div>
@@ -164,7 +164,7 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="btnMonthlyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Report" OnClick="btnMonthlyEmployeeReport_Click" />
+                            <asp:Button ID="btnMonthlyEmployeeReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Time Card" OnClick="btnMonthlyEmployeeReport_Click" />
                         </div>
 
                     </div>
@@ -186,7 +186,7 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h4>Weekly Project Summary</h4>
+                        <h4>Weekly Project Report</h4>
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
@@ -218,12 +218,12 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h4>Monthly Project Summary</h4>
+                        <h4>Monthly Project Report</h4>
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                 </span>
-                                <asp:DropDownList ID="ddlMonthlyProjects" class="form-control" runat="server" OnSelectedIndexChanged="ddlMonthlyProjects_SelectedIndexChanged"></asp:DropDownList>
+                                <asp:DropDownList ID="ddlMonthlyProjects" class="form-control" runat="server" ></asp:DropDownList>
                             </div>
                         </div>
                         <div class="form-group">
@@ -237,7 +237,7 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="btnMonthlyProjectsReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly SRED Report" OnClick="btnMonthlyProjectsReport_Click" />
+                            <asp:Button ID="btnMonthlyProjectsReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Project Report" OnClick="btnMonthlyProjectsReport_Click" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -250,12 +250,12 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h4>Monthly SRED Summary</h4>
+                        <h4>Monthly SR&amp;ED Report</h4>
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                 </span>
-                                <asp:DropDownList ID="ddlMonthlyProjectsSRED" class="form-control" runat="server" OnSelectedIndexChanged="ddlMonthlyProjects_SelectedIndexChanged"></asp:DropDownList>
+                                <asp:DropDownList ID="ddlMonthlyProjectsSRED" class="form-control" runat="server" ></asp:DropDownList>
                             </div>
                         </div>
                         <div class="form-group">
@@ -276,7 +276,7 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <asp:Button ID="btnMonthlyEmployeeSREDReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly Project Report" OnClick="btnMonthlyEmployeeSREDReport_Click" />
+                            <asp:Button ID="btnMonthlyEmployeeSREDReport" class="btn btn-primary btn-lg" runat="server" CommandName="Submit" Text="Monthly SR&ED Report" OnClick="btnMonthlyEmployeeSREDReport_Click" />
                         </div>
                     </div>
                     <div class="form-group">

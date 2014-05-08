@@ -316,6 +316,7 @@
     <Content Include="admin\PDFimages\EmployeeWeeklyTemplate.pdf" />
     <Content Include="admin\PDFimages\WeeklyProjectTemplate.pdf" />
     <Content Include="admin\Web.config" />
+    <Content Include="admin\PDFimages\MonthlyEmployeeSREDTemplate.pdf" />
     <None Include="Properties\PublishProfiles\athena-timekeeper - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\athena-timekeeper - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\athena-timekeeper - Web Deploy %282%29.pubxml" />

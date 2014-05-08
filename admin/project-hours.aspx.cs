@@ -145,7 +145,7 @@ namespace AIS_Time.admin
                 lblHoursCheck.Text = "";
 
                 _currentProjectHours = (TimeProjectHours)Session["CurrentProjectHours"];
-                bool insertGood = false;
+                bool insertGood;
                 if (_currentProjectHours == null)
                 {
                     //new projectHours object

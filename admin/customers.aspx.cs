@@ -37,10 +37,8 @@ namespace AIS_Time.admin
                 lblError.Text = "Please enter a customer name.";
                 return;
             }
-            else
-            {
-                lblError.Text = "";
-            }
+            
+            lblError.Text = "";
             _currentCustomer = (TimeCustomers) Session["CurrentCustomer"];
             if (_currentCustomer == null)
             {

@@ -394,10 +394,9 @@ namespace AIS_Time.admin
                         var file = pages[index];
                         var reader = new PdfReader(file);
                         int n = reader.NumberOfPages;
-                        PdfImportedPage page;
                         for (int p = 1; p <= n; p++)
                         {
-                            page = writer.GetImportedPage(reader, p);
+                            PdfImportedPage page = writer.GetImportedPage(reader, p);
                             writer.AddPage(page);
                         }
                     }
@@ -445,10 +444,9 @@ namespace AIS_Time.admin
                         var file = pages[index];
                         var reader = new PdfReader(file);
                         int n = reader.NumberOfPages;
-                        PdfImportedPage page;
                         for (int p = 1; p <= n; p++)
                         {
-                            page = writer.GetImportedPage(reader, p);
+                            PdfImportedPage page = writer.GetImportedPage(reader, p);
                             writer.AddPage(page);
                         }
                     }
@@ -488,10 +486,9 @@ namespace AIS_Time.admin
                         var file = pages[index];
                         var reader = new PdfReader(file);
                         int n = reader.NumberOfPages;
-                        PdfImportedPage page;
                         for (int p = 1; p <= n; p++)
                         {
-                            page = writer.GetImportedPage(reader, p);
+                            PdfImportedPage page = writer.GetImportedPage(reader, p);
                             writer.AddPage(page);
                         }
                     }
@@ -538,10 +535,9 @@ namespace AIS_Time.admin
                         var file = pages[index];
                         var reader = new PdfReader(file);
                         int n = reader.NumberOfPages;
-                        PdfImportedPage page;
                         for (int p = 1; p <= n; p++)
                         {
-                            page = writer.GetImportedPage(reader, p);
+                            PdfImportedPage page = writer.GetImportedPage(reader, p);
                             writer.AddPage(page);
                         }
                     }
@@ -579,10 +575,9 @@ namespace AIS_Time.admin
                         var file = pages[index];
                         var reader = new PdfReader(file);
                         int n = reader.NumberOfPages;
-                        PdfImportedPage page;
                         for (int p = 1; p <= n; p++)
                         {
-                            page = writer.GetImportedPage(reader, p);
+                            PdfImportedPage page = writer.GetImportedPage(reader, p);
                             writer.AddPage(page);
                         }
                     }

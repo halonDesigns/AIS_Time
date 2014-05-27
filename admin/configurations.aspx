@@ -88,14 +88,14 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtAISCodeName" class="form-control" placeholder="code name" />
+                                        <asp:TextBox runat="server" ID="txtAISCodeName" class="form-control" placeholder="code name" MaxLength="10" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
-                                        <asp:TextBox runat="server" ID="txtAISCodeDescription" class="form-control" placeholder="description" />
+                                        <asp:TextBox runat="server" ID="txtAISCodeDescription" class="form-control" placeholder="description" MaxLength="249" />
                                     </div>
                                 </div>
                                 

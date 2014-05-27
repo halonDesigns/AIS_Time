@@ -79,13 +79,13 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="project name" />
+                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="project name" MaxLength="100" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtNumber" class="form-control" placeholder="project number" />
+                                        <asp:TextBox runat="server" ID="txtNumber" class="form-control" placeholder="project number" MaxLength="50" />
                                     </div>
                                 </div>
                                  <div class="form-group">
@@ -99,7 +99,7 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
-                                        <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />
+                                        <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" MaxLength="249" />
                                     </div>
                                 </div>
                                 

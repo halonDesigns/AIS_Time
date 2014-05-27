@@ -89,7 +89,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="resource name" />
+                                        <asp:TextBox runat="server" ID="txtName" class="form-control" placeholder="resource name" MaxLength="100" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -120,14 +120,14 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
-                                        <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />
+                                        <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" MaxLength="249" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                         <asp:Button ID="cmdSubmit" class="btn btn-lg btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmit_Click" />
                                 </div>
                                 <div class="form-group">
-                                    <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                                    <asp:Label ID="lblError" runat="server" Font-Bold="True" ForeColor="Red"></asp:Label>
                                 </div>
                             </div>
 
@@ -200,9 +200,7 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="span6">
-                                <h3>
-                                    Success!</h3>
-                                <p class="help-block">
+                               <p class="help-block">
                                      <asp:Label ID="lblSuccessMessage" runat="server" /></p>
                             </div>
                         </div>

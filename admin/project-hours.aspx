@@ -147,7 +147,7 @@
                                  <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <asp:TextBox runat="server" ID="txtHours" class="form-control" placeholder="project hours" onKeyPress="return checkIt(event)" />
+                                        <asp:TextBox runat="server" ID="txtHours" class="form-control" placeholder="project hours" onKeyPress="return checkIt(event)" MaxLength="5" />
                                      <asp:Label ID="lblHoursCheck" runat="server" ForeColor="red" />
                                     </div>
                                 </div>

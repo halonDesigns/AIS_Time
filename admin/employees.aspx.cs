@@ -127,7 +127,28 @@ namespace AIS_Time.admin
                         employee.Email = txtEmail.Text;
                         //save the new employee
                         employee.Save();
+
+                        txtFname.Text = "";
+                        txtLname.Text = "";
+                        txtEmail.Text = "";
+                        txtPhone.Text = "";
+                        Password.Text = "";
+                        UserName.Text = "";
+                        ddlCompany.SelectedIndex = -1;
+                        txtDescription.Text = "";
+                        _currentEmployee = null;
+                        Session["CurrentEmployee"] = _currentEmployee;
+                        RefreshEntries();
+                        updEntries.Update();
+
+                        lblSuccessMessage.Text = "Successfully submitted data!";
+                        mpSuccess.Show();
                     }
+                }
+                else
+                {
+                    lblSuccessMessage.Text = GetErrorMessage(status);
+                    mpSuccess.Show();
                 }
             }
             else
@@ -149,23 +170,59 @@ namespace AIS_Time.admin
                 UserName.Visible = true;
                 Password.Visible = true;
                 ddlRoles.Visible = true;
+
+                txtFname.Text = "";
+                txtLname.Text = "";
+                txtEmail.Text = "";
+                txtPhone.Text = "";
+                Password.Text = "";
+                UserName.Text = "";
+                ddlCompany.SelectedIndex = -1;
+                txtDescription.Text = "";
+                _currentEmployee = null;
+                Session["CurrentEmployee"] = _currentEmployee;
+                RefreshEntries();
+                updEntries.Update();
+
+                lblSuccessMessage.Text = "Successfully submitted data!";
+                mpSuccess.Show();
             }
+        }
 
-            txtFname.Text = "";
-            txtLname.Text = "";
-            txtEmail.Text = "";
-            txtPhone.Text = "";
-            Password.Text = "";
-            UserName.Text = "";
-            ddlCompany.SelectedIndex = -1;
-            txtDescription.Text = "";
-            _currentEmployee = null;
-            Session["CurrentEmployee"] = _currentEmployee;
-            RefreshEntries();
-            updEntries.Update();
+        public string GetErrorMessage(MembershipCreateStatus status)
+        {
+            switch (status)
+            {
+                case MembershipCreateStatus.DuplicateUserName:
+                    return "Username already exists. Please enter a different user name.";
 
-            lblSuccessMessage.Text = "Successfully submitted data!";
-            mpSuccess.Show();
+                case MembershipCreateStatus.DuplicateEmail:
+                    return "A username for that e-mail address already exists. Please enter a different e-mail address.";
+
+                case MembershipCreateStatus.InvalidPassword:
+                    return "The password provided is invalid. Please enter a valid password value of at least 6 characters.";
+
+                case MembershipCreateStatus.InvalidEmail:
+                    return "The e-mail address provided is invalid. Please check the value and try again.";
+
+                case MembershipCreateStatus.InvalidAnswer:
+                    return "The password retrieval answer provided is invalid. Please check the value and try again.";
+
+                case MembershipCreateStatus.InvalidQuestion:
+                    return "The password retrieval question provided is invalid. Please check the value and try again.";
+
+                case MembershipCreateStatus.InvalidUserName:
+                    return "The user name provided is invalid. Please check the value and try again.";
+
+                case MembershipCreateStatus.ProviderError:
+                    return "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+
+                case MembershipCreateStatus.UserRejected:
+                    return "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+
+                default:
+                    return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+            }
         }
 
         protected void rptCustomers_ItemCommand(object source, RepeaterCommandEventArgs e)

@@ -79,7 +79,17 @@ namespace AIS_Time.admin
                 resource.TimeAISCodeID = Convert.ToInt32(ddlAISCode.SelectedValue);
                 //resource.TimeCEAClassCodeID = Convert.ToInt32(ddlCEAClassCode.SelectedValue);
                 decimal res;
-                resource.HourlyRate = decimal.TryParse(txtHourlyRate.Text, out res) ? res : new decimal(0.0);
+                try
+                {
+                    resource.HourlyRate = decimal.TryParse(txtHourlyRate.Text, out res) ? res : new decimal(0.0);
+                }
+                catch (Exception)
+                {
+                    lblSuccessMessage.Text = "Hourly Rate not in correct format!";
+                    mpSuccess.Show();
+                    return;
+                }
+               
                 resource.Status = 1;
                 resource.Type = 1;
 
@@ -93,7 +103,17 @@ namespace AIS_Time.admin
                 _currentResource.TimeAISCodeID = Convert.ToInt32(ddlAISCode.SelectedValue);
                 //_currentResource.TimeCEAClassCodeID = Convert.ToInt32(ddlCEAClassCode.SelectedValue);
                 decimal res;
-                _currentResource.HourlyRate = decimal.TryParse(txtHourlyRate.Text, out res) ? res : new decimal(0.0);
+                try
+                {
+                    _currentResource.HourlyRate = decimal.TryParse(txtHourlyRate.Text, out res) ? res : new decimal(0.0);
+                }
+                catch (Exception)
+                {
+                    lblSuccessMessage.Text = "Hourly Rate not in correct format!";
+                    mpSuccess.Show();
+                    return;
+                }
+               
                 _currentResource.Status = 1;
                 _currentResource.Type = 1;
 

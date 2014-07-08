@@ -175,6 +175,7 @@
     <Content Include="admin\projects.aspx" />
     <Content Include="admin\reports.aspx" />
     <Content Include="admin\resources.aspx" />
+    <Content Include="admin\unlock-user.aspx" />
     <Content Include="bin\Vici.CoolStorage.dll" />
     <Content Include="bin\Vici.Core.dll" />
     <Content Include="Content\Site.css" />
@@ -317,6 +318,7 @@
     <Content Include="admin\PDFimages\WeeklyProjectTemplate.pdf" />
     <Content Include="admin\Web.config" />
     <Content Include="admin\PDFimages\MonthlyEmployeeSREDTemplate.pdf" />
+    <None Include="Properties\PublishProfiles\athena-timekeeper - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\athena-timekeeper - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
@@ -442,6 +444,13 @@
     </Compile>
     <Compile Include="admin\resources.aspx.designer.cs">
       <DependentUpon>resources.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\unlock-user.aspx.cs">
+      <DependentUpon>unlock-user.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\unlock-user.aspx.designer.cs">
+      <DependentUpon>unlock-user.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />

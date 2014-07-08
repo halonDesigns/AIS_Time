@@ -52,6 +52,7 @@
                         <li><a href="<%= Page.ResolveUrl("~/admin/resources.aspx") %>"><i class="fa fa-wrench"></i> Resources</a></li>
                         <li><a href="<%= Page.ResolveUrl("~/admin/configurations.aspx") %>"><i class="fa fa-bar-chart-o"></i> AIS Codes</a></li>
                         <li><a href="<%= Page.ResolveUrl("~/admin/reports.aspx") %>"><i class="fa fa-bar-chart-o"></i> Reports</a></li>
+                          <li><a href="<%= Page.ResolveUrl("~/admin/unlock-user.aspx") %>"><i class="fa fa-bar-chart-o"></i> User Unlock</a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right navbar-user">

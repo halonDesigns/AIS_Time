@@ -56,6 +56,8 @@ namespace AIS_Time.admin
         {
             CSList<TimeEmployees> employees = TimeEmployees.OrderedList("LastName");
 
+           // employees.Columns.Add("FullName", typeof(string), "FirstName + ' ' + LastName");
+
             ddlEmployee.DataSource = employees;
             ddlEmployee.DataValueField = "TimeEmployeeID";
             ddlEmployee.DataTextField = "LastName";

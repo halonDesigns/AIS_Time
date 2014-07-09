@@ -142,6 +142,29 @@
                         </div>
                     </div>
                 </div>
+                  <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h2>Change a Password and Unlock</h2>
+                            <div class="alert alert-info">
+                                Enter the username and a new password. It will unlock the user and change the password. LAST RESORT!!
+                            </div>
+                            <br />
+                            <div class="well well-small">
+                                Username: 
+                                <asp:TextBox ID="txtUsername" runat="server" class="form-control" placeholder="username"></asp:TextBox><br/>
+                                Password To Use: <asp:TextBox ID="txtPassword"
+                                    runat="server" class="form-control" placeholder="password"></asp:TextBox>
+                                 <br /> <br /><asp:Button ID="Button1" runat="server" Text="Update" OnClick="Button1_Click" class="btn btn-large btn-danger" />
+
+                                <br />
+                                <asp:Label ID="lblPasswordChange" runat="server" Text=""></asp:Label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
             <!-- START PROGRESS LOADING PANEL -->
             <asp:ModalPopupExtender ID="ModalProgress" runat="server" PopupControlID="PanLoad"

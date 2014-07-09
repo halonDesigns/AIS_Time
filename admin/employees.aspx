@@ -67,7 +67,7 @@
             $find(ModalBehaviour).hide();
         }
     </script>
-       <script type="text/javascript" src="<%= Page.ResolveUrl("~/admin/admin.js") %>"></script>
+    <script type="text/javascript" src="<%= Page.ResolveUrl("~/admin/admin.js") %>"></script>
     <asp:UpdatePanel runat="server" ID="updEntries" UpdateMode="Conditional" ChildrenAsTriggers="true">
         <ContentTemplate>
 
@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                   <%-- <h5>Role</h5>--%>
+                                    <%-- <h5>Role</h5>--%>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
                                         </span>
@@ -145,18 +145,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
-                                    </span>
-                                    <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <asp:TextBox runat="server" ID="txtDescription" class="form-control" placeholder="description" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <asp:Button ID="cmdSubmit" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmit_Click" />
-                            </div>
-                            <div class="form-group">
-                                <asp:Label ID="lblError" runat="server" Font-Bold="True" ForeColor="Red"></asp:Label>
-                            </div>
+                                <div class="form-group">
+                                    <asp:Button ID="cmdSubmit" class="btn btn-sm btn-primary btn-block" runat="server" CommandName="Submit" Text="Submit" OnClick="cmdSubmit_Click" />
+                                </div>
+                                <div class="form-group">
+                                    <asp:Label ID="lblError" runat="server" Font-Bold="True" ForeColor="Red"></asp:Label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -192,6 +192,7 @@
                     </div>
                 </div>
             </div>
+
           
             <!-- START PROGRESS LOADING PANEL -->
             <asp:ModalPopupExtender ID="ModalProgress" runat="server" PopupControlID="PanLoad"
@@ -204,7 +205,7 @@
                             <ProgressTemplate>
                                 <div style="padding: 5px; border: dotted 1px #c3c3c3; text-align: center;">
                                     <div align="center">
-                                       <br />
+                                        <br />
                                         <img src="<%= Page.ResolveUrl("~/Images/head_black.png") %>" width="150px" alt="loading" title="loading" />
                                         <br />
                                         <img src="<%= Page.ResolveUrl("~/Images/ajax/loaders/ajax-loader.gif") %>" alt="loading" title="loading" /><br />
@@ -219,7 +220,7 @@
                 </asp:UpdatePanel>
             </asp:Panel>
             <!-- END PROGRESS LOADING PANEL -->
-                 <asp:ModalPopupExtender ID="mpSuccess" runat="server" PopupControlID="pnlSuccess"
+            <asp:ModalPopupExtender ID="mpSuccess" runat="server" PopupControlID="pnlSuccess"
                 TargetControlID="btnHidden" BackgroundCssClass="modalBackground">
             </asp:ModalPopupExtender>
             <asp:Panel ID="pnlSuccess" runat="server" CssClass="modalPopup">
@@ -227,8 +228,9 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="span6">
-                               <p class="help-block">
-                                     <asp:Label ID="lblSuccessMessage" runat="server" /></p>
+                                <p class="help-block">
+                                    <asp:Label ID="lblSuccessMessage" runat="server" />
+                                </p>
                             </div>
                         </div>
                     </div>

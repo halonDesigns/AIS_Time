@@ -109,5 +109,29 @@ namespace AIS_Time.admin
                 GridView1.DataBind();
             }
         }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string username = txtUsername.Text;
+                string password = txtPassword.Text;
+                MembershipUser mu = Membership.GetUser(username);
+
+                //lets unlock if needed
+                mu.UnlockUser();
+                Membership.UpdateUser(mu);
+
+                //now reset the password
+                mu.ChangePassword(mu.ResetPassword(), password);
+
+                lblPasswordChange.Text = "Password changed and user unlocked if it was neccesary.";
+            }
+            catch (Exception ex)
+            {
+                lblPasswordChange.Text = "Error changing password for user : " + ex.Message;
+            }
+
+        }
     }
 }
